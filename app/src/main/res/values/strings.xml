@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">EvaLeadCapture</string>
+    <string name="welcome">Welcome!</string>
+    <string name="enter_your_code">Please enter your Code</string>
+    <string name="license_code">License Code</string>
+    <string name="dont_have_license_code">Don’t have License Code?</string>
+    <string name="license_code_sent">License code Sent</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="login">Login</string>
+    <string name="empty_license_code_field">License code is empty</string>
+    <string name="invalid_email_msg">Please enter valid email</string>
+    <string name="email_address">Email address</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="send_code">Send Code</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+    <string name="sent">Sent</string>
+    <string name="got_it">Got it</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="license_code_msg">Please Enter your email to receive an license code.</string>
+    <string name="license_code_sent_msg">Your license code has been sent to your \nregistered email address.</string>
+    <string name="event_activation_msg">Welcome!\n\nEach code can only be used on one device at a time. If this code is active on another device, please sign out from there to continue.</string>
+</resources>

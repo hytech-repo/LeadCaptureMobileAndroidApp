@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_envelop_checked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLicenseCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/sf_pro_bold"
+        android:gravity="center"
+        android:text="@string/license_code_sent"
+        android:textColor="@color/heading_text_color"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivIcon" />
+
+    <TextView
+        android:id="@+id/tvEnterRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:fontFamily="@font/sf_pro_regular"
+        android:gravity="center"
+        android:lineHeight="25dp"
+        android:text="@string/license_code_sent_msg"
+        android:textColor="@color/subheading_text_color"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/tvLicenseCode"
+        app:layout_constraintStart_toStartOf="@id/tvLicenseCode"
+        app:layout_constraintTop_toBottomOf="@id/tvLicenseCode" />
+
+    <Button
+        android:id="@+id/btnSent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/primary_color"
+        android:fontFamily="@font/sf_pro_regular"
+        android:text="@string/got_it"
+        android:textColor="@color/screen_bg_color"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEnterRegistration" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

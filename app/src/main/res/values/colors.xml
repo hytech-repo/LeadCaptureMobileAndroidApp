@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="screen_bg_color">#FFFFFF</color>
+    <color name="heading_text_color">#333333</color>
+    <color name="subheading_text_color">#666666</color>
+    <color name="primary_color">#F37029</color>
+    <color name="toast_success_bg">#039855</color>
+    <color name="toast_error_bg">#FF2424</color>
+    <color name="toast_warning_bg">#FF9800</color>
+    <color name="toast_info_bg">#2196F3</color>
+</resources>
