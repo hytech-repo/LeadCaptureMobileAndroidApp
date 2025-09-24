@@ -1,13 +1,18 @@
 package com.eva.lead.capture.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
 import com.eva.lead.capture.R
+import com.eva.lead.capture.constants.AppConstants
+import com.eva.lead.capture.data.local.AppDatabase
+import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
 import com.eva.lead.capture.databinding.ActivityMainBinding
+import com.eva.lead.capture.domain.model.entity.dummyUser
 import com.eva.lead.capture.ui.base.BaseActivity
 import com.eva.lead.capture.utils.AppLogger
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -17,12 +22,39 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         log = AppLogger(this@MainActivity)
         binding = ActivityMainBinding.inflate(layoutInflater)
-//        enableEdgeToEdge()
+
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
+
+        this.startWorking()
+        this.handleNavigation()
+    }
+
+    private fun startWorking() {
+        GlobalScope.launch {
+            val appDb = AppDatabase.getInstance(this@MainActivity)
+            val appDbRepository = AppDbRepositoryImpl(appDb)
+            appDbRepository.insertExhibitor(dummyUser)
+        }
+    }
+
+    private fun handleNavigation() {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val leadCode = prefManager.get(AppConstants.LEAD_CODE, "")
+        if (leadCode.isNotEmpty()) {
+            val isLicenseActivate = prefManager.get(AppConstants.LICENSE_ACTIVATED, false)
+            if (!isLicenseActivate) {
+                navController.popBackStack(R.id.nav_graph, true)
+                navController.navigate(R.id.eventActivationFragment)
+            } else {
+                navigateToEventHostActivity()
+            }
+        }
+    }
+
+    private fun navigateToEventHostActivity() {
+        val intent = Intent(this@MainActivity, EventHostActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 }

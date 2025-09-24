@@ -7,23 +7,26 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.eva.lead.capture.domain.model.entity.User
+import com.eva.lead.capture.domain.model.entity.Exhibitor
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertUser(user: User): Long
+    suspend fun insertExhibitor(user: Exhibitor): Long
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateExhibitor(user: Exhibitor)
 
-    @Query("SELECT * FROM user ORDER BY id DESC")
-    fun getAllUsers(): Flow<List<User>>
+    @Query("SELECT * FROM exhibitor ORDER BY id DESC")
+    fun getAllExhibitors(): Flow<List<Exhibitor>>
 
-    @Query("SELECT * FROM user WHERE userId = :userId")
-    fun getUserById(userId: String): Flow<User?>
+    @Query("SELECT * FROM exhibitor WHERE user_id = :userId")
+    fun getExhibitorById(userId: String): Flow<Exhibitor?>
+
+    @Query("SELECT * FROM exhibitor WHERE lead_code = :leadCode")
+    fun getExhibitorByLeadCode(leadCode: String): Flow<Exhibitor?>
 
     @RawQuery
     suspend fun executeRawQuery(query: SupportSQLiteQuery): Long

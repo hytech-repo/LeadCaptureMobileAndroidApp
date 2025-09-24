@@ -1,17 +1,19 @@
 package com.eva.lead.capture.domain.repository
 
-import com.eva.lead.capture.domain.model.entity.User
+import com.eva.lead.capture.domain.model.entity.Exhibitor
 import kotlinx.coroutines.flow.Flow
 
 interface AppDbRepository {
 
-    fun getAllUsers(): Flow<List<User>>
+    fun getAllExhibitors(): Flow<List<Exhibitor>>
 
-    fun getUserById(id: String): Flow<User?>
+    fun getExhibitorById(id: String): Flow<Exhibitor?>
+
+    fun getExhibitorByLeadCode(leadCode: String): Flow<Exhibitor?>
 
 
-    suspend fun insertUser(user: User): Long
-    suspend fun updateUser(user: User)
+    suspend fun insertExhibitor(user: Exhibitor): Long
+    suspend fun updateExhibitor(user: Exhibitor)
 
 //    suspend fun deleteUser(user: User)
 

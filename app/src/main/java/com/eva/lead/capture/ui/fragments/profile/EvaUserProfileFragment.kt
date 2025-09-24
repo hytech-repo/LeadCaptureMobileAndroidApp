@@ -1,39 +1,36 @@
-package com.eva.lead.capture.ui.fragments.addlead
+package com.eva.lead.capture.ui.fragments.profile
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import com.eva.lead.capture.databinding.FragmentEvaAddLeadBinding
+import com.eva.lead.capture.R
+import com.eva.lead.capture.databinding.FragmentEvaUserProfileBinding
 import com.eva.lead.capture.ui.base.BaseFragment
 
-class EvaAddLeadFragment :
-    BaseFragment<FragmentEvaAddLeadBinding, EvaAddLeadViewModel>(EvaAddLeadViewModel::class.java) {
+class EvaUserProfileFragment :
+    BaseFragment<FragmentEvaUserProfileBinding, EvaUserProfileViewModel>(EvaUserProfileViewModel::class.java) {
     private lateinit var mContext: Context
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mContext = context
-        this.TAG = "EvaAddLeadFragment"
+        this.TAG = "EvaUserProfileFragment"
     }
 
     override fun createView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): FragmentEvaAddLeadBinding {
-        return FragmentEvaAddLeadBinding.inflate(inflater, container, false)
+    ): FragmentEvaUserProfileBinding {
+        return FragmentEvaUserProfileBinding.inflate(inflater, container, false)
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
-        this.initView()
-    }
-
-    private fun initView() {
-        binding.incToolbar.tvTitle.text = "Add Lead"
     }
 
     companion object {
-        fun newInstance() = EvaAddLeadFragment()
+        fun newInstance() = EvaUserProfileFragment()
     }
 }

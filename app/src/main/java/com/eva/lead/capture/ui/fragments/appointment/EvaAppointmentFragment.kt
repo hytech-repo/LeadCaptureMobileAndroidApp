@@ -1,5 +1,6 @@
 package com.eva.lead.capture.ui.fragments.appointment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +9,12 @@ import com.eva.lead.capture.ui.base.BaseFragment
 
 class EvaAppointmentFragment :
     BaseFragment<FragmentEvaAppointmentBinding, EvaAppointmentViewModel>(EvaAppointmentViewModel::class.java) {
+    private lateinit var mContext: Context
 
-    companion object {
-        fun newInstance() = EvaAppointmentFragment()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.mContext = context
+        this.TAG = "EvaAppointmentFragment"
     }
 
     override fun createView(
@@ -22,5 +26,9 @@ class EvaAppointmentFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
+    }
+
+    companion object {
+        fun newInstance() = EvaAppointmentFragment()
     }
 }

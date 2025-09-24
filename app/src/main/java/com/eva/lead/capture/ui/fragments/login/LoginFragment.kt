@@ -11,10 +11,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eva.lead.capture.R
-import com.eva.lead.capture.data.remote.RetrofitClient
-import com.eva.lead.capture.data.repository.AuthRepositoryImpl
+import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentLoginBinding
 import com.eva.lead.capture.domain.model.LoginResponse
 import com.eva.lead.capture.ui.base.BaseFragment
@@ -25,6 +25,8 @@ import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.handleFailure
 import com.eva.lead.capture.utils.observe
 import com.eva.lead.capture.utils.showToast
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -71,8 +73,8 @@ class LoginFragment :
     }
 
     private fun initRepo() {
-        val repository = AuthRepositoryImpl(RetrofitClient.apiService)
-        viewModel.initRepository(repository)
+//        val repository = AuthRepositoryImpl(RetrofitClient.apiService)
+//        viewModel.initRepository(repository)
     }
 
     private fun initObserver() {
@@ -127,13 +129,27 @@ class LoginFragment :
     private fun initListener() {
         binding.loginBtn.setOnClickListener {
             if (validateLoginField()) {
-                callLoginUserApi()
+//                callLoginUserApi()
+                checkExhibitorAndMoveAhead()
             }
         }
 
         binding.tvLicenseCode.setOnClickListener {
 //            showForgotPasswordDialog()
             findNavController().navigate(R.id.action_loginFragment_to_eventActivationFragment)
+        }
+    }
+
+    private fun checkExhibitorAndMoveAhead() {
+        val code = binding.etEmail.text.toString()
+        lifecycleScope.launch {
+            val exhibitor = viewModel.checkExhibitor(code).firstOrNull()
+            if (exhibitor == null) {
+                mContext.showToast("Exhibitor not found", ToastType.ERROR)
+            } else {
+                prefManager.put(AppConstants.LEAD_CODE, code)
+                findNavController().navigate(R.id.action_loginFragment_to_eventActivationFragment)
+            }
         }
     }
 

@@ -11,6 +11,12 @@
         android:label="EvaHomeFragment"
         tools:layout="@layout/fragment_eva_home">
 
+        <action
+            android:id="@+id/action_homeFragment_to_evaUserProfileFragment"
+            app:destination="@id/evaUserProfileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_evaLeadListFragment"
+            app:destination="@id/evaLeadListFragment" />
     </fragment>
 
     <fragment
@@ -19,6 +25,9 @@
         android:label="EvaAddLeadFragment"
         tools:layout="@layout/fragment_eva_add_lead">
 
+        <action
+            android:id="@+id/action_evaAddLeadFragment_to_evaUserProfileFragment"
+            app:destination="@id/evaUserProfileFragment" />
     </fragment>
 
     <fragment
@@ -26,6 +35,22 @@
         android:name="com.eva.lead.capture.ui.fragments.appointment.EvaAppointmentFragment"
         android:label="EvaAppointmentFragment"
         tools:layout="@layout/fragment_eva_appointment">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/evaLeadListFragment"
+        android:name="com.eva.lead.capture.ui.fragments.leadlist.EvaLeadListFragment"
+        android:label="EvaLeadListFragment"
+        tools:layout="@layout/fragment_eva_lead_list">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/evaUserProfileFragment"
+        android:name="com.eva.lead.capture.ui.fragments.profile.EvaUserProfileFragment"
+        android:label="EvaUserProfileFragment"
+        tools:layout="@layout/fragment_eva_user_profile">
 
     </fragment>
 

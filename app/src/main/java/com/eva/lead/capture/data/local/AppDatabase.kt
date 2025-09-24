@@ -7,10 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.eva.lead.capture.data.local.dao.AppDao
-import com.eva.lead.capture.domain.model.entity.User
+import com.eva.lead.capture.domain.model.entity.Exhibitor
 
 
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@Database(entities = [Exhibitor::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun appDao(): AppDao
@@ -33,43 +33,6 @@ abstract class AppDatabase: RoomDatabase() {
                     .build()
                 INSTANCE = instance
                 instance
-            }
-        }
-
-        val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // Add new column with default value
-                database.execSQL(
-                    """
-            CREATE TABLE IF NOT EXISTS `events` (
-                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                `eventId` TEXT,
-                `userId` INTEGER,
-                `name` TEXT,
-                `logo` TEXT,
-                `startDate` TEXT,
-                `endDate` TEXT,
-                `timezone` TEXT,
-                `venueTitle` TEXT,
-                `street` TEXT,
-                `city` TEXT,
-                `state` TEXT,
-                `registrantCount` INTEGER,
-                `sessionTimeout` INTEGER,
-                `checkinType` INTEGER,
-                `checkinOptions` INTEGER,
-                `colorCode` TEXT,
-                `backgroundImage` TEXT,
-                `thankyouPageMessageLine1` TEXT,
-                `thankyouPageMessageLine2` TEXT,
-                `thankyouPageButtonText` TEXT,
-                `printerTimeout` INTEGER,
-                `apiTimeoutTime` INTEGER,
-                `createdAt` TEXT,
-                `updatedAt` TEXT
-            )
-            """.trimIndent()
-                )
             }
         }
     }

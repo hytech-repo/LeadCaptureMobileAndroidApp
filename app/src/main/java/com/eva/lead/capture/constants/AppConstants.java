@@ -5,7 +5,8 @@ public class AppConstants {
 
     public static String APP_PREF = "app-pref";
 
-    public static String USER_TOKEN = "user_token";
+    public static String LEAD_CODE = "lead_code";
+    public static String LICENSE_ACTIVATED = "license_accepted";
     public static String APP_LANGUAGE = "app_lang";
     public static String USER_ID = "user_id";
     public static String FIRST_NAME = "first_name";

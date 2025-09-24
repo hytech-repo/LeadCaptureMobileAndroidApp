@@ -70,6 +70,7 @@ dependencies {
     implementation libs.androidx.camera.lifecycle
     implementation libs.androidx.camera.view
     implementation libs.mlkit.barcode
+    implementation libs.android.mpandroidchart
 
     implementation libs.androidx.room
     implementation libs.androidx.room.ktx

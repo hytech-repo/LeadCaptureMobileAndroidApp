@@ -28,6 +28,7 @@ activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 camera = "1.4.1"
 mlbarcode = "17.1.0"
+mpandroidchart = "v3.1.0"
 zxing-android = "4.3.0"
 worker = "2.9.0"
 
@@ -70,6 +71,7 @@ androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", 
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
 mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlbarcode" }
+android-mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 android-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 android-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }

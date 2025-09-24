@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.eva.lead.capture.domain.model.ForgetPasswordRequest
 import com.eva.lead.capture.domain.model.LoginRequest
 import com.eva.lead.capture.domain.model.LoginResponse
+import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.repository.AuthRepository
 import com.eva.lead.capture.ui.base.BaseViewModel
 import com.eva.lead.capture.utils.ResultWrapper
 import com.eva.lead.capture.utils.SingleLiveEvent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(mContext: Context) : BaseViewModel(mContext) {
@@ -44,6 +46,10 @@ class LoginViewModel(mContext: Context) : BaseViewModel(mContext) {
             val result = authRepo.forgetPassword(request)
             _forgetpassword.value = result
         }
+    }
+
+    fun checkExhibitor(leadCode: String): Flow<Exhibitor?> {
+        return repositoryDb.getExhibitorByLeadCode(leadCode)
     }
 
 }

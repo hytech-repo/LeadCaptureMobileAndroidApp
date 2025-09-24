@@ -1,6 +1,8 @@
 package com.eva.lead.capture.ui.activities
 
 import android.os.Bundle
+import androidx.navigation.findNavController
+import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.ActivityEventHostBinding
 import com.eva.lead.capture.ui.base.BaseActivity
 import com.eva.lead.capture.utils.AppLogger
@@ -15,5 +17,31 @@ class EventHostActivity : BaseActivity() {
         log = AppLogger(this@EventHostActivity)
         binding = ActivityEventHostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        this.initView()
+    }
+
+    private fun initView() {
+        val navController = findNavController(R.id.event_fragment_container)
+        binding.bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    navController.navigate(R.id.homeFragment)
+                    true
+                }
+
+                R.id.nav_add_lead -> {
+                    navController.navigate(R.id.evaAddLeadFragment)
+                    true
+                }
+
+                R.id.nav_appointment -> {
+                    navController.navigate(R.id.evaAppointmentFragment)
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 }

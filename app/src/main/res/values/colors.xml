@@ -10,4 +10,5 @@
     <color name="toast_error_bg">#FF2424</color>
     <color name="toast_warning_bg">#FF9800</color>
     <color name="toast_info_bg">#2196F3</color>
+    <color name="text_color_grey">#9CA3AF</color>
 </resources>

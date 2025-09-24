@@ -6,10 +6,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eva.lead.capture.R
+import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaEventActivationBinding
+import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.ui.base.BaseFragment
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -41,9 +46,29 @@ class EvaEventActivationFragment :
 
     override fun startWorking(savedInstanceState: Bundle?) {
         this.initView()
+        this.initListener()
+        this.fetchExhibitorFromDb()
     }
 
     private fun initView() {
+
+    }
+
+    private fun fetchExhibitorFromDb() {
+        lifecycleScope.launch {
+            val code = prefManager.get(AppConstants.LEAD_CODE, "")
+            val exhibitor = viewModel.checkExhibitor(code).firstOrNull()
+            if (exhibitor != null) {
+                showDetailOnUI(exhibitor)
+            }
+        }
+    }
+
+    private fun showDetailOnUI(exhibitor: Exhibitor) {
+        binding.tvUserName.text = "${exhibitor.firstName} ${exhibitor.lastName}"
+    }
+
+    private fun initListener() {
         val slideBtn = binding.btnActivate.slideLayout
         slideBtn.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(
@@ -63,6 +88,7 @@ class EvaEventActivationFragment :
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
                 if (currentId == R.id.end) {
                     binding.btnActivate.slideLayout.isInteractionEnabled = false
+                    prefManager.put(AppConstants.LICENSE_ACTIVATED, true)
                 }
             }
 
@@ -79,10 +105,6 @@ class EvaEventActivationFragment :
 
     private fun navigateToOtherScreen() {
         findNavController().navigate(R.id.action_eventActivationFragment_to_evaDeviceDetailFragment)
-//        val intent = Intent(mContext, EventHostActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        mContext.startActivity(intent)
-//        requireActivity().overridePendingTransition(0, 0)
     }
 
     companion object {
