@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slideLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/slider_background"
+    app:layoutDescription="@xml/slide_unlock_scene">
+
+    <View
+        android:id="@+id/progressFill"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/slider_background"
+        android:backgroundTint="@color/toast_success_bg"
+        app:layout_constraintStart_toStartOf="@id/slideLayout"
+        app:layout_constraintEnd_toStartOf="@id/sliderHandle"
+        app:layout_constraintTop_toTopOf="@id/slideLayout"
+        app:layout_constraintBottom_toBottomOf="@id/slideLayout" />
+
+    <!-- Background Text -->
+    <ImageView
+        android:id="@+id/ivTick"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_circle_tick"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSlideText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sf_pro_regular"
+        android:text="Yes Activate"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Slider Handle -->
+    <ImageView
+        android:id="@+id/sliderHandle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/slider_handle_thumb"
+        android:padding="12dp"
+        android:src="@drawable/ic_key"
+        android:tint="@color/primary_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

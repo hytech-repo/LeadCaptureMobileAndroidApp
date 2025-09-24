@@ -19,5 +19,5 @@
     <string name="enter_email_address">Enter email address</string>
     <string name="license_code_msg">Please Enter your email to receive an license code.</string>
     <string name="license_code_sent_msg">Your license code has been sent to your \nregistered email address.</string>
-    <string name="event_activation_msg">Welcome!\n\nEach code can only be used on one device at a time. If this code is active on another device, please sign out from there to continue.</string>
+    <string name="event_activation_msg">Each code can only be used on one device at a time. If \nthis code is active on another device, please sign out \nfrom there to continue.</string>
 </resources>

@@ -22,6 +22,17 @@
         android:label="EvaEventActivationFragment"
         tools:layout="@layout/fragment_eva_event_activation">
 
+        <action
+            android:id="@+id/action_eventActivationFragment_to_evaDeviceDetailFragment"
+            app:destination="@id/evaDeviceDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/evaDeviceDetailFragment"
+        android:name="com.eva.lead.capture.ui.fragments.deviceform.EvaDeviceDetailFragment"
+        android:label="EvaDeviceDetailFragment"
+        tools:layout="@layout/fragment_eva_device_detail">
+
     </fragment>
 
 </navigation>
