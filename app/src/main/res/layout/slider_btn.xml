@@ -11,6 +11,16 @@
         android:id="@+id/progressFill"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:background="@drawable/slider_progress_gradient"
+        app:layout_constraintStart_toStartOf="@id/slideLayout"
+        app:layout_constraintEnd_toStartOf="@id/sliderHandle"
+        app:layout_constraintTop_toTopOf="@id/slideLayout"
+        app:layout_constraintBottom_toBottomOf="@id/slideLayout" />
+
+    <View
+        android:id="@+id/bgGreenOverlay"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:background="@drawable/slider_background"
         android:backgroundTint="@color/toast_success_bg"
         app:layout_constraintStart_toStartOf="@id/slideLayout"
@@ -48,6 +58,7 @@
         android:id="@+id/sliderHandle"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/slider_handle_thumb"
         android:padding="12dp"
         android:src="@drawable/ic_key"

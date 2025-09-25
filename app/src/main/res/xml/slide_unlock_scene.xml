@@ -12,6 +12,55 @@
             motion:touchAnchorId="@id/sliderHandle"
             motion:touchAnchorSide="right" />
 
+        <KeyFrameSet>
+
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="0"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                motion:framePosition="25"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="1"
+                motion:framePosition="50"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="0.75"
+                motion:framePosition="75"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                motion:framePosition="80"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="85"
+                motion:motionTarget="@id/progressFill" />
+
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="80"
+                motion:motionTarget="@id/bgGreenOverlay" />
+
+            <KeyAttribute
+                android:alpha="0.5"
+                motion:framePosition="85"
+                motion:motionTarget="@id/bgGreenOverlay" />
+
+            <KeyAttribute
+                android:alpha="1"
+                motion:framePosition="100"
+                motion:motionTarget="@id/bgGreenOverlay" />
+
+        </KeyFrameSet>
+
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -26,11 +75,20 @@
             android:id="@id/progressFill"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:visibility="gone"
-            motion:layout_constraintBottom_toBottomOf="@id/slideLayout"
-            motion:layout_constraintEnd_toStartOf="@id/sliderHandle"
-            motion:layout_constraintStart_toStartOf="@id/slideLayout"
-            motion:layout_constraintTop_toTopOf="@id/slideLayout" />
+            android:alpha="0"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@id/bgGreenOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:alpha="0"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -38,12 +96,22 @@
             android:id="@id/progressFill"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:visibility="visible"
-            motion:layout_constraintBottom_toBottomOf="@id/slideLayout"
-            motion:layout_constraintEnd_toEndOf="@id/sliderHandle"
-            motion:layout_constraintStart_toStartOf="@id/slideLayout"
-            motion:layout_constraintTop_toTopOf="@id/slideLayout"
-            motion:motionProgress="0.4" />
+            android:alpha="1"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@id/bgGreenOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:alpha="1"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
         <Constraint
             android:id="@id/sliderHandle"
             android:layout_width="50dp"
