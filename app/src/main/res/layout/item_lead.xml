@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Circular Initials Avatar -->
+    <TextView
+        android:id="@+id/avatarText"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_circle"
+        android:fontFamily="@font/sf_pro_bold"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="@color/heading_text_color"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/sf_pro_medium"
+        android:text="Anderson James"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/llcHotLabel"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/avatarText"
+        app:layout_constraintTop_toTopOf="@id/avatarText" />
+
+    <!-- Role and Company -->
+    <TextView
+        android:id="@+id/roleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Senior Developer, Snap"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/nameText"
+        app:layout_constraintStart_toStartOf="@id/nameText"
+        app:layout_constraintTop_toBottomOf="@id/nameText" />
+
+    <!-- Date and Time Row -->
+    <LinearLayout
+        android:id="@+id/dateTimeRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/roleText"
+        app:layout_constraintTop_toBottomOf="@id/roleText">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            android:tint="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="03 Sep 2025"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            android:src="@android:drawable/ic_lock_idle_alarm"
+            android:tint="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01:00 PM"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- "Hot" Label -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcHotLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_input_rounded"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/avatarText">
+
+        <ImageView
+            android:id="@+id/icTag"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_thunder" />
+
+        <TextView
+            android:id="@+id/hotLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/sf_pro_regular"
+            android:text="Hot"
+            android:textColor="#FF3B30"
+            android:textSize="12sp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="#E6E6E6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateTimeRow" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

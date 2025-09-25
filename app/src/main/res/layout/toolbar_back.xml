@@ -14,6 +14,7 @@
         android:padding="16dp">
 
         <ImageView
+            android:id="@+id/ivBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_back" />
@@ -32,6 +33,7 @@
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llcbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_rounded_primary_stroke"
@@ -40,11 +42,13 @@
             android:paddingVertical="5dp">
 
             <ImageView
+                android:id="@+id/ivBtnImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_export" />
 
             <TextView
+                android:id="@+id/tvBtnName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -56,6 +60,22 @@
                 android:textStyle="bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/tvRecording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_rounded_corners"
+            android:backgroundTint="@color/toast_error_bg"
+            android:drawableStart="@drawable/ic_thunder"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/sf_pro_medium"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="0.05"
+            android:textColor="@color/screen_bg_color"
+            android:textSize="13sp"
+            android:visibility="gone" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.eva.lead.capture.databinding.FragmentEvaAppointmentBinding
+import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 
 class EvaAppointmentFragment :
@@ -26,6 +27,7 @@ class EvaAppointmentFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
     }
 
     companion object {

@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaAddLeadBinding
+import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 
 class EvaAddLeadFragment :
@@ -26,11 +29,19 @@ class EvaAddLeadFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
         this.initView()
+        this.initListener()
     }
 
     private fun initView() {
         binding.incToolbar.tvTitle.text = "Add Lead"
+    }
+
+    private fun initListener() {
+        binding.cvAddManual.setOnClickListener {
+            findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaAddManualLead)
+        }
     }
 
     companion object {

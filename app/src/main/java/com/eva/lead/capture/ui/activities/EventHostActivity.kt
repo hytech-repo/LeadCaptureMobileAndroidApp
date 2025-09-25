@@ -1,6 +1,7 @@
 package com.eva.lead.capture.ui.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.findNavController
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.ActivityEventHostBinding
@@ -44,4 +45,9 @@ class EventHostActivity : BaseActivity() {
             }
         }
     }
+
+    fun showHideBottomNavBar(isShown: Boolean) {
+        binding.cvBottomNavBar.visibility = if (isShown) View.VISIBLE else View.GONE
+    }
+
 }

@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import kotlinx.coroutines.flow.Flow
 
@@ -27,6 +28,15 @@ interface AppDao {
 
     @Query("SELECT * FROM exhibitor WHERE lead_code = :leadCode")
     fun getExhibitorByLeadCode(leadCode: String): Flow<Exhibitor?>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertLead(leadData: EvaLeadData): Long
+
+    @Query("SELECT * FROM lead_data ORDER BY id DESC")
+    fun getAllLeadData(): Flow<List<EvaLeadData>?>
+
+    @Query("SELECT * FROM lead_data where lead_id = :leadId")
+    fun getLeadById(leadId: String): Flow<EvaLeadData?>
 
     @RawQuery
     suspend fun executeRawQuery(query: SupportSQLiteQuery): Long

@@ -8,9 +8,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.eva.lead.capture.data.local.dao.AppDao
 import com.eva.lead.capture.domain.model.entity.Exhibitor
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
 
 
-@Database(entities = [Exhibitor::class], version = 1, exportSchema = false)
+@Database(entities = [Exhibitor::class, EvaLeadData::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun appDao(): AppDao

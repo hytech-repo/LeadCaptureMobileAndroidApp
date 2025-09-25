@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaHomeBinding
+import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 
 class EvaHomeFragment :

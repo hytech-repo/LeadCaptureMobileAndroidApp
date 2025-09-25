@@ -11,4 +11,6 @@
     <color name="toast_warning_bg">#FF9800</color>
     <color name="toast_info_bg">#2196F3</color>
     <color name="text_color_grey">#9CA3AF</color>
+    <color name="status_yellow">#F5C900</color>
+    <color name="status_blue">#007AFF</color>
 </resources>

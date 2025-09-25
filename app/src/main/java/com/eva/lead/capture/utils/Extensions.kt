@@ -10,6 +10,7 @@ package com.eva.lead.capture.utils
 import android.app.Dialog
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -275,15 +276,25 @@ enum class ToastType {
     SUCCESS, ERROR, WARNING, INFO
 }
 
-//fun Context.getDrawableStatus(status: String?): Drawable {
-//    val colorRes = status?.getStatusColor() ?: R.color.status_yellow
-//    return this.changeDrawableBgAndStroke(
-//        R.drawable.bg_rounded_status,
-//        colorRes,
-//        2,
-//        15
-//    )
-//}
+fun Context.getDrawableStatus(status: String?): Drawable {
+    val colorRes = status?.getStatusColor() ?: R.color.status_yellow
+    return this.changeDrawableBgAndStroke(
+        R.drawable.bg_rounded_status,
+        colorRes,
+        2,
+        15
+    )
+}
+
+fun String.getStatusColor(): Int {
+    return when (this) {
+        "Hot" -> R.color.toast_error_bg
+        "Medium" -> R.color.status_yellow
+        "Cold" -> R.color.status_blue
+        else -> R.color.status_yellow
+    }
+}
+
 
 //fun String.getStatusColor(): Int {
 //    return when (this) {

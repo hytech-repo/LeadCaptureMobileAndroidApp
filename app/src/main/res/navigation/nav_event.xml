@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_evaAddLeadFragment_to_evaUserProfileFragment"
             app:destination="@id/evaUserProfileFragment" />
+        <action
+            android:id="@+id/action_evaAddLeadFragment_to_evaAddManualLead"
+            app:destination="@id/evaAddManualLead" />
     </fragment>
 
     <fragment
@@ -51,6 +54,14 @@
         android:name="com.eva.lead.capture.ui.fragments.profile.EvaUserProfileFragment"
         android:label="EvaUserProfileFragment"
         tools:layout="@layout/fragment_eva_user_profile">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/evaAddManualLead"
+        android:name="com.eva.lead.capture.ui.fragments.addmanual.EvaAddManuallyFragment"
+        android:label="EvaAddManuallyFragment"
+        tools:layout="@layout/fragment_eva_add_manually">
 
     </fragment>
 

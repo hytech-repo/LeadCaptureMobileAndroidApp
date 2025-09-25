@@ -1,19 +1,25 @@
 package com.eva.lead.capture.ui.fragments.leadlist
 
 import android.content.Context
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.eva.lead.capture.R
-import com.eva.lead.capture.databinding.FragmentEvaAddLeadBinding
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.databinding.FragmentEvaLeadListBinding
+import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
-class EvaLeadListFragment : BaseFragment<FragmentEvaLeadListBinding, EvaLeadListViewModel>(EvaLeadListViewModel::class.java) {
+class EvaLeadListFragment :
+    BaseFragment<FragmentEvaLeadListBinding, EvaLeadListViewModel>(EvaLeadListViewModel::class.java) {
     private lateinit var mContext: Context
+
+    private val leadListAdapter: EvaLeadListAdapter by lazy {
+        EvaLeadListAdapter(mContext)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -30,12 +36,37 @@ class EvaLeadListFragment : BaseFragment<FragmentEvaLeadListBinding, EvaLeadList
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
         this.initView()
+        this.initListener()
+        this.fetchLeadList()
     }
 
     private fun initView() {
         binding.incToolbar.tvTitle.text = "Lead list"
+        this.initRecyclerView()
+    }
 
+    private fun initListener() {
+        binding.incToolbar.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun initRecyclerView() {
+        binding.rvLeadList.apply {
+            layoutManager = LinearLayoutManager(mContext)
+            adapter = leadListAdapter
+        }
+    }
+
+    private fun fetchLeadList() {
+        lifecycleScope.launch {
+            val leadList = viewModel.getLeadList().firstOrNull()
+            if (leadList != null) {
+                leadListAdapter.setLeadDataList(leadList)
+            }
+        }
     }
 
 
