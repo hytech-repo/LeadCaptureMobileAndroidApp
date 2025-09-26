@@ -21,6 +21,7 @@
         android:padding="16dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cvQrCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/white"
@@ -57,11 +58,14 @@
                     android:layout_height="24dp"
                     android:contentDescription="Arrow"
                     android:src="@drawable/ic_right_arrow_circle" />
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <!-- Business Card Option -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cvBusinessCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

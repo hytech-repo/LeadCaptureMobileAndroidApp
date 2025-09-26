@@ -30,3 +30,20 @@ val dummyUser = Exhibitor(
     lastName = "Kant",
     email = "lakshmikant@evareg.com"
 )
+
+fun Exhibitor.generateUpdateQuery(): String {
+    val updates = mutableListOf<String>()
+
+    this.leadCode.let { updates.add("lead_code = '$it'") }
+    this.userId.let { updates.add("user_id = '$it'") }
+    this.firstName.let { updates.add("first_name = '$it'") }
+    this.lastName.let { updates.add("last_name = '$it'") }
+    this.email.let { updates.add("email = '$it'") }
+    this.deviceName.let { updates.add("device_name = '$it'") }
+
+    if (updates.isEmpty()) return ""
+
+    val setClause = updates.joinToString(", ")
+    return "update exhibitor SET $setClause WHERE lead_code = '${this.leadCode}'"
+}
+

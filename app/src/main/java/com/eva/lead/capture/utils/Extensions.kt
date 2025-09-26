@@ -288,9 +288,9 @@ fun Context.getDrawableStatus(status: String?): Drawable {
 
 fun String.getStatusColor(): Int {
     return when (this) {
-        "Hot" -> R.color.toast_error_bg
-        "Medium" -> R.color.status_yellow
-        "Cold" -> R.color.status_blue
+        "hot" -> R.color.toast_error_bg
+        "medium" -> R.color.status_yellow
+        "cold" -> R.color.status_blue
         else -> R.color.status_yellow
     }
 }

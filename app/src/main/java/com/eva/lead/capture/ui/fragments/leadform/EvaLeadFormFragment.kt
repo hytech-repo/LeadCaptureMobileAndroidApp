@@ -1,4 +1,4 @@
-package com.eva.lead.capture.ui.fragments.addmanual
+package com.eva.lead.capture.ui.fragments.leadform
 
 import android.Manifest
 import android.content.Context
@@ -13,16 +13,20 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
-import com.eva.lead.capture.databinding.FragmentEvaAddManuallyBinding
+import com.eva.lead.capture.databinding.FragmentEvaLeadFormBinding
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.getDrawableStatus
 import com.eva.lead.capture.utils.observe
+import com.eva.lead.capture.utils.showToast
 import java.io.IOException
 
-class EvaAddManuallyFragment :
-    BaseFragment<FragmentEvaAddManuallyBinding, EvaAddManuallyViewModel>(EvaAddManuallyViewModel::class.java) {
+class EvaLeadFormFragment :
+    BaseFragment<FragmentEvaLeadFormBinding, EvaLeadFormViewModel>(EvaLeadFormViewModel::class.java) {
 
     private lateinit var mContext: Context
     private var isRecording = false
@@ -32,8 +36,8 @@ class EvaAddManuallyFragment :
     private var fileName: String = ""
     private lateinit var mediaRecorder: MediaRecorder
 
-    companion object {
-        private const val REQUEST_PERMISSION_CODE = 1001
+    private val mediaAdapter: EvaAttachedMediaAdapter by lazy {
+        EvaAttachedMediaAdapter(mContext)
     }
 
     override fun onAttach(context: Context) {
@@ -46,8 +50,8 @@ class EvaAddManuallyFragment :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): FragmentEvaAddManuallyBinding {
-        return FragmentEvaAddManuallyBinding.inflate(inflater, container, false)
+    ): FragmentEvaLeadFormBinding {
+        return FragmentEvaLeadFormBinding.inflate(inflater, container, false)
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
@@ -57,10 +61,11 @@ class EvaAddManuallyFragment :
     }
 
     private fun init() {
-        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
         binding.incToolbar.tvTitle.text = "Add Manually"
         binding.incToolbar.llcbtn.visibility = View.GONE
         binding.incToolbar.tvRecording.visibility = View.VISIBLE
+
+        this.initMediaRecyclerView()
 
 
         handler = Handler(Looper.getMainLooper())
@@ -70,6 +75,13 @@ class EvaAddManuallyFragment :
 
         // Initialize the MediaRecorder
         mediaRecorder = MediaRecorder()
+    }
+
+    private fun initMediaRecyclerView() {
+        binding.rvUploadMedia.apply {
+            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+            adapter = mediaAdapter
+        }
     }
 
     private fun initListener() {
@@ -87,15 +99,15 @@ class EvaAddManuallyFragment :
             resetRadioButtonBackground()
             when (checkedId) {
                 R.id.hotLead -> {
-                    binding.hotLead.background = mContext.getDrawableStatus("Hot")
+                    binding.hotLead.background = mContext.getDrawableStatus("hot")
                 }
 
                 R.id.mediumLead -> {
-                    binding.mediumLead.background = mContext.getDrawableStatus("Medium")
+                    binding.mediumLead.background = mContext.getDrawableStatus("medium")
                 }
 
                 R.id.coldLead -> {
-                    binding.coldLead.background = mContext.getDrawableStatus("Cold")
+                    binding.coldLead.background = mContext.getDrawableStatus("cold")
                 }
             }
         }
@@ -180,9 +192,9 @@ class EvaAddManuallyFragment :
     }
 
     private fun resetRadioButtonBackground() {
-        binding.hotLead.background = mContext.getDrawable(R.drawable.bg_rounded_unfilled)
-        binding.mediumLead.background = mContext.getDrawable(R.drawable.bg_rounded_unfilled)
-        binding.coldLead.background = mContext.getDrawable(R.drawable.bg_rounded_unfilled)
+        binding.hotLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
+        binding.mediumLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
+        binding.coldLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
     }
 
     private fun initObserver() {
@@ -196,27 +208,49 @@ class EvaAddManuallyFragment :
     }
 
     private fun saveLeadData() {
+        val tag = when (binding.rgLeads.checkedRadioButtonId) {
+            R.id.hotLead -> "hot"
+            R.id.mediumLead -> "medium"
+            R.id.coldLead -> "cold"
+            else -> ""
+        }
+
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val email = binding.etEmail.text.toString()
         val phone = binding.etPhoneNumber.text.toString()
         val company = binding.etCompanyName.text.toString()
         val additional = binding.etAdditionalInfo.text.toString()
+        val leadData = EvaLeadData(
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            phone = phone,
+            companyName = company,
+            additionalInfo = additional,
+            tag = tag,
+            timestamp = System.currentTimeMillis()
+        )
 
-        viewModel.saveLeadData(firstName, lastName, email, phone, company, additional)
+        viewModel.saveLeadData(leadData)
+        findNavController().popBackStack()
     }
 
     private fun validateLoginField(): Boolean {
         if (binding.etFirstName.text.isNullOrEmpty()) {
-            binding.etFirstName.error = "First Name is required"
+            mContext.showToast("First Name is required", ToastType.ERROR)
             return false
         }
         if (binding.etLastName.text.isNullOrEmpty()) {
-            binding.etLastName.error = "First Name is required"
+            mContext.showToast("Last Name is required", ToastType.ERROR)
             return false
         }
         if (binding.etEmail.text.isNullOrEmpty()) {
-            binding.etEmail.error = "First Name is required"
+            mContext.showToast("Email is required", ToastType.ERROR)
+            return false
+        }
+        if (binding.rgLeads.checkedRadioButtonId == 0) {
+            mContext.showToast("Please select tag", ToastType.ERROR)
             return false
         }
         return true
@@ -235,5 +269,9 @@ class EvaAddManuallyFragment :
             arrayOf(Manifest.permission.RECORD_AUDIO),
             REQUEST_PERMISSION_CODE
         )
+    }
+
+    companion object {
+        private const val REQUEST_PERMISSION_CODE = 1001
     }
 }

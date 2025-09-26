@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="130dp"
+    android:layout_height="100dp"
+    android:layout_marginStart="14dp"
+    android:layout_marginVertical="15dp"
+    android:background="@drawable/bg_dash_rounded"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_add"
+        android:drawableTint="@color/subheading_text_color"
+        android:fontFamily="@font/sf_pro_regular"
+        android:gravity="center"
+        android:text="Add Photo"
+        android:textAlignment="gravity"
+        android:textColor="@color/subheading_text_color"
+        android:textSize="11dp" />
+
+</LinearLayout>

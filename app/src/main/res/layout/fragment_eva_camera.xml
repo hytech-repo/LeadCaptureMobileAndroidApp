@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".ui.fragments.camera.EvaCameraFragment">
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvScanTxt"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:fontFamily="@font/sf_pro_bold"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="25sp"-->
+<!--        android:textStyle="bold" />-->
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp">
+
+        <ImageButton
+            android:id="@+id/captureButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/shutter_button_background"
+            android:clickable="true"
+            android:contentDescription="Shutter Button"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/ivCameraIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_flip_camera"
+            app:tint="@color/white" />
+
+    </RelativeLayout>
+
+    <!--    <Button-->
+    <!--        android:id="@+id/backButton"-->
+    <!--        android:layout_width="250dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginBottom="20dp"-->
+    <!--        android:background="@drawable/bg_input_rounded"-->
+    <!--        android:fontFamily="@font/sf_pro_regular"-->
+    <!--        android:text="@string/back"-->
+    <!--        android:textColor="@color/screen_bg_color"-->
+    <!--        android:textSize="16dp" />-->
+
+</RelativeLayout>

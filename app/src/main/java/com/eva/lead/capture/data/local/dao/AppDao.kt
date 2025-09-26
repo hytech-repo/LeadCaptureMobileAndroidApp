@@ -30,7 +30,7 @@ interface AppDao {
     fun getExhibitorByLeadCode(leadCode: String): Flow<Exhibitor?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertLead(leadData: EvaLeadData): Long
+    suspend fun insertLead(leadData: EvaLeadData): Long
 
     @Query("SELECT * FROM lead_data ORDER BY id DESC")
     fun getAllLeadData(): Flow<List<EvaLeadData>?>

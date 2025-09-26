@@ -1,0 +1,22 @@
+package com.eva.lead.capture.ui.fragments.leadform
+
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.ui.base.BaseViewModel
+import com.eva.lead.capture.utils.ResultWrapper
+import com.eva.lead.capture.utils.SingleLiveEvent
+import kotlinx.coroutines.launch
+
+class EvaLeadFormViewModel(mContext: Context) : BaseViewModel(mContext) {
+    private val _loader = SingleLiveEvent<ResultWrapper.Loading>()
+    val loader: LiveData<ResultWrapper.Loading> = _loader
+
+    fun saveLeadData(leadData: EvaLeadData) {
+        viewModelScope.launch {
+//            _loader.value = ResultWrapper.Loading
+            repositoryDb.insertLead(leadData)
+        }
+    }
+}

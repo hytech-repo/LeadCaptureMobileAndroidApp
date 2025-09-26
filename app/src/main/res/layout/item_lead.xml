@@ -10,9 +10,9 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/ic_circle"
-        android:fontFamily="@font/sf_pro_bold"
+        android:fontFamily="@font/sf_pro_medium"
         android:gravity="center"
         android:text="A"
         android:textColor="@color/heading_text_color"
@@ -28,6 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:fontFamily="@font/sf_pro_medium"
+        android:maxLength="25"
+        android:maxLines="1"
         android:text="Anderson James"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -97,18 +99,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_input_rounded"
+        android:background="@drawable/bg_rounded_stroke_16"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingHorizontal="30dp"
+        android:paddingHorizontal="23dp"
         android:paddingVertical="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/avatarText">
 
         <ImageView
             android:id="@+id/icTag"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:src="@drawable/ic_thunder" />
 
         <TextView
@@ -119,14 +121,15 @@
             android:fontFamily="@font/sf_pro_regular"
             android:text="Hot"
             android:textColor="#FF3B30"
-            android:textSize="12sp" />
+            android:textSize="13sp"
+            android:textStyle="normal" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="13dp"
         android:background="#E6E6E6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

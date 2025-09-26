@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_evaAddLeadFragment_to_evaAddManualLead"
             app:destination="@id/evaAddManualLead" />
+        <action
+            android:id="@+id/action_evaAddLeadFragment_to_evaCameraFragment"
+            app:destination="@id/evaCameraFragment" />
     </fragment>
 
     <fragment
@@ -55,14 +58,30 @@
         android:label="EvaUserProfileFragment"
         tools:layout="@layout/fragment_eva_user_profile">
 
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaEditProfileFragment"
+            app:destination="@id/evaEditProfileFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/evaAddManualLead"
-        android:name="com.eva.lead.capture.ui.fragments.addmanual.EvaAddManuallyFragment"
+        android:name="com.eva.lead.capture.ui.fragments.leadform.EvaLeadFormFragment"
         android:label="EvaAddManuallyFragment"
-        tools:layout="@layout/fragment_eva_add_manually">
+        tools:layout="@layout/fragment_eva_lead_form">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/evaCameraFragment"
+        android:name="com.eva.lead.capture.ui.fragments.camera.EvaCameraFragment"
+        android:label="EvaCameraFragment"
+        tools:layout="@layout/fragment_eva_camera">
+
+    </fragment>
+    <fragment
+        android:id="@+id/evaEditProfileFragment"
+        android:name="com.eva.lead.capture.ui.fragments.editprofile.EvaEditProfileFragment"
+        android:label="EvaEditProfileFragment"
+        tools:layout="@layout/fragment_eva_edit_profile" />
 
 </navigation>

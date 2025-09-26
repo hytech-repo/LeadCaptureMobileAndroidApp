@@ -15,8 +15,8 @@ class EventHostActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        log = AppLogger(this@EventHostActivity)
         binding = ActivityEventHostBinding.inflate(layoutInflater)
+        log = AppLogger(this@EventHostActivity)
         setContentView(binding.root)
 
         this.initView()

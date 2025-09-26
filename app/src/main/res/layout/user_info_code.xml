@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clUserInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_input_rounded"
+    android:backgroundTint="#FFFBF8"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileImageCard"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primary_color"
+            android:gravity="center"
+            android:textColor="@color/screen_bg_color"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            tools:text="JM" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcUserNameBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/profileImageCard"
+        app:layout_constraintEnd_toStartOf="@+id/tvEdit"
+        app:layout_constraintStart_toEndOf="@id/profileImageCard"
+        app:layout_constraintTop_toTopOf="@id/profileImageCard">
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_medium"
+            android:gravity="start"
+            android:textColor="@color/heading_text_color"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="David John fgefregrgergegerger" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@color/subheading_text_color"
+            android:textSize="12sp"
+            tools:text="davidjohn@evareg.coms" />
+
+        <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/ic_circle_tick"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/color_lime_green"
+            android:gravity="center_vertical"
+            android:text="Apply"
+            android:textColor="@color/subheading_text_color"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/tvEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_edit"
+        android:drawablePadding="5dp"
+        android:text="Edit"
+        android:textColor="@color/primary_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/profileImageCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/profileImageCard" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

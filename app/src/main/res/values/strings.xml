@@ -16,9 +16,13 @@
     <string name="submit">Submit</string>
     <string name="sent">Sent</string>
     <string name="got_it">Got it</string>
+    <string name="home">Home</string>
+    <string name="add_lead">Add Lead</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="license_code_msg">Please Enter your email to receive an license code.</string>
     <string name="license_code_sent_msg">Your license code has been sent to your \nregistered email address.</string>
     <string name="event_activation_msg">Each code can only be used on one device at a time. If \nthis code is active on another device, please sign out \nfrom there to continue.</string>
     <string name="save_lead">Save Lead</string>
+    <string name="doing_good_msg">You are doing good</string>
+    <string name="no_lead_yet">No Lead Yet</string>
 </resources>

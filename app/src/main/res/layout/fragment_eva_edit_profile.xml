@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/toolbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnSave"
+        android:layout_below="@id/incToolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/screen_bg_color"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:text="First Name"
+                android:textColor="@color/subheading_text_color"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:ellipsize="end"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:singleLine="true"
+                android:textColor="@color/heading_text_color"
+                android:textColorHint="@color/subheading_text_color"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@+id/txtFirstName"
+                app:layout_constraintStart_toStartOf="@+id/txtFirstName"
+                app:layout_constraintTop_toBottomOf="@id/txtFirstName"
+                tools:hint="Anderson" />
+
+            <TextView
+                android:id="@+id/txtLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Last Name"
+                android:textColor="@color/subheading_text_color"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etFirstName" />
+
+            <EditText
+                android:id="@+id/etLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtLastName"
+                app:layout_constraintStart_toStartOf="@+id/txtLastName"
+                app:layout_constraintTop_toBottomOf="@id/txtLastName"
+                tools:hint="James" />
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Email"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLastName" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:backgroundTint="#EDF1F3"
+                android:enabled="false"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtEmail"
+                app:layout_constraintStart_toStartOf="@+id/txtEmail"
+                app:layout_constraintTop_toBottomOf="@id/txtEmail"
+                tools:hint="james@andr@gmail.com" />
+
+
+            <!-- Company Name -->
+            <TextView
+                android:id="@+id/txtCompanyName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Device Name"
+                android:textColor="@color/subheading_text_color"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etEmail" />
+
+            <EditText
+                android:id="@+id/etDevice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtCompanyName"
+                app:layout_constraintStart_toStartOf="@+id/txtCompanyName"
+                app:layout_constraintTop_toBottomOf="@id/txtCompanyName"
+                tools:hint="iphone 16" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:fontFamily="@font/sf_pro_regular"
+        android:text="save"
+        android:textColor="@color/screen_bg_color"
+        android:textStyle="normal" />
+</RelativeLayout>

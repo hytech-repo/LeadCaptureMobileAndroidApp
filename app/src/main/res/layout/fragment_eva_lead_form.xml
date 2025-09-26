@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/toolbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnSave"
+        android:layout_below="@id/incToolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/screen_bg_color"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvTag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tag"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioGroup
+                android:id="@+id/rgLeads"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@id/tvTag"
+                app:layout_constraintStart_toStartOf="@id/tvTag"
+                app:layout_constraintTop_toBottomOf="@id/tvTag">
+
+                <RadioButton
+                    android:id="@+id/hotLead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/lead_type_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="true"
+                    android:drawableStart="@drawable/ic_thunder"
+                    android:drawablePadding="5dp"
+                    android:paddingHorizontal="15dp"
+                    android:text="Hot Lead"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/incToolbar" />
+
+                <RadioButton
+                    android:id="@+id/mediumLead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/lead_type_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_fire"
+                    android:drawablePadding="5dp"
+                    android:paddingHorizontal="15dp"
+                    android:text="Medium Lead"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/incToolbar" />
+
+                <RadioButton
+                    android:id="@+id/coldLead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/lead_type_selector"
+                    android:button="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_cold"
+                    android:drawablePadding="5dp"
+                    android:paddingHorizontal="15dp"
+                    android:text="Cold Lead"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/incToolbar" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvPersonalInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Personal Information"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/rgLeads"
+                app:layout_constraintStart_toStartOf="@+id/rgLeads"
+                app:layout_constraintTop_toBottomOf="@id/rgLeads" />
+
+            <TextView
+                android:id="@+id/txtFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:text="First Name"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPersonalInfo" />
+
+            <EditText
+                android:id="@+id/etFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:ellipsize="end"
+                android:hint="Anderson"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:singleLine="true"
+                android:textColor="@color/heading_text_color"
+                android:textColorHint="@color/subheading_text_color"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@+id/txtFirstName"
+                app:layout_constraintStart_toStartOf="@+id/txtFirstName"
+                app:layout_constraintTop_toBottomOf="@id/txtFirstName" />
+
+            <TextView
+                android:id="@+id/txtLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Last Name"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etFirstName" />
+
+            <EditText
+                android:id="@+id/etLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:hint="James"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtLastName"
+                app:layout_constraintStart_toStartOf="@+id/txtLastName"
+                app:layout_constraintTop_toBottomOf="@id/txtLastName" />
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Email Address"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLastName" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:hint="james@andr@gmail.com"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtEmail"
+                app:layout_constraintStart_toStartOf="@+id/txtEmail"
+                app:layout_constraintTop_toBottomOf="@id/txtEmail" />
+
+
+            <!-- Phone Number -->
+            <TextView
+                android:id="@+id/txtPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Phone Number"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etEmail" />
+
+            <EditText
+                android:id="@+id/etPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:hint="123-456-7890"
+                android:inputType="phone"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtPhoneNumber"
+                app:layout_constraintStart_toStartOf="@+id/txtPhoneNumber"
+                app:layout_constraintTop_toBottomOf="@id/txtPhoneNumber" />
+
+            <!-- Company Name -->
+            <TextView
+                android:id="@+id/txtCompanyName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Company Name"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etPhoneNumber" />
+
+            <EditText
+                android:id="@+id/etCompanyName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:hint="XYZ Pvt. Ltd."
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtCompanyName"
+                app:layout_constraintStart_toStartOf="@+id/txtCompanyName"
+                app:layout_constraintTop_toBottomOf="@id/txtCompanyName" />
+
+            <!-- Additional Information -->
+            <TextView
+                android:id="@+id/txtAdditionalInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Additional Information"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etCompanyName" />
+
+            <EditText
+                android:id="@+id/etAdditionalInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:gravity="top|start"
+                android:hint="Write any notes or instructions here"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:minLines="3"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtAdditionalInfo"
+                app:layout_constraintStart_toStartOf="@+id/txtAdditionalInfo"
+                app:layout_constraintTop_toBottomOf="@id/txtAdditionalInfo" />
+
+
+            <TextView
+                android:id="@+id/tvQuickNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Quick Notes"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etAdditionalInfo" />
+
+            <CheckBox
+                android:id="@+id/cbMailingList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Add to Mailing List"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuickNotes" />
+
+            <CheckBox
+                android:id="@+id/cbScheduleDemo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Schedule Demo"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbMailingList" />
+
+            <CheckBox
+                android:id="@+id/cbBookAppointment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Book Appointment"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbScheduleDemo" />
+
+            <CheckBox
+                android:id="@+id/cbOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Other"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbBookAppointment" />
+
+            <TextView
+                android:id="@+id/tvNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Notes"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOther" />
+
+            <!-- EditText for Note -->
+            <EditText
+                android:id="@+id/etNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_rounded_stroke_16"
+                android:hint="Add your note here"
+                android:inputType="textMultiLine"
+                android:padding="18dp"
+                android:textColor="@color/heading_text_color"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvNote" />
+
+            <TextView
+                android:id="@+id/tvMedia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Media"
+                android:textColor="@color/primary_color"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etNote" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUploadMedia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:background="@drawable/bg_input_rounded"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/tvMedia"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_media" />
+
+            <!-- Questions Section -->
+            <TextView
+                android:id="@+id/tvQuestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingVertical="10dp"
+                android:text="Questions"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvUploadMedia" />
+
+            <!-- Question 1 -->
+            <TextView
+                android:id="@+id/tvQuestion1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="What is your timeline to buy?"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuestions" />
+
+
+            <!-- Checkboxes for Question 1 -->
+            <CheckBox
+                android:id="@+id/cbOption1Q1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Immediately"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuestion1" />
+
+            <CheckBox
+                android:id="@+id/cbOption2Q1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Within 1 month"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption1Q1" />
+
+            <CheckBox
+                android:id="@+id/cbOption3Q1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1-3 months"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption2Q1" />
+
+            <CheckBox
+                android:id="@+id/cbOption4Q1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More than 3 months"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption3Q1" />
+
+            <TextView
+                android:id="@+id/tvQuestion2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="What is your timeline to buy?"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption4Q1" />
+
+            <!-- Checkboxes for Question 2 -->
+            <CheckBox
+                android:id="@+id/cbOption1Q2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Immediately"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuestion2" />
+
+            <CheckBox
+                android:id="@+id/cbOption2Q2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Within 1 month
+"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption1Q2" />
+
+            <CheckBox
+                android:id="@+id/cbOption3Q2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1-3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption2Q2" />
+
+            <CheckBox
+                android:id="@+id/cbOption4Q2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More than 3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption3Q2" />
+
+
+            <!-- Question 3 -->
+            <TextView
+                android:id="@+id/tvQuestion3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="What is your timeline to buy?"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption4Q2" />
+
+            <!-- Checkboxes for Question 3 -->
+            <CheckBox
+                android:id="@+id/cbOption1Q3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Immediately"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuestion3" />
+
+            <CheckBox
+                android:id="@+id/cbOption2Q3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Within 1 month
+"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption1Q3" />
+
+            <CheckBox
+                android:id="@+id/cbOption3Q3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1-3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption2Q3" />
+
+            <CheckBox
+                android:id="@+id/cbOption4Q3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More than 3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption3Q3" />
+
+            <!-- Question 4 -->
+            <TextView
+                android:id="@+id/tvQuestion4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="What is your timeline to buy?"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption4Q3" />
+
+            <!-- Checkboxes for Question 4 -->
+            <CheckBox
+                android:id="@+id/cbOption1Q4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Immediately"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvQuestion4" />
+
+            <CheckBox
+                android:id="@+id/cbOption2Q4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Within 1 month"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption1Q4" />
+
+            <CheckBox
+                android:id="@+id/cbOption3Q4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1-3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption2Q4" />
+
+            <CheckBox
+                android:id="@+id/cbOption4Q4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More than 3 months"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbOption3Q4" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:fontFamily="@font/sf_pro_regular"
+        android:text="@string/save_lead"
+        android:textColor="@color/screen_bg_color"
+        android:textStyle="normal" />
+</RelativeLayout>

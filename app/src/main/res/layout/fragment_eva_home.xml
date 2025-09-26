@@ -97,9 +97,11 @@
                     android:padding="16dp">
 
                     <ImageView
+                        android:id="@+id/ivGroupIcon"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginEnd="16dp"
+                        android:background="@drawable/ic_circle"
                         android:src="@drawable/ic_user_grp" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -118,6 +120,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvLeadCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/sf_pro_medium"
@@ -127,6 +130,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvNoLead"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/sf_pro_regular"

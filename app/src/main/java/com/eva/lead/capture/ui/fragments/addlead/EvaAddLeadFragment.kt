@@ -42,6 +42,15 @@ class EvaAddLeadFragment :
         binding.cvAddManual.setOnClickListener {
             findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaAddManualLead)
         }
+        binding.cvQrCode.setOnClickListener {
+            findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaCameraFragment)
+        }
+        binding.cvBusinessCard.setOnClickListener {
+            findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaCameraFragment)
+        }
+        binding.incToolbar.ivUserImage.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_evaUserProfileFragment)
+        }
     }
 
     companion object {

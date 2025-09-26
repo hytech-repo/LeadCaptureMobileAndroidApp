@@ -129,14 +129,12 @@ class LoginFragment :
     private fun initListener() {
         binding.loginBtn.setOnClickListener {
             if (validateLoginField()) {
-//                callLoginUserApi()
                 checkExhibitorAndMoveAhead()
             }
         }
 
         binding.tvLicenseCode.setOnClickListener {
-//            showForgotPasswordDialog()
-            findNavController().navigate(R.id.action_loginFragment_to_eventActivationFragment)
+            showForgotPasswordDialog()
         }
     }
 

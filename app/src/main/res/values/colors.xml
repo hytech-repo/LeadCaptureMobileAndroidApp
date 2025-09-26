@@ -13,4 +13,8 @@
     <color name="text_color_grey">#9CA3AF</color>
     <color name="status_yellow">#F5C900</color>
     <color name="status_blue">#007AFF</color>
+    <color name="color_lime_green">#009933</color>
+    <color name="color_light_blue">#78C7FF</color>
+    <color name="color_purple">#C67BF3</color>
+    <color name="color_pinkish_red">#FF668C</color>
 </resources>
