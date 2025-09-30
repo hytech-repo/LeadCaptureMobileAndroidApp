@@ -1,7 +1,10 @@
 package com.eva.lead.capture.ui.fragments.profile
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +17,9 @@ import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaUserProfileBinding
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.ui.activities.EventHostActivity
+import com.eva.lead.capture.ui.activities.MainActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.ui.dialog.EvaConfirmationDialog
 import com.eva.lead.capture.utils.changeDrawableBgAndStroke
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -104,6 +109,11 @@ class EvaUserProfileFragment :
     }
 
     private fun setupListeners() {
+        adapter.onItemClick= {option, position ->
+            if (option.label == "Sign out") {
+                showConfirmationDialog()
+            }
+        }
         binding.incUserInfo.tvEdit.setOnClickListener {
             exhibitorData?.let { exhibitor ->
                 val bundle = Bundle().apply {
@@ -124,6 +134,46 @@ class EvaUserProfileFragment :
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun showConfirmationDialog() {
+        val confirmationDialog = EvaConfirmationDialog()
+        val bundle = Bundle()
+        bundle.putString("heading", mContext.getString(R.string.sign_out_header))
+        bundle.putString("sub_heading", mContext.getString(R.string.sign_out_subheading))
+        bundle.putString("primary_btn_text", mContext.getString(R.string.cancel))
+        bundle.putString("seconday_btn_text", mContext.getString(R.string.eva_sign_out))
+        bundle.putInt("ivIcon", R.drawable.ic_signout_upward)
+        bundle.putInt("icon_bgcolor", R.color.toast_error_bg)
+        confirmationDialog.arguments = bundle
+        confirmationDialog.apply {
+            onConfirmationListener = { isPrimaryBtnClicked ->
+                if (!isPrimaryBtnClicked) {
+                    showProgressDialog(false)
+                    clearLoginUserData()
+                }
+                dismiss()
+            }
+        }.show(requireActivity().supportFragmentManager,"EvaSignOutDialog")
+    }
+
+    private fun clearLoginUserData() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            prefManager.remove(AppConstants.USER_ID)
+            prefManager.remove(AppConstants.FIRST_NAME)
+            prefManager.remove(AppConstants.LAST_NAME)
+            prefManager.remove(AppConstants.LEAD_CODE)
+            prefManager.remove(AppConstants.USER_EMAIL)
+            prefManager.remove(AppConstants.REFRESH_TOKEN)
+            hideProgressDialog()
+            navigateToMainActivity()
+        }, 3000)
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(mContext, MainActivity::class.java)
+        mContext.startActivity(intent)
+        requireActivity().overridePendingTransition(0, 0)
     }
 
     private fun fetchExhibitorFromDb() {

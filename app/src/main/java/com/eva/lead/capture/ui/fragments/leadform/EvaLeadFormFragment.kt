@@ -1,12 +1,16 @@
 package com.eva.lead.capture.ui.fragments.leadform
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,15 +19,17 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
+import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaLeadFormBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.ui.fragments.camera.CapturedBusinessCardData
 import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.getDrawableStatus
 import com.eva.lead.capture.utils.observe
 import com.eva.lead.capture.utils.showToast
-import java.io.IOException
 
 class EvaLeadFormFragment :
     BaseFragment<FragmentEvaLeadFormBinding, EvaLeadFormViewModel>(EvaLeadFormViewModel::class.java) {
@@ -35,6 +41,11 @@ class EvaLeadFormFragment :
     private lateinit var updateTimeRunnable: Runnable
     private var fileName: String = ""
     private lateinit var mediaRecorder: MediaRecorder
+    private var recordService: EvaRecordAudioService? = null
+    private var isBound = false
+    private var userInfo: CapturedBusinessCardData? = null
+    private val emailRegex = Regex(AppConstants.EMAIL_REGEX)
+    private val phoneRegex = Regex(AppConstants.PHONE_REGEX)
 
     private val mediaAdapter: EvaAttachedMediaAdapter by lazy {
         EvaAttachedMediaAdapter(mContext)
@@ -54,10 +65,47 @@ class EvaLeadFormFragment :
         return FragmentEvaLeadFormBinding.inflate(inflater, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val intent = Intent(mContext, EvaRecordAudioService::class.java)
+//        mContext.startService(intent)
+        mContext.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+    }
+
     override fun startWorking(savedInstanceState: Bundle?) {
+        this.initBundle()
         this.init()
         this.initObserver()
         this.initListener()
+    }
+
+    private fun initBundle() {
+        if (arguments != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                userInfo = arguments!!.getParcelable("user_info", CapturedBusinessCardData::class.java)
+            } else {
+                userInfo = arguments!!.getParcelable<CapturedBusinessCardData>("user_info")
+            }
+        }
+    }
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as EvaRecordAudioService.AudioBinder
+            recordService = binder.getService()
+            isBound = true
+            checkAudioPermission()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+            recordService = null
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
     }
 
     private fun init() {
@@ -65,16 +113,36 @@ class EvaLeadFormFragment :
         binding.incToolbar.llcbtn.visibility = View.GONE
         binding.incToolbar.tvRecording.visibility = View.VISIBLE
 
+
+        userInfo?.let { this.randerInfo(it) }
+
         this.initMediaRecyclerView()
+    }
 
-
-        handler = Handler(Looper.getMainLooper())
-
-        // File path for the audio file
-        fileName = context?.filesDir?.absolutePath + "/recording_${System.currentTimeMillis()}.3gp"
-
-        // Initialize the MediaRecorder
-        mediaRecorder = MediaRecorder()
+    private fun randerInfo(data: CapturedBusinessCardData) {
+        if (data.businessCardInfo.isNotEmpty()) {
+            val name = data.businessCardInfo["name"]?.split(" ")
+            if (name != null && name.isNotEmpty()) {
+                if (name.size == 2) {
+                    binding.etFirstName.setText(name[0])
+                    binding.etLastName.setText(name[1])
+                } else {
+                    binding.etFirstName.setText(name[0])
+                }
+            }
+            val email = data.businessCardInfo["email"]
+            if (!email.isNullOrEmpty()) {
+                binding.etEmail.setText(email)
+            }
+            val phone = data.businessCardInfo["phone"]
+            if (!phone.isNullOrEmpty()) {
+                binding.etPhoneNumber.setText(phone)
+            }
+            val companyName = data.businessCardInfo["company"]
+            if (!companyName.isNullOrEmpty()) {
+                binding.etCompanyName.setText(companyName)
+            }
+        }
     }
 
     private fun initMediaRecyclerView() {
@@ -112,83 +180,36 @@ class EvaLeadFormFragment :
             }
         }
 
-        binding.incToolbar.tvRecording.setOnClickListener {
-            if (!isRecording) {
-                // Start Recording
-                startRecording()
-            } else {
-                // Stop Recording
-                stopRecording()
-            }
-        }
+//        binding.incToolbar.tvRecording.setOnClickListener {
+//            if (!isRecording) {
+//                // Start Recording
+//                startRecording()
+//            } else {
+//                // Stop Recording
+//                stopRecording()
+//            }
+//        }
     }
 
-    private fun startRecording() {
-        if (checkPermissions()) {
-            try {
-                mediaRecorder.apply {
-                    setAudioSource(MediaRecorder.AudioSource.MIC)
-                    setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                    setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                    setOutputFile(fileName)
-
-                    prepare()
-                    start()
-
-                    // Update UI to show recording time
-                    startTime = System.currentTimeMillis()
-                    isRecording = true
-
-                    // Start updating the text view with elapsed time
-                    startRecordingTimeUpdate()
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
+    private fun showProgressOfAudio() {
+        recordService?.setOnProgressListener { progress, ampl ->
+            val hrs = progress / 3600
+            val mins = (progress % 3600) / 60
+            val secs = progress % 60
+            val duration = if (hrs > 0) {
+                String.format("%02d:%02d:%02d", hrs, mins, secs)
+            } else {
+                String.format("%02d:%02d", mins, secs)
             }
-        } else {
-            requestPermissions()
+            log.d("Recording", "progress: $progress, ampl $ampl")
+            binding.incToolbar.tvRecording.text = duration
         }
+        recordService?.startRecording()
     }
 
     override fun onStop() {
         super.onStop()
-        this.stopRecording()
-    }
-
-    private fun startRecordingTimeUpdate() {
-        updateTimeRunnable = Runnable {
-            val elapsedMillis = System.currentTimeMillis() - startTime
-            val elapsedSeconds = elapsedMillis / 1000
-            val formattedTime = formatElapsedTime(elapsedSeconds)
-            binding.incToolbar.tvRecording.text = "Recording: $formattedTime"
-
-            // Repeat this runnable every 100ms
-            handler.postDelayed(updateTimeRunnable, 100)
-        }
-
-        // Start the timer immediately
-        handler.post(updateTimeRunnable)
-    }
-
-    // Format elapsed time to display as 0:05 (minutes:seconds)
-    private fun formatElapsedTime(seconds: Long): String {
-        val minutes = seconds / 60
-        val remainingSeconds = seconds % 60
-        return String.format("%d:%02d", minutes, remainingSeconds)
-    }
-
-    private fun stopRecording() {
-        if (isRecording) {
-            mediaRecorder.apply {
-                stop()
-                reset()
-            }
-            isRecording = false
-
-            // Stop the timer
-            handler.removeCallbacks(updateTimeRunnable)
-            binding.incToolbar.tvRecording.text = "Recording Stopped"
-        }
+        recordService?.removeProgressCallback()
     }
 
     private fun resetRadioButtonBackground() {
@@ -245,8 +266,18 @@ class EvaLeadFormFragment :
             mContext.showToast("Last Name is required", ToastType.ERROR)
             return false
         }
-        if (binding.etEmail.text.isNullOrEmpty()) {
+        val email = binding.etEmail.text
+        if (email.isNullOrEmpty()) {
             mContext.showToast("Email is required", ToastType.ERROR)
+            return false
+        }
+        if (!emailRegex.matches(email)) {
+            mContext.showToast("Email is invalid", ToastType.ERROR)
+            return false
+        }
+        val phone = binding.etPhoneNumber.text
+        if (!phoneRegex.matches(phone)) {
+            mContext.showToast("Phone number is invalid", ToastType.ERROR)
             return false
         }
         if (binding.rgLeads.checkedRadioButtonId == 0) {
@@ -254,6 +285,14 @@ class EvaLeadFormFragment :
             return false
         }
         return true
+    }
+
+    private fun checkAudioPermission() {
+        if (checkPermissions()) {
+            showProgressOfAudio()
+        } else {
+            requestPermissions()
+        }
     }
 
     private fun checkPermissions(): Boolean {
@@ -269,6 +308,12 @@ class EvaLeadFormFragment :
             arrayOf(Manifest.permission.RECORD_AUDIO),
             REQUEST_PERMISSION_CODE
         )
+    }
+
+    override fun onPermissionResult(permission: Map<String, Boolean>, requestCode: Int) {
+        if (permission[Manifest.permission.RECORD_AUDIO] == true) {
+            this.showProgressOfAudio()
+        }
     }
 
     companion object {

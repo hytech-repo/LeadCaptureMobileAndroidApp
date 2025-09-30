@@ -12,7 +12,9 @@
     <string name="email_address">Email address</string>
     <string name="resend_code">Resend Code</string>
     <string name="send_code">Send Code</string>
+    <string name="eva_save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="eva_discard">Discard</string>
     <string name="submit">Submit</string>
     <string name="sent">Sent</string>
     <string name="got_it">Got it</string>
@@ -25,4 +27,9 @@
     <string name="save_lead">Save Lead</string>
     <string name="doing_good_msg">You are doing good</string>
     <string name="no_lead_yet">No Lead Yet</string>
+    <string name="eva_stop_recording">Stop Recording</string>
+    <string name="eva_stop_record_msg">Do you want to save this recording or discard it?</string>
+    <string name="eva_sign_out">Sign Out</string>
+    <string name="sign_out_header">Are you sure you want to Sign out?</string>
+    <string name="sign_out_subheading">After signing out, this device will no longer be active.</string>
 </resources>

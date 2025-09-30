@@ -32,6 +32,7 @@ public class AppConstants {
 
     public static final String BARCODE_REGEX = "^[A-Za-z]+-\\d+$";
     public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    public static final String PHONE_REGEX = "^\\d{10}$";
     public static final String IPV4_REGEX = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
                     + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
     public static final String OTP_REGEX = "^\\d{6}$";
@@ -50,6 +51,7 @@ public class AppConstants {
     public static final String LABEL_STATE = "{%STATE%}";
     public static final String LABEL_REGISTRANT_ID = "{%REGISTRANT_ID%}";
     public static final String LABEL_POSTAL_CODE = "{%POSTAL_CODE%}";
+    public static final String RECORDING = "recordings";
 //    public static final String INTENT_ACTION_DISCONNECT = BuildConfig.APPLICATION_ID + ".Disconnect";
 
 }

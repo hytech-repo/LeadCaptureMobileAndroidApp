@@ -37,12 +37,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.lottie.LottieAnimationView
 import com.eva.lead.capture.R
-import com.eva.lead.capture.ui.activities.MainActivity
+import com.eva.lead.capture.ui.base.BaseActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,6 +77,14 @@ internal fun Fragment.handleFailure(e: Exception?) {
 //        else -> showErrorToast("Oops! Something Went Wrong")
     }
 //    log.v("handleFailure: ", "OUT")
+}
+
+fun Context.getExternalFolderPath(name: String): File {
+    val dir = File(getExternalFilesDir(null), name)
+    if (!dir.exists()) {
+        dir.mkdirs()
+    }
+    return dir
 }
 
 fun Context.showToast(
@@ -193,7 +202,7 @@ fun Context.removePrefData() {
 
 @Throws(Exception::class)
 fun Context.showProgressDialog(cancellable: Boolean, animationRes: Int): Dialog {
-    val customView = (this as MainActivity).layoutInflater.inflate(R.layout.dialog_loader, null)
+    val customView = (this as BaseActivity).layoutInflater.inflate(R.layout.dialog_loader, null)
     val customDialog = Dialog(this)
     customDialog.setContentView(customView)
     customDialog.setCancelable(cancellable)

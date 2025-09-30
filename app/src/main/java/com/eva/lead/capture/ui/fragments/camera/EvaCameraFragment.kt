@@ -14,14 +14,12 @@ import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -29,10 +27,15 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.eva.lead.capture.R
 import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaCameraBinding
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.utils.ToastType
+import com.eva.lead.capture.utils.getExternalFolderPath
+import com.eva.lead.capture.utils.showToast
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -62,6 +65,7 @@ class EvaCameraFragment :
     private var lastScanTime = 0L
     private val scanCooldown = 2000L // 2 seconds
     private val barcodePattern = Regex(AppConstants.BARCODE_REGEX)
+    private var mode: String = "manual"
 
     private val eventId by lazy {
         prefManager.get(AppConstants.EVENT_ID, "")
@@ -97,8 +101,15 @@ class EvaCameraFragment :
 
     private fun init() {
         cameraExecutor = Executors.newSingleThreadExecutor()
+        this.initBundle()
         this.initRepo()
         this.initObserver()
+    }
+
+    private fun initBundle() {
+        if (arguments != null) {
+            mode = arguments!!.getString("mode", "manual")
+        }
     }
 
     private fun initRepo() {
@@ -153,8 +164,9 @@ class EvaCameraFragment :
                 it.surfaceProvider = binding.previewView.surfaceProvider
             }
 
-            imageCapture = ImageCapture.Builder().
-                setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build()
+            imageCapture =
+                ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                    .build()
 
 //            val imageAnalyzer = ImageAnalysis.Builder()
 //                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -181,11 +193,11 @@ class EvaCameraFragment :
     }
 
     private fun captureBusinessCardImage() {
-        // Show loading indicator
-        showLoader()
+//        // Show loading indicator
+//        showLoader()
 
         // Create file in internal storage
-        val imageFile = File(requireContext().filesDir, "business_cards")
+        val imageFile = mContext.getExternalFolderPath("clicked_image")
         if (!imageFile.exists()) {
             imageFile.mkdirs()
         }
@@ -238,12 +250,14 @@ class EvaCameraFragment :
     fun enhanceContrast(bitmap: Bitmap): Bitmap {
         val contrast = 1.5f // Increase contrast by 50%
         val brightness = 0f
-        val cm = ColorMatrix(floatArrayOf(
-            contrast, 0f, 0f, 0f, brightness,
-            0f, contrast, 0f, 0f, brightness,
-            0f, 0f, contrast, 0f, brightness,
-            0f, 0f, 0f, 1f, 0f
-        ))
+        val cm = ColorMatrix(
+            floatArrayOf(
+                contrast, 0f, 0f, 0f, brightness,
+                0f, contrast, 0f, 0f, brightness,
+                0f, 0f, contrast, 0f, brightness,
+                0f, 0f, 0f, 1f, 0f
+            )
+        )
         val ret = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(ret)
         val paint = Paint()
@@ -260,49 +274,43 @@ class EvaCameraFragment :
 
     private fun processImageFile(imageFile: File) {
         try {
-            // Create InputImage from file
-//            val image = InputImage.fromFilePath(requireContext(), Uri.fromFile(imageFile))
-
+            // Preprocess image
             val greyBitmap = toGrayscale(imageFile)
             val conBitmap = enhanceContrast(greyBitmap)
-            val bitmap = rotateBitmap(conBitmap, 0f)
-            val image = InputImage.fromBitmap(bitmap, 0)
+            val image = InputImage.fromBitmap(conBitmap, 0)
 
-            // Process both QR codes and text
-            val results = mutableMapOf<String, Any>()
-            var completedTasks = 0
-            val totalTasks = 2
-
-            // Process QR codes
-            processQRCodeFromImage(image) { qrResults ->
-                synchronized(results) {
-                    if (qrResults.isNotEmpty()) {
-                        results["qrCodes"] = qrResults
-                    }
-                    completedTasks++
-                    if (completedTasks == totalTasks) {
+            // Process based on mode
+            when (mode) {
+                "qr" -> {
+                    processQRCodeFromImage(image) { qrResults ->
+                        val results = mutableMapOf<String, Any>()
+                        if (qrResults.isNotEmpty()) {
+                            results["qrCodes"] = qrResults
+                        }
                         handleAllResults(results, imageFile)
                     }
                 }
-            }
 
-            // Process text recognition
-            processTextFromImage(image) { textResults ->
-                synchronized(results) {
-                    if (textResults.isNotEmpty()) {
-                        results["businessCardInfo"] = textResults
-                    }
-                    completedTasks++
-                    if (completedTasks == totalTasks) {
+                "card" -> {
+                    processTextFromImage(image) { textResults ->
+                        val results = mutableMapOf<String, Any>()
+                        if (textResults.isNotEmpty()) {
+                            results["businessCardInfo"] = textResults
+                        }
                         handleAllResults(results, imageFile)
                     }
+                }
+
+                else -> {
+                    log.e(TAG, "Invalid mode: $mode")
+                    hideProgressDialog()
                 }
             }
 
         } catch (e: Exception) {
             hideProgressDialog()
             log.e(TAG, "Error processing image: ${e.message}")
-//            showError("Error processing image: ${e.message}")
+            mContext.showToast("Error processing image", ToastType.ERROR)
         }
     }
 
@@ -315,14 +323,18 @@ class EvaCameraFragment :
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 val qrResults = mutableListOf<String>()
-                for (barcode in barcodes) {
-                    val value = barcode.rawValue
-                    if (value != null && barcodePattern.matches(value)) {
-                        qrResults.add(value)
-                        log.d(TAG, "Detected QR Code: $value")
+                if (barcodes.isNotEmpty()) {
+                    for (barcode in barcodes) {
+                        val value = barcode.rawValue
+                        if (value != null && barcodePattern.matches(value)) {
+                            qrResults.add(value)
+                            log.d(TAG, "Detected QR Code: $value")
+                        }
                     }
+                    callback(qrResults)
+                } else {
+                    mContext.showToast("Qr code not found", ToastType.ERROR)
                 }
-                callback(qrResults)
             }
             .addOnFailureListener { e ->
                 log.e(TAG, "QR code scanning failed: ${e.message}")
@@ -362,15 +374,22 @@ class EvaCameraFragment :
                 val boundingBox = line.boundingBox
 
                 // Filter out likely icon/image artifacts
-                if (isValidTextLine(lineText, boundingBox)) {
-                    validTextBlocks.add(
-                        TextBlockInfo(
-                            text = lineText,
-                            boundingBox = boundingBox,
-                            confidence = line.confidence ?: 0f
-                        )
+//                if (isValidTextLine(lineText, boundingBox)) {
+//                    validTextBlocks.add(
+//                        TextBlockInfo(
+//                            text = lineText,
+//                            boundingBox = boundingBox,
+//                            confidence = line.confidence ?: 0f
+//                        )
+//                    )
+//                }
+                validTextBlocks.add(
+                    TextBlockInfo(
+                        text = lineText,
+                        boundingBox = boundingBox,
+                        confidence = line.confidence ?: 0f
                     )
-                }
+                )
             }
         }
 
@@ -383,16 +402,24 @@ class EvaCameraFragment :
         return info
     }
 
-    private fun processFilteredTextBlocks(textBlocks: List<TextBlockInfo>, info: MutableMap<String, String>) {
+    private fun processFilteredTextBlocks(
+        textBlocks: List<TextBlockInfo>,
+        info: MutableMap<String, String>
+    ) {
         val processedTexts = textBlocks.map { it.text }
 
         // Extract specific information types
+        extractAddress(textBlocks, info)
         extractContactInfo(textBlocks, info)
+        extractBloodGroup(textBlocks, info)
         extractNameAndCompany(textBlocks, info)
         extractEmployeeId(textBlocks, info)
     }
 
-    private fun extractContactInfo(textBlocks: List<TextBlockInfo>, info: MutableMap<String, String>) {
+    private fun extractContactInfo(
+        textBlocks: List<TextBlockInfo>,
+        info: MutableMap<String, String>
+    ) {
         for (block in textBlocks) {
             val text = block.text
 
@@ -417,7 +444,8 @@ class EvaCameraFragment :
             }
 
             // Website detection
-            val urlPattern = Regex("""(?i)(?:https?://)?(?:www\.)?[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}""")
+            val urlPattern =
+                Regex("""(?i)(?:https?://)?(?:www\.)?[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}""")
             urlPattern.find(text)?.let { matchResult ->
                 var website = matchResult.value.lowercase()
                 if (!website.startsWith("http")) {
@@ -428,7 +456,67 @@ class EvaCameraFragment :
         }
     }
 
-    private fun extractNameAndCompany(textBlocks: List<TextBlockInfo>, info: MutableMap<String, String>) {
+    private fun extractBloodGroup(
+        textBlocks: List<TextBlockInfo>,
+        info: MutableMap<String, String>
+    ) {
+        for (block in textBlocks) {
+            val text = block.text
+
+            // Blood group patterns
+            val bloodGroupPattern = Regex("""(?i)blood\s*group\s*:?\s*([ABO][+-](?:ve)?)""")
+            bloodGroupPattern.find(text)?.let { matchResult ->
+                info["bloodGroup"] = matchResult.groupValues.getOrNull(1) ?: matchResult.value
+                return  // Found it, exit
+            }
+
+            // Also check for standalone blood group (A+, B-, O+, etc.)
+            val standalonePattern = Regex("""(?i)([ABO][+-](?:ve)?)""")
+            if (text.lowercase().contains("blood")) {
+                standalonePattern.find(text)?.let { matchResult ->
+                    info["bloodGroup"] = matchResult.value
+                    return
+                }
+            }
+        }
+    }
+
+    private fun extractAddress(textBlocks: List<TextBlockInfo>, info: MutableMap<String, String>) {
+        val addressKeywords = listOf(
+            "sector", "block", "plot", "street", "road", "lane", "avenue",
+            "noida", "delhi", "bangalore", "mumbai", "gurgaon", "gurugram",
+            "india", "colony", "nagar", "phase"
+        )
+
+        // Find blocks that likely contain address information
+        val addressBlocks = textBlocks.filter { block ->
+            val text = block.text.lowercase()
+            val hasKeyword = addressKeywords.any { text.contains(it) }
+            val hasNumbers = block.text.any { it.isDigit() }
+            val hasPincode = Regex("""\d{6}""").containsMatchIn(block.text)
+
+            (hasKeyword && hasNumbers) || hasPincode
+        }
+
+        if (addressBlocks.isNotEmpty()) {
+            // If multiple address blocks found, combine them or take the most complete one
+            val fullAddress = if (addressBlocks.size == 1) {
+                addressBlocks[0].text
+            } else {
+                // Take the longest one (most complete)
+                addressBlocks.maxByOrNull { it.text.length }?.text ?: ""
+            }
+
+            if (fullAddress.isNotEmpty()) {
+                info["address"] = fullAddress
+            }
+        }
+    }
+
+    private fun extractNameAndCompany(
+        textBlocks: List<TextBlockInfo>,
+        info: MutableMap<String, String>
+    ) {
         // Filter out blocks that contain contact information
         val nonContactBlocks = textBlocks.filter { block ->
             val text = block.text
@@ -487,31 +575,51 @@ class EvaCameraFragment :
         return blocks.firstOrNull()?.text
     }
 
-    private fun findBestCompanyCandidate(blocks: List<TextBlockInfo>, personName: String?): String? {
+    private fun findBestCompanyCandidate(
+        blocks: List<TextBlockInfo>,
+        personName: String?
+    ): String? {
         // Look for company indicators
         val companyKeywords = listOf(
             "ltd", "llc", "inc", "corp", "company", "pvt", "private", "limited",
-            "solutions", "services", "technologies", "tech", "systems", "group",
-            "enterprises", "consulting", "software", "development"
+            "solutions", "services", "technologies", "tech", "systems",
+            "enterprises", "consulting", "software", "development", "edutech"
+        )
+
+        // Patterns to EXCLUDE from company detection
+        val excludePatterns = listOf(
+            Regex("""(?i)blood\s*group"""),
+            Regex("""(?i)id\s*:"""),
+            Regex("""(?i)phone"""),
+            Regex("""(?i)mobile"""),
+            Regex("""(?i)emergency""")
         )
 
         for (block in blocks) {
             val text = block.text
+            val lowerText = text.lowercase()
 
             // Skip if it's the person's name
             if (text.equals(personName, ignoreCase = true)) continue
 
+            // Skip if it matches exclude patterns
+            if (excludePatterns.any { pattern -> pattern.containsMatchIn(text) }) {
+                continue
+            }
+
             // Check for company keywords
-            val lowerText = text.lowercase()
             if (companyKeywords.any { keyword -> lowerText.contains(keyword) }) {
                 return text
             }
         }
 
-        // Fallback: find text that's different from the name
+        // Fallback: find text that's different from the name,
+        // longer than 5 chars, and doesn't match exclude patterns
         return blocks.find {
-            !it.text.equals(personName, ignoreCase = true) &&
-                    it.text.length > 3
+            val text = it.text
+            !text.equals(personName, ignoreCase = true) &&
+                    text.length > 5 &&
+                    excludePatterns.none { pattern -> pattern.containsMatchIn(text) }
         }?.text
     }
 
@@ -523,7 +631,9 @@ class EvaCameraFragment :
         if (words.size !in 1..4) return false
 
         // Each word should start with uppercase
-        if (!words.all { word -> word.first().isUpperCase() && word.drop(1).all { it.isLowerCase() } }) {
+        if (!words.all { word ->
+                word.first().isUpperCase() && word.drop(1).all { it.isLowerCase() }
+            }) {
             return false
         }
 
@@ -545,7 +655,10 @@ class EvaCameraFragment :
         return cleanPhone.length in 10..15
     }
 
-    private fun extractEmployeeId(textBlocks: List<TextBlockInfo>, info: MutableMap<String, String>) {
+    private fun extractEmployeeId(
+        textBlocks: List<TextBlockInfo>,
+        info: MutableMap<String, String>
+    ) {
         for (block in textBlocks) {
             val text = block.text
 
@@ -741,7 +854,15 @@ class EvaCameraFragment :
         // 3. Show results dialog
         // 4. Pass results back to parent
 
-        print(data)
+        navigateToNextScreen(data)
+
+//        print(data)
+    }
+
+    private fun navigateToNextScreen(data: CapturedBusinessCardData) {
+        val bundle = Bundle()
+        bundle.putParcelable("user_info", data)
+        findNavController().navigate(R.id.action_evaCameraFragment_to_evaAddManualLead, bundle)
     }
 
     @OptIn(ExperimentalGetImage::class)
