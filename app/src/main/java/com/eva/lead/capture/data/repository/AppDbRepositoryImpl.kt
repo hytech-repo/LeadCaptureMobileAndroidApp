@@ -4,6 +4,9 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import com.eva.lead.capture.data.local.AppDatabase
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
+import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuestionOption
 import com.eva.lead.capture.domain.repository.AppDbRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -27,6 +30,16 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
     override fun getLeadById(leadId: String): Flow<EvaLeadData?> = dao.getLeadById(leadId)
 
     override fun getAllLeads(): Flow<List<EvaLeadData>?> = dao.getAllLeadData()
+
+    override suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long = dao.insertQuestionInfo(questionInfo)
+
+    override suspend fun insertOptions(options: List<QuestionOption>): List<Long> = dao.insertOptions(options)
+
+    override suspend fun insertOption(option: QuestionOption): Long = dao.insertOption(option)
+
+    override suspend fun insertMediaFile(media: LeadAudioRecording): Long = dao.insertMediaFile(media)
+
+    override fun getAllRecording(): Flow<List<LeadAudioRecording>> = dao.getAllRecording()
 
     override suspend fun executeRawQuery(query: String): Long {
         val rawQuery = SimpleSQLiteQuery(query)

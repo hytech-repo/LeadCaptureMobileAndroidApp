@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/toolbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnSave"
+        android:layout_below="@id/incToolbar">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/bg_input_rounded"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/header_question"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Question"
+                        android:textColor="@color/subheading_text_color"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/arrow_icon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_up"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <!-- Question input -->
+                <EditText
+                    android:id="@+id/question_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_input_rounded"
+                    android:gravity="top|start"
+                    android:hint="Enter Question"
+                    android:inputType="textMultiLine"
+                    android:minHeight="75dp"
+                    android:padding="12dp"
+                    android:textColor="@color/subheading_text_color"
+                    android:textSize="13sp" />
+
+                <!-- Question type label -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sf_pro_regular"
+                        android:text="Question type"
+                        android:textColor="@color/subheading_text_color"
+                        android:textSize="13sp"
+                        android:textStyle="normal" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilLeadDropDown"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:background="@drawable/bg_input_rounded"
+                        app:boxBackgroundColor="@color/subheading_text_color"
+                        app:boxBackgroundMode="outline"
+                        app:boxStrokeColor="@color/black"
+                        app:endIconDrawable="@drawable/ic_dropdown"
+                        app:endIconMode="dropdown_menu"
+                        app:hintAnimationEnabled="false"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="@id/ivIcon"
+                        app:layout_constraintStart_toStartOf="@id/tvSubHeading"
+                        app:layout_constraintTop_toBottomOf="@id/tvLeadRecord">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/actvQuestionType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:fontFamily="@font/sf_pro_regular"
+                            android:hint="Select Lead"
+                            android:inputType="none"
+                            android:textColor="@color/heading_text_color"
+                            android:textColorHint="@color/subheading_text_color"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/color_switch_off" />
+
+                <LinearLayout
+                    android:id="@+id/llcMcq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewOptions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/edit_item" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutOptions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/incEditText"
+                            layout="@layout/edit_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAddBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_dash_rounded"
+                        android:gravity="center"
+                        android:padding="14dp"
+                        android:text="Add"
+                        android:textColor="@color/subheading_text_color"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llcAnswerBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvAns"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Answer"
+                        android:textColor="@color/subheading_text_color"
+                        android:textSize="13sp" />
+
+                    <EditText
+                        android:id="@+id/etAnswer"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_input_rounded"
+                        android:gravity="top|start"
+                        android:hint="Enter Answer"
+                        android:inputType="textMultiLine"
+                        android:padding="12dp"
+                        android:textColor="@color/subheading_text_color"
+                        android:textSize="13sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:fontFamily="@font/sf_pro_regular"
+        android:text="save"
+        android:textColor="@color/screen_bg_color"
+        android:textStyle="normal" />
+
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<!-- res/layout/dynamic_edit_text.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llcEditItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:background="@drawable/bg_input_rounded"
+    android:orientation="horizontal"
+    android:paddingHorizontal="12dp"
+    android:visibility="gone">
+
+    <!-- EditText -->
+    <EditText
+        android:id="@+id/etDynamicInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/sf_pro_regular"
+        android:hint="Type answer here"
+        android:imeOptions="actionGo"
+        android:inputType="text"
+        android:paddingVertical="12dp"
+        android:textColor="@color/heading_text_color"
+        android:textColorHint="@color/subheading_text_color"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/icCross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:contentDescription="Remove Option"
+        android:focusable="true"
+        android:src="@drawable/ic_cross" />
+
+</LinearLayout>

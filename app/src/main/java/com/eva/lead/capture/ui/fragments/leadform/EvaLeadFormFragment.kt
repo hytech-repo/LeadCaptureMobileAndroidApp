@@ -5,7 +5,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
@@ -14,8 +13,6 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
@@ -25,11 +22,13 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.ui.dialog.EvaConfirmationDialog
 import com.eva.lead.capture.ui.fragments.camera.CapturedBusinessCardData
 import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.getDrawableStatus
 import com.eva.lead.capture.utils.observe
 import com.eva.lead.capture.utils.showToast
+import java.io.File
 
 class EvaLeadFormFragment :
     BaseFragment<FragmentEvaLeadFormBinding, EvaLeadFormViewModel>(EvaLeadFormViewModel::class.java) {
@@ -46,6 +45,8 @@ class EvaLeadFormFragment :
     private var userInfo: CapturedBusinessCardData? = null
     private val emailRegex = Regex(AppConstants.EMAIL_REGEX)
     private val phoneRegex = Regex(AppConstants.PHONE_REGEX)
+    private val audioPermission = arrayOf(Manifest.permission.RECORD_AUDIO)
+    private var selectedFile = arrayListOf<String>()
 
     private val mediaAdapter: EvaAttachedMediaAdapter by lazy {
         EvaAttachedMediaAdapter(mContext)
@@ -55,6 +56,24 @@ class EvaLeadFormFragment :
         super.onAttach(context)
         this.mContext = context
         this.TAG = "EvaAddManuallyFragment"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener("scan_result", this) { _, bundle ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                userInfo = bundle.getParcelable("user_info", CapturedBusinessCardData::class.java)
+            } else {
+                userInfo = bundle.getParcelable<CapturedBusinessCardData>("user_info")
+            }
+
+            userInfo?.let { randerInfo(it) }
+            userInfo?.imagePath?.let {
+                selectedFile.add(it)
+                mediaAdapter.setList(selectedFile)
+            }
+        }
     }
 
     override fun createView(
@@ -70,6 +89,9 @@ class EvaLeadFormFragment :
         val intent = Intent(mContext, EvaRecordAudioService::class.java)
 //        mContext.startService(intent)
         mContext.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        if (recordService != null) {
+            checkAudioPermission()
+        }
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
@@ -82,10 +104,14 @@ class EvaLeadFormFragment :
     private fun initBundle() {
         if (arguments != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                userInfo = arguments!!.getParcelable("user_info", CapturedBusinessCardData::class.java)
+                userInfo =
+                    arguments!!.getParcelable("user_info", CapturedBusinessCardData::class.java)
             } else {
                 userInfo = arguments!!.getParcelable<CapturedBusinessCardData>("user_info")
             }
+            selectedFile = arrayListOf()
+            val image = userInfo!!.imagePath
+            selectedFile.add(image)
         }
     }
 
@@ -112,7 +138,6 @@ class EvaLeadFormFragment :
         binding.incToolbar.tvTitle.text = "Add Manually"
         binding.incToolbar.llcbtn.visibility = View.GONE
         binding.incToolbar.tvRecording.visibility = View.VISIBLE
-
 
         userInfo?.let { this.randerInfo(it) }
 
@@ -142,6 +167,7 @@ class EvaLeadFormFragment :
             if (!companyName.isNullOrEmpty()) {
                 binding.etCompanyName.setText(companyName)
             }
+            mediaAdapter.setList(selectedFile)
         }
     }
 
@@ -153,13 +179,23 @@ class EvaLeadFormFragment :
     }
 
     private fun initListener() {
+        mediaAdapter.onItemClickListener = { path, action, position ->
+            if (action == "add") {
+                openCameraForClickedImage()
+            } else if (action == "remove") {
+                selectedFile.remove(path)
+                mediaAdapter.setList(selectedFile)
+            } else {
+
+            }
+        }
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
         binding.btnSave.setOnClickListener {
             if (validateLoginField()) {
-                saveLeadData()
+                takeConfirmationFromUser()
             }
         }
 
@@ -179,16 +215,33 @@ class EvaLeadFormFragment :
                 }
             }
         }
+    }
 
-//        binding.incToolbar.tvRecording.setOnClickListener {
-//            if (!isRecording) {
-//                // Start Recording
-//                startRecording()
-//            } else {
-//                // Stop Recording
-//                stopRecording()
-//            }
-//        }
+    private fun takeConfirmationFromUser() {
+        val confirmationDialog = EvaConfirmationDialog()
+        val bundle = Bundle()
+        bundle.putString("heading", mContext.getString(R.string.save_lead))
+        bundle.putString("sub_heading", mContext.getString(R.string.save_confirmation_lead))
+        bundle.putString("primary_btn_text", mContext.getString(R.string.save_lead))
+        bundle.putString("seconday_btn_text", mContext.getString(R.string.eva_discard))
+        bundle.putInt("icon_bgcolor", R.color.color_lime_green)
+        bundle.putInt("ivIcon", R.drawable.ic_user_grp)
+        confirmationDialog.arguments = bundle
+        confirmationDialog.isCancelable = false
+        confirmationDialog.apply {
+            onConfirmationListener = { isPrimaryBtnClicked ->
+                if (isPrimaryBtnClicked) {
+                    saveLeadData()
+                }
+                dismiss()
+            }
+        }.show(requireActivity().supportFragmentManager, "EvaConfirmationAudioDialog")
+    }
+
+    private fun openCameraForClickedImage() {
+        val bundle = Bundle()
+        bundle.putBoolean("send_fragment_result", true)
+        findNavController().navigate(R.id.action_evaAddManualLead_to_evaCameraFragment, bundle)
     }
 
     private fun showProgressOfAudio() {
@@ -236,12 +289,23 @@ class EvaLeadFormFragment :
             else -> ""
         }
 
+        var namesCommaSeparated: String = ""
+        if (selectedFile.isNotEmpty()) {
+            val fileNames = selectedFile.mapNotNull { filePath ->
+                val file = File(filePath)
+                if (file.exists()) file.name else null
+            }
+            namesCommaSeparated = fileNames.joinToString(", ")
+            log.d("Files", namesCommaSeparated)
+        }
+
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val email = binding.etEmail.text.toString()
         val phone = binding.etPhoneNumber.text.toString()
         val company = binding.etCompanyName.text.toString()
         val additional = binding.etAdditionalInfo.text.toString()
+        val notes = binding.etNote.text.toString()
         val leadData = EvaLeadData(
             firstName = firstName,
             lastName = lastName,
@@ -249,6 +313,8 @@ class EvaLeadFormFragment :
             phone = phone,
             companyName = company,
             additionalInfo = additional,
+            notes = notes,
+            imageFileNames = namesCommaSeparated,
             tag = tag,
             timestamp = System.currentTimeMillis()
         )
@@ -288,26 +354,11 @@ class EvaLeadFormFragment :
     }
 
     private fun checkAudioPermission() {
-        if (checkPermissions()) {
+        if (hasPermission(audioPermission)) {
             showProgressOfAudio()
         } else {
-            requestPermissions()
+            requestPermission(audioPermission, 10023)
         }
-    }
-
-    private fun checkPermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            mContext,
-            Manifest.permission.RECORD_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.RECORD_AUDIO),
-            REQUEST_PERMISSION_CODE
-        )
     }
 
     override fun onPermissionResult(permission: Map<String, Boolean>, requestCode: Int) {

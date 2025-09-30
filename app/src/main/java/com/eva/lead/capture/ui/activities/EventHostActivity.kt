@@ -41,6 +41,11 @@ class EventHostActivity : BaseActivity() {
                     true
                 }
 
+                R.id.nav_total_lead -> {
+                    navController.navigate(R.id.evaLeadListFragment)
+                    true
+                }
+
                 else -> false
             }
         }

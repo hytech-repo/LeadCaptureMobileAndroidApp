@@ -9,6 +9,9 @@ import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
+import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuestionOption
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -37,6 +40,21 @@ interface AppDao {
 
     @Query("SELECT * FROM lead_data where lead_id = :leadId")
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
+
+    @Insert
+    suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long
+
+    @Insert
+    suspend fun insertOptions(options: List<QuestionOption>): List<Long>
+
+    @Insert
+    suspend fun insertOption(option: QuestionOption): Long
+
+    @Insert
+    suspend fun insertMediaFile(media: LeadAudioRecording): Long
+
+    @Query("SELECT * FROM audio_recording where type = 'recording' ORDER BY id DESC")
+    fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
     @RawQuery
     suspend fun executeRawQuery(query: SupportSQLiteQuery): Long

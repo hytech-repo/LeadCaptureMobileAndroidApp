@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg_color"
+    tools:context=".ui.fragments.question.EvaQuestionsFragment">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/toolbar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/incToolbar"
+        app:tabIndicatorColor="@color/primary_color"
+        app:tabIndicatorHeight="3dp"
+        app:tabSelectedTextColor="@color/primary_color"
+        app:tabTextColor="@color/subheading_text_color">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="Questions" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="My Question" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="Quick Notes" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <LinearLayout
+        android:id="@+id/llQuestionCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+        <TextView
+            android:id="@+id/tvTotalQuestion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/sf_pro_medium"
+            android:text="8 Questions"
+            android:textColor="@color/heading_text_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/addQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rounded_primary_stroke"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:text="Add Quick Notes"
+            android:textColor="@color/primary_color"
+            android:textSize="13sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewOptions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="15dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llQuestionCount"
+        tools:listitem="@layout/question_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

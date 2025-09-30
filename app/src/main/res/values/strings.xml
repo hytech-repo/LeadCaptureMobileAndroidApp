@@ -20,6 +20,9 @@
     <string name="got_it">Got it</string>
     <string name="home">Home</string>
     <string name="add_lead">Add Lead</string>
+    <string name="lead_recording_heading">Add Lead Recording</string>
+    <string name="lead_recording_msg">Would you like to save this recording and link it to a lead record, save without lead?</string>
+    <string name="add_to_lead_record">Add to Lead Record</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="license_code_msg">Please Enter your email to receive an license code.</string>
     <string name="license_code_sent_msg">Your license code has been sent to your \nregistered email address.</string>
@@ -32,4 +35,6 @@
     <string name="eva_sign_out">Sign Out</string>
     <string name="sign_out_header">Are you sure you want to Sign out?</string>
     <string name="sign_out_subheading">After signing out, this device will no longer be active.</string>
+    <string name="save_without_lead">Save without Lead</string>
+    <string name="save_confirmation_lead">Would you like to save lead?</string>
 </resources>

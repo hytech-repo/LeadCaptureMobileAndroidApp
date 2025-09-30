@@ -282,59 +282,6 @@
                 app:layout_constraintStart_toStartOf="@+id/txtAdditionalInfo"
                 app:layout_constraintTop_toBottomOf="@id/txtAdditionalInfo" />
 
-
-            <TextView
-                android:id="@+id/tvQuickNotes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Quick Notes"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etAdditionalInfo" />
-
-            <CheckBox
-                android:id="@+id/cbMailingList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Add to Mailing List"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuickNotes" />
-
-            <CheckBox
-                android:id="@+id/cbScheduleDemo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Schedule Demo"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbMailingList" />
-
-            <CheckBox
-                android:id="@+id/cbBookAppointment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Book Appointment"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbScheduleDemo" />
-
-            <CheckBox
-                android:id="@+id/cbOther"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Other"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbBookAppointment" />
-
             <TextView
                 android:id="@+id/tvNote"
                 android:layout_width="match_parent"
@@ -345,7 +292,7 @@
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOther" />
+                app:layout_constraintTop_toBottomOf="@id/etAdditionalInfo" />
 
             <!-- EditText for Note -->
             <EditText
@@ -389,6 +336,58 @@
                 tools:itemCount="4"
                 tools:listitem="@layout/item_media" />
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llcQuicNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvUploadMedia">
+
+                <TextView
+                    android:id="@+id/tvQuickNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quick Notes"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/cbMailingList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Add to Mailing List"
+                    android:textSize="12sp" />
+
+                <CheckBox
+                    android:id="@+id/cbScheduleDemo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Schedule Demo"
+                    android:textSize="12sp" />
+
+                <CheckBox
+                    android:id="@+id/cbBookAppointment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Book Appointment"
+                    android:textSize="12sp" />
+
+                <CheckBox
+                    android:id="@+id/cbOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Other"
+                    android:textSize="12sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <!-- Questions Section -->
             <TextView
                 android:id="@+id/tvQuestions"
@@ -401,213 +400,219 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvUploadMedia" />
+                app:layout_constraintTop_toBottomOf="@id/llcQuicNotes" />
 
             <!-- Question 1 -->
-            <TextView
-                android:id="@+id/tvQuestion1"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llcQuestionContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="What is your timeline to buy?"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuestions" />
+                app:layout_constraintTop_toBottomOf="@id/tvQuestions">
+
+                <RadioGroup
+                    android:id="@+id/rgTimeLineQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvQuestion1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="What is your timeline to buy?"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/cbOption1Q1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Immediately"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/cbOption2Q1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Within 1 month"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/cbOption3Q1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1-3 months"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/cbOption4Q1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="More than 3 months"
+                        android:textSize="14sp" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvQuestion2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="What is your timeline to buy?"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/llcQuestionContainer" />-->
+
+<!--            &lt;!&ndash; Checkboxes for Question 2 &ndash;&gt;-->
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption1Q2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Immediately"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tvQuestion2" />-->
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption2Q2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Within 1 month-->
+<!--"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption1Q2" />-->
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption3Q2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="1-3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption2Q2" />-->
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption4Q2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="More than 3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption3Q2" />-->
 
 
-            <!-- Checkboxes for Question 1 -->
-            <CheckBox
-                android:id="@+id/cbOption1Q1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Immediately"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuestion1" />
+<!--            &lt;!&ndash; Question 3 &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:id="@+id/tvQuestion3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="What is your timeline to buy?"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption4Q2" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption2Q1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Within 1 month"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption1Q1" />
+<!--            &lt;!&ndash; Checkboxes for Question 3 &ndash;&gt;-->
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption1Q3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Immediately"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tvQuestion3" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption3Q1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1-3 months"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption2Q1" />
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption2Q3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Within 1 month-->
+<!--"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption1Q3" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption4Q1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="More than 3 months"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption3Q1" />
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption3Q3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="1-3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption2Q3" />-->
 
-            <TextView
-                android:id="@+id/tvQuestion2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="What is your timeline to buy?"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption4Q1" />
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption4Q3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="More than 3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption3Q3" />-->
 
-            <!-- Checkboxes for Question 2 -->
-            <CheckBox
-                android:id="@+id/cbOption1Q2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Immediately"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuestion2" />
+<!--            &lt;!&ndash; Question 4 &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:id="@+id/tvQuestion4"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:text="What is your timeline to buy?"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption4Q3" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption2Q2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Within 1 month
-"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption1Q2" />
+<!--            &lt;!&ndash; Checkboxes for Question 4 &ndash;&gt;-->
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption1Q4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Immediately"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tvQuestion4" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption3Q2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1-3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption2Q2" />
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption2Q4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Within 1 month"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption1Q4" />-->
 
-            <CheckBox
-                android:id="@+id/cbOption4Q2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="More than 3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption3Q2" />
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption3Q4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="1-3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption2Q4" />-->
 
-
-            <!-- Question 3 -->
-            <TextView
-                android:id="@+id/tvQuestion3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="What is your timeline to buy?"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption4Q2" />
-
-            <!-- Checkboxes for Question 3 -->
-            <CheckBox
-                android:id="@+id/cbOption1Q3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Immediately"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuestion3" />
-
-            <CheckBox
-                android:id="@+id/cbOption2Q3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Within 1 month
-"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption1Q3" />
-
-            <CheckBox
-                android:id="@+id/cbOption3Q3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1-3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption2Q3" />
-
-            <CheckBox
-                android:id="@+id/cbOption4Q3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="More than 3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption3Q3" />
-
-            <!-- Question 4 -->
-            <TextView
-                android:id="@+id/tvQuestion4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="What is your timeline to buy?"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption4Q3" />
-
-            <!-- Checkboxes for Question 4 -->
-            <CheckBox
-                android:id="@+id/cbOption1Q4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Immediately"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvQuestion4" />
-
-            <CheckBox
-                android:id="@+id/cbOption2Q4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Within 1 month"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption1Q4" />
-
-            <CheckBox
-                android:id="@+id/cbOption3Q4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1-3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption2Q4" />
-
-            <CheckBox
-                android:id="@+id/cbOption4Q4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="More than 3 months"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cbOption3Q4" />
-
+<!--            <CheckBox-->
+<!--                android:id="@+id/cbOption4Q4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="More than 3 months"-->
+<!--                android:textSize="12sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cbOption3Q4" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
     <Button
@@ -621,4 +626,5 @@
         android:text="@string/save_lead"
         android:textColor="@color/screen_bg_color"
         android:textStyle="normal" />
+
 </RelativeLayout>

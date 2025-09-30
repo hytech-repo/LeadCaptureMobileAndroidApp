@@ -2,6 +2,9 @@ package com.eva.lead.capture.domain.repository
 
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
+import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuestionOption
 import kotlinx.coroutines.flow.Flow
 
 interface AppDbRepository {
@@ -22,6 +25,16 @@ interface AppDbRepository {
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
 
     fun getAllLeads(): Flow<List<EvaLeadData>?>
+
+    suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long
+
+    suspend fun insertOptions(options: List<QuestionOption>): List<Long>
+
+    suspend fun insertOption(option: QuestionOption): Long
+
+    suspend fun insertMediaFile(media: LeadAudioRecording): Long
+
+    fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
 //    suspend fun deleteUser(user: User)
 

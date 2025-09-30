@@ -6,7 +6,11 @@ import android.media.MediaRecorder
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import com.eva.lead.capture.data.local.AppDatabase
+import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
+import com.eva.lead.capture.domain.repository.AppDbRepository
 import com.eva.lead.capture.utils.AppLogger
+import com.eva.lead.capture.utils.getExternalFolderPath
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -57,7 +61,8 @@ class EvaRecordAudioService : Service() {
         if (isRecording) return
 
         // Prepare output file path (internal storage)
-        outputFile = File(filesDir, "recording_${System.currentTimeMillis()}.mp4")
+        val dir = applicationContext.getExternalFolderPath("recording")
+        outputFile = File(dir, "recording_${System.currentTimeMillis()}.mp4")
 
         recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             MediaRecorder(this.applicationContext)

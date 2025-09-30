@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_event"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/evaQuestionsFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_evaUserProfileFragment_to_evaEditProfileFragment"
             app:destination="@id/evaEditProfileFragment" />
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaQuestionsFragment"
+            app:destination="@id/evaQuestionsFragment" />
     </fragment>
 
     <fragment
@@ -69,6 +72,9 @@
         android:label="EvaAddManuallyFragment"
         tools:layout="@layout/fragment_eva_lead_form">
 
+        <action
+            android:id="@+id/action_evaAddManualLead_to_evaCameraFragment"
+            app:destination="@id/evaCameraFragment" />
     </fragment>
 
     <fragment
@@ -86,5 +92,19 @@
         android:name="com.eva.lead.capture.ui.fragments.editprofile.EvaEditProfileFragment"
         android:label="EvaEditProfileFragment"
         tools:layout="@layout/fragment_eva_edit_profile" />
+    <fragment
+        android:id="@+id/evaQuestionsFragment"
+        android:name="com.eva.lead.capture.ui.fragments.question.EvaQuestionsFragment"
+        android:label="EvaQuestionsFragment"
+        tools:layout="@layout/fragment_eva_questions">
+        <action
+            android:id="@+id/action_evaQuestionsFragment_to_evaCreateQuestionFragment"
+            app:destination="@id/evaCreateQuestionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/evaCreateQuestionFragment"
+        android:name="com.eva.lead.capture.ui.fragments.question.EvaCreateQuestionFragment"
+        android:label="EvaCreateQuestionFragment"
+        tools:layout="@layout/fragment_add_question" />
 
 </navigation>

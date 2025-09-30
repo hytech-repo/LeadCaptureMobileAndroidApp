@@ -18,4 +18,5 @@
     <color name="color_purple">#C67BF3</color>
     <color name="color_pinkish_red">#FF668C</color>
     <color name="red_255">#FFE5E5</color>
+    <color name="color_switch_off">#D2D5DA</color>
 </resources>

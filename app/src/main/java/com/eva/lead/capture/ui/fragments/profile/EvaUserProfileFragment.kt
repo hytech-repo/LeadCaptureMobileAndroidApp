@@ -110,7 +110,9 @@ class EvaUserProfileFragment :
 
     private fun setupListeners() {
         adapter.onItemClick= {option, position ->
-            if (option.label == "Sign out") {
+            if (option.label == "Questions") {
+              findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaQuestionsFragment)
+            } else if (option.label == "Sign out") {
                 showConfirmationDialog()
             }
         }
@@ -181,6 +183,10 @@ class EvaUserProfileFragment :
             val leadCode = prefManager.get(AppConstants.LEAD_CODE, "")
             val exhibitor = viewModel.checkExhibitor(leadCode).firstOrNull()
             exhibitor?.let { showDetailOnUI(it) }
+            val leads = viewModel.getLeadList().firstOrNull()
+            if (leads != null) {
+
+            }
         }
     }
 

@@ -13,19 +13,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaAddLeadBinding
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.ui.dialog.EvaConfirmationDialog
+import com.eva.lead.capture.ui.dialog.EvaLeadAudioSelectionDialog
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toCollection
+import kotlinx.coroutines.launch
+import java.io.File
 
 class EvaAddLeadFragment :
     BaseFragment<FragmentEvaAddLeadBinding, EvaAddLeadViewModel>(EvaAddLeadViewModel::class.java) {
     private lateinit var mContext: Context
     private var recordService: EvaRecordAudioService? = null
     private var isBound = false
+    private var leadList: ArrayList<String> = arrayListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -65,6 +73,17 @@ class EvaAddLeadFragment :
         (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
         this.initView()
         this.initListener()
+        this.fetchLeadList()
+    }
+
+    private fun fetchLeadList() {
+        lifecycleScope.launch {
+            val leads = viewModel.getLeadList().firstOrNull()
+            if (leads != null) {
+                val leadsName = leads.map { "${it.firstName} ${it.lastName}" }
+                leadList = leadsName as ArrayList<String>
+            }
+        }
     }
 
     override fun onResume() {
@@ -94,11 +113,13 @@ class EvaAddLeadFragment :
         binding.cvQrCode.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("mode", "qr")
+            bundle.putBoolean("send_fragment_result", false)
             findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaCameraFragment, bundle)
         }
         binding.cvBusinessCard.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("mode", "card")
+            bundle.putBoolean("send_fragment_result", false)
             findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaCameraFragment, bundle)
         }
         binding.btnRecord.setOnClickListener {
@@ -114,16 +135,18 @@ class EvaAddLeadFragment :
 
     private fun showSavedRecordingFile() {
         recordService?.removeProgressCallback()
-        recordService?.stopRecording()
+        val file = recordService?.stopRecording()
         binding.waveRecording.addAmplitude(0)
         binding.btnRecord.visibility = View.VISIBLE
         binding.llcRecording.visibility = View.GONE
 
-        showConfirmationDialog()
+        if (file != null) {
+            showConfirmationDialog(file)
+        }
     }
 
 
-    private fun showConfirmationDialog() {
+    private fun showConfirmationDialog(audioFile: File) {
         val confirmationDialog = EvaConfirmationDialog()
         val bundle = Bundle()
         bundle.putString("heading", mContext.getString(R.string.eva_stop_recording))
@@ -133,14 +156,44 @@ class EvaAddLeadFragment :
         bundle.putInt("icon_bgcolor", R.color.color_lime_green)
         bundle.putInt("ivIcon", R.drawable.ic_mic_white)
         confirmationDialog.arguments = bundle
+        confirmationDialog.isCancelable = false
         confirmationDialog.apply {
             onConfirmationListener = { isPrimaryBtnClicked ->
                 if (isPrimaryBtnClicked) {
-                    showProgressDialog(false)
+                    showAudioSelectionDialog(audioFile)
+                } else {
+                    deleteRecordingFile(audioFile)
                 }
                 dismiss()
             }
-        }.show(requireActivity().supportFragmentManager, "EvaSaveRecordingDialog")
+        }.show(requireActivity().supportFragmentManager, "EvaConfirmationAudioDialog")
+    }
+
+    fun showAudioSelectionDialog(audioFile: File) {
+        val leadSelectionDialog = EvaLeadAudioSelectionDialog()
+        val bundle = Bundle()
+        bundle.putStringArrayList("lead_list", leadList)
+        leadSelectionDialog.arguments = bundle
+        leadSelectionDialog.isCancelable = false
+        leadSelectionDialog.apply {
+            onItemClickListener = { action, leadName ->
+                when (action) {
+                    "dismiss" -> deleteRecordingFile(audioFile)
+                    "save_only" -> {}
+                    "save" -> {}
+                }
+                dismiss()
+            }
+        }.show(requireActivity().supportFragmentManager, "EvaSaveLeadRecordingDialog")
+    }
+
+    fun deleteRecordingFile(audioFile: File) {
+        if (audioFile.exists()) {
+            if (audioFile.delete()) {
+                log.d(TAG, "audio discarded and deleted file ${audioFile.absolutePath}")
+            }
+        }
+
     }
 
     private fun startRecordingAtBackground() {

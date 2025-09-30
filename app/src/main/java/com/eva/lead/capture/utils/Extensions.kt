@@ -337,6 +337,12 @@ fun Context.isTablet(): Boolean {
             screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE
 }
 
+enum class QuestionTabType {
+    QUESTIONS,
+    MY_QUESTIONS,
+    QUICK_NOTES
+}
+
 fun EditText.moveOnInput(next: EditText?, previous: EditText?) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

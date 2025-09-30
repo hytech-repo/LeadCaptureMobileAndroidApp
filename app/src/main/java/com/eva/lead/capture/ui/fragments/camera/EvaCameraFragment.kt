@@ -301,6 +301,24 @@ class EvaCameraFragment :
                     }
                 }
 
+                "manual" -> {
+                    processQRCodeFromImage(image) { qrResults ->
+                        val results = mutableMapOf<String, Any>()
+                        if (qrResults.isNotEmpty()) {
+                            results["qrCodes"] = qrResults
+                        }
+                        handleAllResults(results, imageFile)
+                    }
+
+                    processTextFromImage(image) { textResults ->
+                        val results = mutableMapOf<String, Any>()
+                        if (textResults.isNotEmpty()) {
+                            results["businessCardInfo"] = textResults
+                        }
+                        handleAllResults(results, imageFile)
+                    }
+                }
+
                 else -> {
                     log.e(TAG, "Invalid mode: $mode")
                     hideProgressDialog()
@@ -862,7 +880,13 @@ class EvaCameraFragment :
     private fun navigateToNextScreen(data: CapturedBusinessCardData) {
         val bundle = Bundle()
         bundle.putParcelable("user_info", data)
-        findNavController().navigate(R.id.action_evaCameraFragment_to_evaAddManualLead, bundle)
+        val fragmentResult = requireArguments().getBoolean("send_fragment_result", false)
+        if (fragmentResult) {
+            parentFragmentManager.setFragmentResult("scan_result", bundle)
+            findNavController().popBackStack()
+        } else {
+            findNavController().navigate(R.id.action_evaCameraFragment_to_evaAddManualLead, bundle)
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
