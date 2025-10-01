@@ -1,6 +1,7 @@
 package com.eva.lead.capture.ui.fragments.question
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentAddQuestionBinding
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
 import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.utils.DragManageAdapter
 import com.eva.lead.capture.utils.ToastType
@@ -22,6 +24,8 @@ class EvaCreateQuestionFragment :
     private var mContext: Context? = null
     private val optionsList = mutableListOf<String>()
     private var selectedQuestionType = ""
+    private var selectedQuestionTypePositon = -1
+    private var questionInfo: QuestionInfo? = null
     private var type: Int = 1
 
     private val optionsAdapter: QuestionOptionAdapter by lazy {
@@ -47,12 +51,38 @@ class EvaCreateQuestionFragment :
         this.initView()
         this.initListener()
         this.initRecyclerView()
+        this.randerQuestion()
 //        this.addNewEditText()
+    }
+
+    private fun randerQuestion() {
+        if (questionInfo != null) {
+            optionsList.addAll(questionInfo!!.options!!)
+            optionsAdapter.updateQuestionList(optionsList)
+            binding.questionInput.setText(questionInfo!!.question)
+            val type = questionInfo!!.type
+            if (type == "choice") {
+                if (questionInfo!!.isMultipleChoice == true) {
+                    selectedQuestionType = "Multiple Choice"
+                    selectedQuestionTypePositon = 1
+                } else {
+                    selectedQuestionType = "Single Choice"
+                    selectedQuestionTypePositon = 0
+                }
+                binding.actvQuestionType.setText(selectedQuestionType)
+            }
+
+        }
     }
 
     private fun initBundle() {
         if (arguments != null) {
             type = arguments!!.getInt("question_tab_type", 1)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                questionInfo = arguments!!.getParcelable("question_info", QuestionInfo::class.java)
+            } else {
+                questionInfo = arguments!!.getParcelable<QuestionInfo>("question_info")
+            }
         }
     }
 
@@ -63,7 +93,7 @@ class EvaCreateQuestionFragment :
         binding.actvQuestionType.setDropDownBackgroundResource(R.drawable.bg_edittext_focusable_selector)
 
         // Set up Spinner for Question Type
-        val questionTypes = listOf("MCQ", "Text")
+        val questionTypes = listOf("Single Choice", "Multiple Choice"/*, "Text"*/)
         this.showQuestionTypeDropDown(questionTypes)
 
         // Set default visibility
@@ -133,21 +163,22 @@ class EvaCreateQuestionFragment :
         binding.actvQuestionType.apply {
             setOnItemClickListener { _, _, position, _ ->
                 selectedQuestionType = questionTypes[position]
-                toggleViewsBasedOnQuestionType(questionTypes[position])
+                selectedQuestionTypePositon = position
+//                toggleViewsBasedOnQuestionType(position)
             }
             setAdapter(spinnerAdapter)
         }
     }
 
-    private fun toggleViewsBasedOnQuestionType(questionType: String) {
+    private fun toggleViewsBasedOnQuestionType(questionType: Int) {
         // Show MCQ Views and Hide Answer Views
         when (questionType) {
-            "MCQ" -> {
+            1, 2 -> {
                 binding.llcMcq.visibility = View.VISIBLE
                 binding.llcAnswerBlock.visibility = View.GONE
             }
 
-            "Text" -> {
+            3 -> {
                 binding.llcMcq.visibility = View.GONE
                 binding.llcAnswerBlock.visibility = View.VISIBLE
             }
@@ -157,8 +188,15 @@ class EvaCreateQuestionFragment :
     private fun saveData() {
         val question = binding.questionInput.text.toString()
         val type = if (type == 1) "question" else "note"
-        viewModel.saveQuestionIntoList(question, type, selectedQuestionType, optionsList) {
-            findNavController().popBackStack()
+        if (questionInfo == null) {
+            viewModel.saveQuestionIntoList(question, type, selectedQuestionTypePositon, optionsList) {
+                findNavController().popBackStack()
+            }
+        } else {
+            questionInfo!!.options = optionsList
+            viewModel.updateQuestionIntoDb(questionInfo!!) {
+                findNavController().popBackStack()
+            }
         }
     }
 
@@ -167,11 +205,11 @@ class EvaCreateQuestionFragment :
             mContext?.showToast("Question is empty", ToastType.ERROR)
             return false
         }
-        if (selectedQuestionType.isEmpty()) {
+        if (selectedQuestionTypePositon == -1) {
             mContext?.showToast("Question type not selected", ToastType.ERROR)
             return false
         }
-        if (selectedQuestionType == "MCQ" && optionsList.isEmpty()) {
+        if ((selectedQuestionTypePositon == 0 || selectedQuestionTypePositon == 1) && optionsList.isEmpty()) {
             mContext?.showToast("Options not added", ToastType.ERROR)
             return false
         }

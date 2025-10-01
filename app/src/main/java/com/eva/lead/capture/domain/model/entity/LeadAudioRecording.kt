@@ -6,14 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "audio_recording"/*, indices = [Index(value = ["lead_id"], unique = true)]*/)
 data class LeadAudioRecording(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Int? = null,
     @ColumnInfo("name")
     var recordingName: String? = null,
     @ColumnInfo("fileName")
-    val tag: String? = null,
+    val fileName: String? = null,
     @ColumnInfo("filePath")
-    var firstName: String? = null,
+    var filePath: String? = null,
     @ColumnInfo("type")
     var type: String? = null,
     @ColumnInfo("is_deleted", defaultValue = "0")

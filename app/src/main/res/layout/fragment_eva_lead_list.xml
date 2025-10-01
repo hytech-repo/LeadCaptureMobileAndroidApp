@@ -56,6 +56,7 @@
         android:padding="14dp"
         android:src="@drawable/ic_filter"
         android:tint="@color/subheading_text_color"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/etSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/etSearch" />

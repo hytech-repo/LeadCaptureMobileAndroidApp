@@ -37,20 +37,8 @@ public class AppConstants {
                     + "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
     public static final String OTP_REGEX = "^\\d{6}$";
 
-    public static final String LABEL_FULL_NAME = "{%FULL_NAME%}";
-    public static final String LABEL_FIRST_NAME = "{%FIRST_NAME%}";
-    public static final String LABEL_LAST_NAME = "{%LAST_NAME%}";
-    public static final String LABEL_EMAIL = "{%EMAIL%}";
-    public static final String LABEL_JOBTITLE = "{%JOB_TITLE%}";
-    public static final String LABEL_QRCODE = "{%QR_CODE%}";
-    public static final String LABEL_ORGANIZATION = "{%ORGANIZATION%}";
-    public static final String LABEL_CITY = "{%CITY%}";
-    public static final String LABEL_STREET = "{%STREET%}";
-    public static final String LABEL_COUNTRY = "{%COUNTRY%}";
-    public static final String LABEL_PHONE = "{%PHONE%}";
-    public static final String LABEL_STATE = "{%STATE%}";
-    public static final String LABEL_REGISTRANT_ID = "{%REGISTRANT_ID%}";
-    public static final String LABEL_POSTAL_CODE = "{%POSTAL_CODE%}";
+    public static final String SINGLE_CHOICE = "Single Choice";
+    public static final String MULTI_CHOICE = "Multiple Choice";
     public static final String RECORDING = "recordings";
 //    public static final String INTENT_ACTION_DISCONNECT = BuildConfig.APPLICATION_ID + ".Disconnect";
 

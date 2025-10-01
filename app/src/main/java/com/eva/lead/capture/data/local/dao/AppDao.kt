@@ -11,8 +11,6 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
-import com.eva.lead.capture.domain.model.entity.QuestionOption
-import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -42,17 +40,17 @@ interface AppDao {
     @Query("SELECT * FROM lead_data where lead_id = :leadId")
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
 
+    @Update
+    suspend fun updateQuestionInfo(questionInfo: QuestionInfo)
+
     @Insert
     suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long
 
-    @Insert
-    suspend fun insertOptions(options: List<QuestionOption>): List<Long>
-
-    @Insert
-    suspend fun insertOption(option: QuestionOption): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuestionInfos(questionInfo: List<QuestionInfo>): List<Long>
 
     @Query("SELECT * FROM question_info WHERE type=:type AND is_deleted = 0")
-    fun getQuestionsWithOptions(type: String): Flow<List<QuestionWithOptions>?>
+    fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?>
 
     @Insert
     suspend fun insertMediaFile(media: LeadAudioRecording): Long

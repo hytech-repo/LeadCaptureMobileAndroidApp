@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_input_rounded"
+    android:backgroundTint="@color/screen_bg_color"
+    android:minWidth="200dp"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
+
+    <!-- Profile Link -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_regular"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:text="Edit"
+            android:textColor="@color/heading_text_color"
+            android:textSize="13sp" />
+
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="2dp"-->
+        <!--            android:layout_marginHorizontal=""-->
+        <!--            android:background="@color/light_grey" />-->
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Back to Event List Link -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcActive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvActive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_regular"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:text="In Active"
+            android:textColor="@color/heading_text_color"
+            android:textSize="13sp" />
+
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="2dp"-->
+        <!--            android:layout_marginHorizontal="@dimen/margin_30"-->
+        <!--            android:background="@color/light_grey" />-->
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Attendee View Link -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_regular"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:text="Delete"
+            android:textColor="@color/heading_text_color"
+            android:textSize="13sp" />
+
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="2dp"-->
+        <!--            android:layout_marginHorizontal="@dimen/margin_30"-->
+        <!--            android:background="@color/light_grey" />-->
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Logout Link -->
+    <!--    <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--        android:id="@+id/llcLogout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/logoutButton"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:drawablePadding="20dp"-->
+    <!--            android:fontFamily="@font/sf_pro_regular"-->
+    <!--            android:gravity="center_vertical"-->
+    <!--            android:paddingHorizontal="15dp"-->
+    <!--            android:paddingVertical="7dp"-->
+    <!--            android:text="Logout"-->
+    <!--            android:textSize="15sp" />-->
+
+    <!--    </androidx.appcompat.widget.LinearLayoutCompat>-->
+
+</androidx.appcompat.widget.LinearLayoutCompat>

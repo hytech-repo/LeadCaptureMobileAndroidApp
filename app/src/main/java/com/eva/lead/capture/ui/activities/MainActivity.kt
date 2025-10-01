@@ -5,14 +5,9 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import com.eva.lead.capture.R
 import com.eva.lead.capture.constants.AppConstants
-import com.eva.lead.capture.data.local.AppDatabase
-import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
 import com.eva.lead.capture.databinding.ActivityMainBinding
-import com.eva.lead.capture.domain.model.entity.dummyUser
 import com.eva.lead.capture.ui.base.BaseActivity
 import com.eva.lead.capture.utils.AppLogger
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,22 +25,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun startWorking() {
-        GlobalScope.launch {
-            val appDb = AppDatabase.getInstance(this@MainActivity)
-            val appDbRepository = AppDbRepositoryImpl(appDb)
-            appDbRepository.insertExhibitor(dummyUser)
-//            appDbRepository.insertLead(lead1)
-//            appDbRepository.insertLead(lead2)
-//            appDbRepository.insertLead(lead3)
-//            appDbRepository.insertLead(lead4)
-//            appDbRepository.insertLead(lead5)
-//            appDbRepository.insertLead(lead6)
-//            appDbRepository.insertLead(lead7)
-//            appDbRepository.insertLead(lead8)
-//            appDbRepository.insertLead(lead9)
-//            appDbRepository.insertLead(lead10)
-//            appDbRepository.insertLead(lead11)
-        }
+//        GlobalScope.launch {
+//            val appDb = AppDatabase.getInstance(this@MainActivity)
+//            val appDbRepository = AppDbRepositoryImpl(appDb)
+//            appDbRepository.insertExhibitor(dummyUser)
+//        }
     }
 
     private fun handleNavigation() {

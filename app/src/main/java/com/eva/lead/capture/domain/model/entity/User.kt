@@ -9,7 +9,7 @@ import kotlin.let
 
 @Entity(tableName = "user", indices = [Index(value = ["userId"], unique = true)])
 data class User(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Int? = null,
     @ColumnInfo("userId")
     val userId: String? = null,

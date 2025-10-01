@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaQuestionsBinding
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
-import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.utils.QuestionTabType
+import com.eva.lead.capture.utils.showDialog
+import com.eva.lead.capture.utils.showPopupDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -23,39 +26,10 @@ class EvaQuestionsFragment :
     BaseFragment<FragmentEvaQuestionsBinding, EvaQuestionsViewModel>(EvaQuestionsViewModel::class.java) {
 
     private var mContext: Context? = null
-    private lateinit var questionsListAdapter: QuestionsListAdapter
+    private val questionsListAdapter: QuestionsListAdapter by lazy {
+        QuestionsListAdapter(mContext!!)
+    }
     private var currentTabType = QuestionTabType.QUESTIONS
-
-
-    private val questionList = listOf(
-        QuestionWithOptions(
-            question = QuestionInfo(
-                question = "What solutions are you currently using?"
-            )
-        ),
-        QuestionWithOptions(
-            question = QuestionInfo(
-                question = "What features do you value the most?"
-            )
-        ),
-        QuestionWithOptions(
-            question = QuestionInfo(
-                question = "What is your decision timeline?"
-            )
-        )
-    )
-
-    private val myQuestionsList = listOf(
-        "myquestion",
-        "Do you want more info on pricing?",
-        "Would you like a follow-up call?"
-    )
-
-    private val quickNotesList = listOf(
-        "quicknotes",
-        "Client was unsure about package benefits.",
-        "Interested in automation features."
-    )
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -90,7 +64,9 @@ class EvaQuestionsFragment :
         binding.addQuestion.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("question_tab_type", currentTabType.ordinal)
-            findNavController().navigate(R.id.action_evaQuestionsFragment_to_evaCreateQuestionFragment, bundle)
+            findNavController().navigate(
+                R.id.action_evaQuestionsFragment_to_evaCreateQuestionFragment, bundle
+            )
         }
     }
 
@@ -136,11 +112,63 @@ class EvaQuestionsFragment :
 
 
     private fun setupRecyclerView() {
-        questionsListAdapter = QuestionsListAdapter(mContext!!, currentTabType)
+        questionsListAdapter.onItemClickListener = { view, data, position ->
+            if (view.id == R.id.ivOptionMenuDot) {
+                showPopupMenu(view, data, position)
+            }
+        }
         binding.recyclerViewOptions.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = questionsListAdapter
         }
+    }
+
+    private fun showPopupMenu(
+        view: View,
+        data: QuestionInfo,
+        position: Int
+    ) {
+        val popupMenu = mContext!!.showPopupDialog(R.layout.popup_edit_delete, view)
+        val contentView = popupMenu.contentView
+        val llcEdit = contentView.findViewById<LinearLayoutCompat>(R.id.llcEdit)
+        val llcActive = contentView.findViewById<LinearLayoutCompat>(R.id.llcActive)
+        val llcDelete = contentView.findViewById<LinearLayoutCompat>(R.id.llcDelete)
+        val tvActive = contentView.findViewById<TextView>(R.id.tvActive)
+        tvActive.text = if (data.status == 1) "InActive" else "Active"
+
+        llcEdit.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("question_tab_type", currentTabType.ordinal)
+            bundle.putParcelable("question_info", data)
+            findNavController().navigate(R.id.action_evaQuestionsFragment_to_evaCreateQuestionFragment, bundle)
+            popupMenu.dismiss()
+        }
+        llcActive.setOnClickListener {
+            performActiveInActiveAction(data, position)
+            popupMenu.dismiss()
+        }
+        llcDelete.setOnClickListener {
+            performDeleteAction(data, position)
+            popupMenu.dismiss()
+        }
+
+    }
+
+    private fun performActiveInActiveAction(
+        data: QuestionInfo,
+        position: Int
+    ) {
+        val status = data.status
+        data.status = if (status == 1) 0 else 1
+        viewModel.updateQuestionIntoDb(data)
+    }
+
+    private fun performDeleteAction(
+        data: QuestionInfo,
+        position: Int
+    ) {
+        data.isDeleted = 1
+        viewModel.updateQuestionIntoDb(data)
     }
 
     private fun showQuestions() {
@@ -165,26 +193,26 @@ class EvaQuestionsFragment :
 
     private fun fetchQuestionFromDb() {
         lifecycleScope.launch {
-            if (currentTabType != QuestionTabType.QUESTIONS) {
-                val type = if (currentTabType == QuestionTabType.MY_QUESTIONS) "question" else "note"
-                val questionOptionList = viewModel.fetchQuestionWithOptions(type).firstOrNull()
-                if (questionOptionList != null) {
-                    updateRecyclerView(questionOptionList)
-                }
-            } else {
-                updateRecyclerView(questionList)
+            val type = when (currentTabType) {
+                QuestionTabType.QUESTIONS -> "remote"
+                QuestionTabType.MY_QUESTIONS -> "question"
+                QuestionTabType.QUICK_NOTES -> "note"
+            }
+
+            val questionOptionList = viewModel.fetchQuestionWithOptions(type).firstOrNull()
+            if (questionOptionList != null) {
+                updateRecyclerView(questionOptionList)
             }
         }
     }
 
-    private fun updateRecyclerView(questionOptionList: List<QuestionWithOptions>) {
-        questionsListAdapter = QuestionsListAdapter(mContext!!, currentTabType)
-        binding.recyclerViewOptions.adapter = questionsListAdapter
+    private fun updateRecyclerView(questionInfo: List<QuestionInfo>) {
+        binding.tvTotalQuestion.text = "${questionInfo.size} Questions"
 
         when (currentTabType) {
-            QuestionTabType.QUESTIONS -> questionsListAdapter.updateData(questionOptionList)
-            QuestionTabType.MY_QUESTIONS -> questionsListAdapter.updateData(questionOptionList)
-            QuestionTabType.QUICK_NOTES -> questionsListAdapter.updateData(questionOptionList)
+            QuestionTabType.QUESTIONS -> questionsListAdapter.updateData(questionInfo, currentTabType)
+            QuestionTabType.MY_QUESTIONS -> questionsListAdapter.updateData(questionInfo, currentTabType)
+            QuestionTabType.QUICK_NOTES -> questionsListAdapter.updateData(questionInfo, currentTabType)
         }
     }
 

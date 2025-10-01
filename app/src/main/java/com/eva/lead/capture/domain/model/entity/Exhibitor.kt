@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "exhibitor", indices = [Index(value = ["lead_code", "user_id"], unique = true)])
 data class Exhibitor(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Int? = null,
     @ColumnInfo("lead_code")
     var leadCode: String? = null,

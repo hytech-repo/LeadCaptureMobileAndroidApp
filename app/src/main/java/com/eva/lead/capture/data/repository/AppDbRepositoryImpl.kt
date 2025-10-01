@@ -6,8 +6,6 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
-import com.eva.lead.capture.domain.model.entity.QuestionOption
-import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import com.eva.lead.capture.domain.repository.AppDbRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -32,15 +30,19 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
 
     override fun getAllLeads(): Flow<List<EvaLeadData>?> = dao.getAllLeadData()
 
-    override suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long = dao.insertQuestionInfo(questionInfo)
+    override suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long =
+        dao.insertQuestionInfo(questionInfo)
 
-    override suspend fun insertOptions(options: List<QuestionOption>): List<Long> = dao.insertOptions(options)
+    override suspend fun updateQuestionInfo(questionInfo: QuestionInfo) = dao.updateQuestionInfo(questionInfo)
 
-    override suspend fun insertOption(option: QuestionOption): Long = dao.insertOption(option)
+    override suspend fun insertQuestionInfos(questionInfo: List<QuestionInfo>): List<Long> =
+        dao.insertQuestionInfos(questionInfo)
 
-    override fun getQuestionsWithOptions(type: String): Flow<List<QuestionWithOptions>?> = dao.getQuestionsWithOptions(type)
+    override fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?> =
+        dao.getQuestionsWithOptions(type)
 
-    override suspend fun insertMediaFile(media: LeadAudioRecording): Long = dao.insertMediaFile(media)
+    override suspend fun insertMediaFile(media: LeadAudioRecording): Long =
+        dao.insertMediaFile(media)
 
     override fun getAllRecording(): Flow<List<LeadAudioRecording>> = dao.getAllRecording()
 

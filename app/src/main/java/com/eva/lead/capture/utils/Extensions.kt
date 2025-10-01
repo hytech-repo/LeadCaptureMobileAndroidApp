@@ -20,11 +20,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
@@ -143,32 +148,32 @@ fun Context.removePrefData() {
 //    prefManger.remove("user_id")
 }
 
-//fun Context.showPopupDialog(layoutRes: Int, ancherView: View): PopupWindow {
-//    val customView = (this as MainActivity).layoutInflater.inflate(layoutRes, null)
-//    val popupWindow = PopupWindow(
-//        customView,
-//        ViewGroup.LayoutParams.WRAP_CONTENT,
-//        ViewGroup.LayoutParams.WRAP_CONTENT,
-//        true // Set true for focusable PopupWindow
-//    )
-//    val params = FrameLayout.LayoutParams(
-//        ViewGroup.LayoutParams.MATCH_PARENT,
-//        ViewGroup.LayoutParams.MATCH_PARENT
-//    )
-//
-//    val dimOverlay = View(this)
-//    dimOverlay.setBackgroundResource(R.drawable.dim_overlay)
-//    dimOverlay.setOnClickListener { // Dismiss the popup menu when overlay is clicked
-//        popupWindow.dismiss()
-//        (dimOverlay.parent as ViewGroup).removeView(dimOverlay)
-//    }
-//    (window.decorView.rootView as ViewGroup).addView(dimOverlay, params)
-//    popupWindow.setOnDismissListener {
-//        (dimOverlay.parent as ViewGroup).removeView(dimOverlay)
-//    }
-//    popupWindow.showAsDropDown(ancherView)
-//    return popupWindow
-//}
+fun Context.showPopupDialog(layoutRes: Int, ancherView: View): PopupWindow {
+    val customView = (this as AppCompatActivity).layoutInflater.inflate(layoutRes, null)
+    val popupWindow = PopupWindow(
+        customView,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        true // Set true for focusable PopupWindow
+    )
+    val params = FrameLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+
+    val dimOverlay = View(this)
+    dimOverlay.setBackgroundResource(R.drawable.dim_overlay)
+    dimOverlay.setOnClickListener { // Dismiss the popup menu when overlay is clicked
+        popupWindow.dismiss()
+        (dimOverlay.parent as ViewGroup).removeView(dimOverlay)
+    }
+    (window.decorView.rootView as ViewGroup).addView(dimOverlay, params)
+    popupWindow.setOnDismissListener {
+        (dimOverlay.parent as ViewGroup).removeView(dimOverlay)
+    }
+    popupWindow.showAsDropDown(ancherView)
+    return popupWindow
+}
 
 //fun Context.showProgressBar(): PopupWindow {
 //    val customView = (this as MainActivity).layoutInflater.inflate(R.layout.loader_imageview, null)
