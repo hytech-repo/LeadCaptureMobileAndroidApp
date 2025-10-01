@@ -2,6 +2,7 @@ package com.eva.lead.capture.ui.fragments.profile
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -109,9 +111,9 @@ class EvaUserProfileFragment :
     }
 
     private fun setupListeners() {
-        adapter.onItemClick= {option, position ->
+        adapter.onItemClick = { option, position ->
             if (option.label == "Questions") {
-              findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaQuestionsFragment)
+                findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaQuestionsFragment)
             } else if (option.label == "Sign out") {
                 showConfirmationDialog()
             }
@@ -156,7 +158,7 @@ class EvaUserProfileFragment :
                 }
                 dismiss()
             }
-        }.show(requireActivity().supportFragmentManager,"EvaSignOutDialog")
+        }.show(requireActivity().supportFragmentManager, "EvaSignOutDialog")
     }
 
     private fun clearLoginUserData() {
@@ -185,8 +187,22 @@ class EvaUserProfileFragment :
             exhibitor?.let { showDetailOnUI(it) }
             val leads = viewModel.getLeadList().firstOrNull()
             if (leads != null) {
-
+                showLeadDetailOnUI(leads.size)
             }
+        }
+    }
+
+    private fun showLeadDetailOnUI(size: Int) {
+//        val colorRes = if (size != 0) R.color.color_lime_green else R.color.status_yellow
+//        val color = ContextCompat.getColor(mContext, colorRes)
+//        val bgColor = ColorUtils.setAlphaComponent(color, 15)
+//        binding.incLeads.ivIcon.imageTintList = ColorStateList.valueOf(color)
+//        binding.incLeads.ivIcon.backgroundTintList = ColorStateList.valueOf(bgColor)
+//        binding.incLeads.tvCount.setTextColor(color)
+        if (size != 0) {
+            binding.incLeads.tvCount.text = "$size"
+        } else {
+            binding.incLeads.tvCount.text = "0"
         }
     }
 

@@ -1,69 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llcQuestion"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="@drawable/bg_input_rounded"
+    android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvQuestion"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/sf_pro_medium"
-        android:text="Q1. What solutions are you currently using for this?"
-        android:textColor="@color/heading_text_color"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="15dp">
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_dots"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvQuestion" />
+        <TextView
+            android:id="@+id/tvQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/sf_pro_medium"
+            android:text="Q1. What solutions are you currently using for this?"
+            android:textColor="@color/heading_text_color"
+            android:textSize="16sp" />
 
-    <CheckBox
-        android:id="@+id/cbOption1Q1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Yes, please contact me via email"
-        android:textColor="@color/subheading_text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvQuestion" />
+        <ImageView
+            android:id="@+id/ivOptionMenuDot"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_dots" />
 
-    <CheckBox
-        android:id="@+id/cbOption2Q1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Yes, please call me"
-        android:textColor="@color/subheading_text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbOption1Q1" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <CheckBox
-        android:id="@+id/cbOption3Q1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No, thank you"
-        android:textColor="@color/subheading_text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbOption2Q1" />
-
-    <CheckBox
-        android:id="@+id/cbOption4Q1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Maybe later"
-        android:textColor="@color/subheading_text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cbOption3Q1" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -22,7 +22,7 @@ class EvaCreateQuestionFragment :
     private var mContext: Context? = null
     private val optionsList = mutableListOf<String>()
     private var selectedQuestionType = ""
-    private var draggedView: View? = null
+    private var type: Int = 1
 
     private val optionsAdapter: QuestionOptionAdapter by lazy {
         QuestionOptionAdapter(mContext!!)
@@ -43,10 +43,17 @@ class EvaCreateQuestionFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
+        this.initBundle()
         this.initView()
         this.initListener()
         this.initRecyclerView()
 //        this.addNewEditText()
+    }
+
+    private fun initBundle() {
+        if (arguments != null) {
+            type = arguments!!.getInt("question_tab_type", 1)
+        }
     }
 
     private fun initView() {
@@ -149,7 +156,10 @@ class EvaCreateQuestionFragment :
 
     private fun saveData() {
         val question = binding.questionInput.text.toString()
-        viewModel.saveQuestionIntoList(question, selectedQuestionType, optionsList)
+        val type = if (type == 1) "question" else "note"
+        viewModel.saveQuestionIntoList(question, type, selectedQuestionType, optionsList) {
+            findNavController().popBackStack()
+        }
     }
 
     private fun validateUi(): Boolean {

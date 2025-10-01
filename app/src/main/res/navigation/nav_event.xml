@@ -87,20 +87,24 @@
             android:id="@+id/action_evaCameraFragment_to_evaAddManualLead"
             app:destination="@id/evaAddManualLead" />
     </fragment>
+
     <fragment
         android:id="@+id/evaEditProfileFragment"
         android:name="com.eva.lead.capture.ui.fragments.editprofile.EvaEditProfileFragment"
         android:label="EvaEditProfileFragment"
         tools:layout="@layout/fragment_eva_edit_profile" />
+
     <fragment
         android:id="@+id/evaQuestionsFragment"
         android:name="com.eva.lead.capture.ui.fragments.question.EvaQuestionsFragment"
         android:label="EvaQuestionsFragment"
         tools:layout="@layout/fragment_eva_questions">
+
         <action
             android:id="@+id/action_evaQuestionsFragment_to_evaCreateQuestionFragment"
             app:destination="@id/evaCreateQuestionFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/evaCreateQuestionFragment"
         android:name="com.eva.lead.capture.ui.fragments.question.EvaCreateQuestionFragment"

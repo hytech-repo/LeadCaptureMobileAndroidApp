@@ -3,6 +3,7 @@ package com.eva.lead.capture.ui.fragments.leadlist
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -69,7 +70,7 @@ class EvaLeadListFragment :
                         ?.contains(text?.toString()?.lowercase() ?: "") == true
 
                 }
-                leadListAdapter.setLeadDataList(filterList)
+                showLeadListOnUI(filterList)
             }
 
         }
@@ -111,6 +112,13 @@ class EvaLeadListFragment :
         }
     }
 
+    private fun showLeadListOnUI(record: List<EvaLeadData>?) {
+        binding.rvLeadList.visibility = if (record.isNullOrEmpty()) View.GONE else View.VISIBLE
+        binding.tvNoLeads.visibility = if (record.isNullOrEmpty()) View.VISIBLE else View.GONE
+        leadListAdapter.setLeadDataList(record)
+        binding.tvLeadCounts.text = "${record?.size?: 0} Leads"
+    }
+
     private fun filterListAccordingToTags() {
         if (!leadList.isNullOrEmpty()) {
             val filterList = if (tags.isNotEmpty()) {
@@ -128,8 +136,7 @@ class EvaLeadListFragment :
             } else {
                 leadList
             }
-            leadListAdapter.setLeadDataList(filterList ?: emptyList())
-            updateCountOnUI(filterList)
+            showLeadListOnUI(filterList)
         }
 
     }
@@ -156,7 +163,7 @@ class EvaLeadListFragment :
             if (leadList != null) {
                 leadListAdapter.setLeadDataList(leadList!!)
             }
-            updateCountOnUI(leadList)
+            showLeadListOnUI(leadList)
         }
     }
 

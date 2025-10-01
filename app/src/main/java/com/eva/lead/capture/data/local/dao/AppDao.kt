@@ -12,6 +12,7 @@ import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
 import com.eva.lead.capture.domain.model.entity.QuestionOption
+import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -49,6 +50,9 @@ interface AppDao {
 
     @Insert
     suspend fun insertOption(option: QuestionOption): Long
+
+    @Query("SELECT * FROM question_info WHERE type=:type AND is_deleted = 0")
+    fun getQuestionsWithOptions(type: String): Flow<List<QuestionWithOptions>?>
 
     @Insert
     suspend fun insertMediaFile(media: LeadAudioRecording): Long

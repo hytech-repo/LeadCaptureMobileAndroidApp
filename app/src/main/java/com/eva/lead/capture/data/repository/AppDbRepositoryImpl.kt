@@ -7,6 +7,7 @@ import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
 import com.eva.lead.capture.domain.model.entity.QuestionOption
+import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import com.eva.lead.capture.domain.repository.AppDbRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -36,6 +37,8 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
     override suspend fun insertOptions(options: List<QuestionOption>): List<Long> = dao.insertOptions(options)
 
     override suspend fun insertOption(option: QuestionOption): Long = dao.insertOption(option)
+
+    override fun getQuestionsWithOptions(type: String): Flow<List<QuestionWithOptions>?> = dao.getQuestionsWithOptions(type)
 
     override suspend fun insertMediaFile(media: LeadAudioRecording): Long = dao.insertMediaFile(media)
 

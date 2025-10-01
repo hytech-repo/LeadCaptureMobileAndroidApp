@@ -5,6 +5,7 @@ import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
 import com.eva.lead.capture.domain.model.entity.QuestionOption
+import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import kotlinx.coroutines.flow.Flow
 
 interface AppDbRepository {
@@ -31,6 +32,8 @@ interface AppDbRepository {
     suspend fun insertOptions(options: List<QuestionOption>): List<Long>
 
     suspend fun insertOption(option: QuestionOption): Long
+
+    fun getQuestionsWithOptions(type: String): Flow<List<QuestionWithOptions>?>
 
     suspend fun insertMediaFile(media: LeadAudioRecording): Long
 

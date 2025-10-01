@@ -5,14 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaQuestionsBinding
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuestionWithOptions
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.utils.QuestionTabType
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 class EvaQuestionsFragment :
     BaseFragment<FragmentEvaQuestionsBinding, EvaQuestionsViewModel>(EvaQuestionsViewModel::class.java) {
@@ -23,9 +28,21 @@ class EvaQuestionsFragment :
 
 
     private val questionList = listOf(
-        "What solutions are you currently using?",
-        "What features do you value the most?",
-        "What is your decision timeline?"
+        QuestionWithOptions(
+            question = QuestionInfo(
+                question = "What solutions are you currently using?"
+            )
+        ),
+        QuestionWithOptions(
+            question = QuestionInfo(
+                question = "What features do you value the most?"
+            )
+        ),
+        QuestionWithOptions(
+            question = QuestionInfo(
+                question = "What is your decision timeline?"
+            )
+        )
     )
 
     private val myQuestionsList = listOf(
@@ -71,7 +88,9 @@ class EvaQuestionsFragment :
         }
         // Navigate to Add Question screen
         binding.addQuestion.setOnClickListener {
-            findNavController().navigate(R.id.action_evaQuestionsFragment_to_evaCreateQuestionFragment)
+            val bundle = Bundle()
+            bundle.putInt("question_tab_type", currentTabType.ordinal)
+            findNavController().navigate(R.id.action_evaQuestionsFragment_to_evaCreateQuestionFragment, bundle)
         }
     }
 
@@ -95,13 +114,29 @@ class EvaQuestionsFragment :
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
-            selectTab(getTabAt(0)) // default select Questions tab
+            val targetTab = when (currentTabType) {
+                QuestionTabType.QUESTIONS -> getTabAt(0)
+                QuestionTabType.MY_QUESTIONS -> getTabAt(1)
+                QuestionTabType.QUICK_NOTES -> getTabAt(2)
+            }
+
+            // Select the tab
+            selectTab(targetTab)
+
+            // Manually trigger the selection action if it's already selected
+            if (targetTab?.isSelected == true) {
+                when (targetTab.position) {
+                    0 -> showQuestions()
+                    1 -> showMyQuestions()
+                    2 -> showQuickNotes()
+                }
+            }
         }
     }
 
 
     private fun setupRecyclerView() {
-        questionsListAdapter = QuestionsListAdapter(requireContext(), currentTabType)
+        questionsListAdapter = QuestionsListAdapter(mContext!!, currentTabType)
         binding.recyclerViewOptions.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = questionsListAdapter
@@ -110,33 +145,46 @@ class EvaQuestionsFragment :
 
     private fun showQuestions() {
         currentTabType = QuestionTabType.QUESTIONS
-        refreshAdapterForCurrentTab()
+        fetchQuestionFromDb()
         binding.addQuestion.visibility = View.GONE
     }
 
     private fun showMyQuestions() {
         currentTabType = QuestionTabType.MY_QUESTIONS
-        refreshAdapterForCurrentTab()
+        fetchQuestionFromDb()
         binding.addQuestion.visibility = View.VISIBLE
         binding.addQuestion.text = "Add Question"
     }
 
     private fun showQuickNotes() {
         currentTabType = QuestionTabType.QUICK_NOTES
-        refreshAdapterForCurrentTab()
+        fetchQuestionFromDb()
         binding.addQuestion.visibility = View.VISIBLE
         binding.addQuestion.text = "Add Quick Notes"
     }
 
-    private fun refreshAdapterForCurrentTab() {
-        // Re-create adapter with new tab type and set data accordingly
-        questionsListAdapter = QuestionsListAdapter(requireContext(), currentTabType)
+    private fun fetchQuestionFromDb() {
+        lifecycleScope.launch {
+            if (currentTabType != QuestionTabType.QUESTIONS) {
+                val type = if (currentTabType == QuestionTabType.MY_QUESTIONS) "question" else "note"
+                val questionOptionList = viewModel.fetchQuestionWithOptions(type).firstOrNull()
+                if (questionOptionList != null) {
+                    updateRecyclerView(questionOptionList)
+                }
+            } else {
+                updateRecyclerView(questionList)
+            }
+        }
+    }
+
+    private fun updateRecyclerView(questionOptionList: List<QuestionWithOptions>) {
+        questionsListAdapter = QuestionsListAdapter(mContext!!, currentTabType)
         binding.recyclerViewOptions.adapter = questionsListAdapter
 
         when (currentTabType) {
-            QuestionTabType.QUESTIONS -> questionsListAdapter.updateData(questionList)
-            QuestionTabType.MY_QUESTIONS -> questionsListAdapter.updateData(myQuestionsList)
-            QuestionTabType.QUICK_NOTES -> questionsListAdapter.updateData(quickNotesList)
+            QuestionTabType.QUESTIONS -> questionsListAdapter.updateData(questionOptionList)
+            QuestionTabType.MY_QUESTIONS -> questionsListAdapter.updateData(questionOptionList)
+            QuestionTabType.QUICK_NOTES -> questionsListAdapter.updateData(questionOptionList)
         }
     }
 

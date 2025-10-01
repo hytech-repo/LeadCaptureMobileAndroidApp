@@ -45,7 +45,7 @@ class EvaLeadListAdapter(val mContext: Context) :
 
     override fun getItemCount(): Int = list?.size ?: 0
 
-    fun setLeadDataList(list: List<EvaLeadData>) {
+    fun setLeadDataList(list: List<EvaLeadData>?) {
         this.list = list
         notifyDataSetChanged()
     }

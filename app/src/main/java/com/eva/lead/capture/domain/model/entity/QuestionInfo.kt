@@ -1,10 +1,12 @@
 package com.eva.lead.capture.domain.model.entity
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "question_info", indices = [Index(value = ["server_id"], unique = true)])
 data class QuestionInfo(
@@ -14,8 +16,10 @@ data class QuestionInfo(
     var serverId: Int? = null,
     @ColumnInfo("question_text")
     var question: String? = null,
+    @ColumnInfo(name = "type")
+    var type: String? = null, // e.g. Quick Note or Question
     @ColumnInfo(name = "question_type")
-    var questionType: String, // e.g., "MCQ", "ShortAnswer"
+    var questionType: String? = null, // e.g. "MCQ", "ShortAnswer"
     @ColumnInfo(name = "is_multiple_choice")
     var isMultipleChoice: Boolean? = null,
     @ColumnInfo("status")
@@ -36,6 +40,7 @@ data class QuestionInfo(
     ],
     indices = [Index(value = ["question_id"])]
 )
+
 data class QuestionOption(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
@@ -48,4 +53,13 @@ data class QuestionOption(
 
     @ColumnInfo(name = "option_text")
     var optionText: String
+)
+
+data class QuestionWithOptions(
+    @Embedded var question: QuestionInfo? = null,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "question_id"
+    )
+    var options: List<QuestionOption>? = null
 )
