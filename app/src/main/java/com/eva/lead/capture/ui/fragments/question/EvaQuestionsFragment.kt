@@ -208,6 +208,8 @@ class EvaQuestionsFragment :
 
     private fun updateRecyclerView(questionInfo: List<QuestionInfo>) {
         binding.tvTotalQuestion.text = "${questionInfo.size} Questions"
+        binding.tvNoQuestion.visibility = if (questionInfo.isEmpty()) View.VISIBLE else View.GONE
+        binding.recyclerViewOptions.visibility = if (questionInfo.isNotEmpty()) View.VISIBLE else View.GONE
 
         when (currentTabType) {
             QuestionTabType.QUESTIONS -> questionsListAdapter.updateData(questionInfo, currentTabType)

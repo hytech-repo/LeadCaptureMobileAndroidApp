@@ -1,0 +1,44 @@
+{
+  "faqs": [
+    {
+      "question": "How do I log in to the lead capture app?",
+      "answer": "Open the app and enter the access code or credentials provided by your event organizer or admin. If you don’t have a code, use the “Need a Code?” option to request one by email."
+    },
+    {
+      "question": "How can I capture a lead at the event?",
+      "answer": "You can capture a lead by scanning their badge QR code or manually entering their details using the “Add Lead” button."
+    },
+    {
+      "question": "What should I do if my access code is not working?",
+      "answer": "Double-check the code for typos. If it still doesn’t work, contact your event admin or the event’s help desk for assistance."
+    },
+    {
+      "question": "How do I assign tags (like Hot, Medium, Cold) to a lead?",
+      "answer": "After capturing or viewing a lead’s details, select the appropriate tag to categorize their intent or importance for follow-up."
+    },
+    {
+      "question": "Can I edit or update a lead’s information after saving?",
+      "answer": "Yes. Go to the lead list, select the lead, and use the “Edit” option to update their information or add notes."
+    },
+    {
+      "question": "What if the app won’t scan the badge QR code?",
+      "answer": "Check your device’s camera permissions in the app settings, and ensure you have good lighting. If the issue persists, try entering the attendee’s details manually."
+    },
+    {
+      "question": "Is it possible to schedule an appointment with a captured lead?",
+      "answer": "Yes. After capturing a lead, tap “Add Appointment” to schedule a meeting and log the time and location."
+    },
+    {
+      "question": "How do I export my captured leads?",
+      "answer": "Most apps allow export from the dashboard (look for “Export” or “Download” in menu). If you have issues, ask the event organizer for your lead report after the event."
+    },
+    {
+      "question": "What should I do if the app freezes or crashes?",
+      "answer": "Restart the app and check your internet connection. If the problem continues, contact support or your admin/reception for immediate help."
+    },
+    {
+      "question": "Who do I contact for help during the event?",
+      "answer": "Reach out to the event admin or visit the registration desk/reception. You can also use the “Need Help” button in the app for quick support options."
+    }
+  ]
+}

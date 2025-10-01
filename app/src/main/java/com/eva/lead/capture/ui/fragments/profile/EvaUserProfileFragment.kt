@@ -2,7 +2,6 @@ package com.eva.lead.capture.ui.fragments.profile
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,11 +71,11 @@ class EvaUserProfileFragment :
 
         val options = listOf(
             ProfileOption("Device", R.drawable.ic_phone),
-            ProfileOption("My Appointment", R.drawable.ic_add_calender),
+//            ProfileOption("My Appointment", R.drawable.ic_add_calender),
             ProfileOption("Questions", R.drawable.ic_question),
             ProfileOption("Recording", R.drawable.ic_mic),
             ProfileOption("Need Help", R.drawable.ic_help),
-            ProfileOption("Sync Data", R.drawable.ic_sync),
+//            ProfileOption("Sync Data", R.drawable.ic_sync),
             ProfileOption("Privacy Policy", R.drawable.ic_privacy_policy),
             ProfileOption("Sign out", R.drawable.ic_sign_out)
         )
@@ -114,6 +112,8 @@ class EvaUserProfileFragment :
         adapter.onItemClick = { option, position ->
             if (option.label == "Questions") {
                 findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaQuestionsFragment)
+            } else if (option.label == "Need Help") {
+                findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaHelpFragment)
             } else if (option.label == "Sign out") {
                 showConfirmationDialog()
             }

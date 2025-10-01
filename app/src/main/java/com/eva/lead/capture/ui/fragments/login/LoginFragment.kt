@@ -132,7 +132,9 @@ class LoginFragment :
                 checkExhibitorAndMoveAhead()
             }
         }
+        binding.tvAccessQr.setOnClickListener {
 
+        }
         binding.tvLicenseCode.setOnClickListener {
             showForgotPasswordDialog()
         }

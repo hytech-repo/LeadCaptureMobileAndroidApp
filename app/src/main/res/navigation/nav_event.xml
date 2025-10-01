@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_evaUserProfileFragment_to_evaQuestionsFragment"
             app:destination="@id/evaQuestionsFragment" />
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaHelpFragment"
+            app:destination="@id/evaHelpFragment" />
     </fragment>
 
     <fragment
@@ -110,5 +113,10 @@
         android:name="com.eva.lead.capture.ui.fragments.question.EvaCreateQuestionFragment"
         android:label="EvaCreateQuestionFragment"
         tools:layout="@layout/fragment_add_question" />
+    <fragment
+        android:id="@+id/evaHelpFragment"
+        android:name="com.eva.lead.capture.ui.fragments.help.EvaHelpFragment"
+        android:label="EvaHelpFragment"
+        tools:layout="@layout/fragment_eva_help" />
 
 </navigation>
