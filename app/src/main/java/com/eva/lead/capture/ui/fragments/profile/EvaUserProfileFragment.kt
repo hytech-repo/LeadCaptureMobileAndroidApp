@@ -114,6 +114,10 @@ class EvaUserProfileFragment :
                 findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaQuestionsFragment)
             } else if (option.label == "Need Help") {
                 findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaHelpFragment)
+            } else if (option.label == "Device") {
+                findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaDeviceListFragment)
+            } else if (option.label == "Recording") {
+                findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaRecordingListFragment)
             } else if (option.label == "Sign out") {
                 showConfirmationDialog()
             }

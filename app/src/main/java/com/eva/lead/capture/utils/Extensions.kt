@@ -363,6 +363,12 @@ fun EditText.moveOnInput(next: EditText?, previous: EditText?) {
     })
 }
 
+fun Long.formatDuration(): String {
+    val minutes = (this / 1000) / 60
+    val seconds = (this / 1000) % 60
+    return String.format("%02d:%02d", minutes, seconds)
+}
+
 //fun String.generateQRCode(width: Int, height: Int): Bitmap? {
 //    return try {
 //        val bitMatrix = MultiFormatWriter().encode(this, BarcodeFormat.QR_CODE, width, height)

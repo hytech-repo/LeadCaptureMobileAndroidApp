@@ -37,6 +37,8 @@ interface AppDbRepository {
 
     fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
+    fun getRecordingById(id: String): Flow<LeadAudioRecording?>
+
 //    suspend fun deleteUser(user: User)
 
     suspend fun executeRawQuery(query: String): Long

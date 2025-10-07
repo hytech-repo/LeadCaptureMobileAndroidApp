@@ -46,6 +46,8 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
 
     override fun getAllRecording(): Flow<List<LeadAudioRecording>> = dao.getAllRecording()
 
+    override fun getRecordingById(id: String): Flow<LeadAudioRecording?> = dao.getRecordingById(id)
+
     override suspend fun executeRawQuery(query: String): Long {
         val rawQuery = SimpleSQLiteQuery(query)
         return dao.executeRawQuery(rawQuery)

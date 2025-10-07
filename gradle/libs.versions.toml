@@ -29,6 +29,7 @@ composeBom = "2024.09.00"
 camera = "1.4.1"
 mlbarcode = "17.3.0"
 mltextrecog = "16.0.0"
+googleCloudSpeech = "4.70.0"
 mpandroidchart = "v3.1.0"
 zxing-android = "4.3.0"
 worker = "2.9.0"
@@ -73,6 +74,7 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
 mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlbarcode" }
 mlkit-text-recog = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mltextrecog" }
+google-cloud-speech = { module = "com.google.cloud:google-cloud-speech", version.ref = "googleCloudSpeech" }
 android-mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 android-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

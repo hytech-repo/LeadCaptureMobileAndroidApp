@@ -179,8 +179,8 @@ class EvaAddLeadFragment :
             onItemClickListener = { action, leadName ->
                 when (action) {
                     "dismiss" -> deleteRecordingFile(audioFile)
-                    "save_only" -> {}
-                    "save" -> {}
+                    "save_only" -> { recordService?.saveRecordingIntoDb(audioFile) }
+                    "save" -> { recordService?.saveRecordingIntoDb(audioFile) }
                 }
                 dismiss()
             }

@@ -67,6 +67,12 @@
         <action
             android:id="@+id/action_evaUserProfileFragment_to_evaHelpFragment"
             app:destination="@id/evaHelpFragment" />
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaRecordingListFragment"
+            app:destination="@id/evaRecordingListFragment" />
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaDeviceListFragment"
+            app:destination="@id/evaDeviceListFragment" />
     </fragment>
 
     <fragment
@@ -118,5 +124,24 @@
         android:name="com.eva.lead.capture.ui.fragments.help.EvaHelpFragment"
         android:label="EvaHelpFragment"
         tools:layout="@layout/fragment_eva_help" />
+    <fragment
+        android:id="@+id/evaRecordingListFragment"
+        android:name="com.eva.lead.capture.ui.fragments.recordinglist.EvaRecordingListFragment"
+        android:label="EvaRecordingListFragment"
+        tools:layout="@layout/fragment_eva_recording_list">
+        <action
+            android:id="@+id/action_evaRecordingListFragment_to_evaRecordingDetailFragment"
+            app:destination="@id/evaRecordingDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/evaRecordingDetailFragment"
+        android:name="com.eva.lead.capture.ui.fragments.recordingdetail.EvaRecordingDetailFragment"
+        android:label="EvaRecordingDetailFragment"
+        tools:layout="@layout/fragment_eva_recording_detail" />
+    <fragment
+        android:id="@+id/evaDeviceListFragment"
+        android:name="com.eva.lead.capture.ui.fragments.devicelist.EvaDeviceListFragment"
+        android:label="EvaDeviceListFragment"
+        tools:layout="@layout/fragment_eva_device_list" />
 
 </navigation>

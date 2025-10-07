@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Typeface
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
@@ -13,12 +14,17 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eva.lead.capture.R
 import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaLeadFormBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.domain.model.entity.QuestionInfo
 import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
@@ -28,6 +34,8 @@ import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.getDrawableStatus
 import com.eva.lead.capture.utils.observe
 import com.eva.lead.capture.utils.showToast
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import java.io.File
 
 class EvaLeadFormFragment :
@@ -217,6 +225,42 @@ class EvaLeadFormFragment :
         }
     }
 
+    private fun displayQuestions(questions: List<QuestionInfo>) {
+        questions.forEach { questionInfo ->
+            // Create a TextView for the question
+            val questionTextView = TextView(mContext).apply {
+                text = questionInfo.question
+                textSize = 16f
+                setTypeface(null, Typeface.BOLD)
+                setPadding(16, 16, 16, 16)
+            }
+
+            // Add TextView for the question to the container
+            binding.llcQuestionContainer.addView(questionTextView)
+
+            // Create a RadioGroup for the options
+            val radioGroup = RadioGroup(mContext).apply {
+                orientation = RadioGroup.VERTICAL
+                setPadding(16, 8, 16, 16)
+            }
+
+            // Add RadioButton for each option in the options list
+            questionInfo.options?.forEach { option ->
+                val radioButton = RadioButton(mContext).apply {
+                    text = option
+                    textSize = 14f
+                    setPadding(16, 8, 16, 8)
+
+
+                }
+                radioGroup.addView(radioButton)
+            }
+
+            // Add the RadioGroup to the container
+            binding.llcQuestionContainer.addView(radioGroup)
+        }
+    }
+
     private fun takeConfirmationFromUser() {
         val confirmationDialog = EvaConfirmationDialog()
         val bundle = Bundle()
@@ -275,6 +319,12 @@ class EvaLeadFormFragment :
         viewModel.apply {
             observe(loader) { showLoader() }
         }
+        lifecycleScope.launch {
+            val questionList = viewModel.fetchQuestions("remote").firstOrNull()
+            if (!questionList.isNullOrEmpty()) {
+                displayQuestions(questionList)
+            }
+        }
     }
 
     private fun showLoader() {
@@ -306,6 +356,7 @@ class EvaLeadFormFragment :
         val company = binding.etCompanyName.text.toString()
         val additional = binding.etAdditionalInfo.text.toString()
         val notes = binding.etNote.text.toString()
+        val audioFile = recordService?.stopRecording()
         val leadData = EvaLeadData(
             firstName = firstName,
             lastName = lastName,
@@ -316,8 +367,12 @@ class EvaLeadFormFragment :
             notes = notes,
             imageFileNames = namesCommaSeparated,
             tag = tag,
+            audioFilePath = audioFile?.absolutePath,
             timestamp = System.currentTimeMillis()
         )
+        audioFile?.let {
+            recordService?.saveRecordingIntoDb(it)
+        }
 
         viewModel.saveLeadData(leadData)
         findNavController().popBackStack()

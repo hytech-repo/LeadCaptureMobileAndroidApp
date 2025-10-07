@@ -58,6 +58,9 @@ interface AppDao {
     @Query("SELECT * FROM audio_recording where type = 'recording' ORDER BY id DESC")
     fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
+    @Query("SELECT * FROM audio_recording where type = 'recording' AND id = :recordingId")
+    fun getRecordingById(recordingId: String): Flow<LeadAudioRecording?>
+
     @RawQuery
     suspend fun executeRawQuery(query: SupportSQLiteQuery): Long
 

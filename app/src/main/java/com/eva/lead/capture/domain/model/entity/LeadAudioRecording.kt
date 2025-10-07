@@ -16,6 +16,10 @@ data class LeadAudioRecording(
     var filePath: String? = null,
     @ColumnInfo("type")
     var type: String? = null,
+    @ColumnInfo(name = "recording_date")
+    var recordingDate: Long? = null,
+    @ColumnInfo(name = "duration")
+    var duration: Long? = null,
     @ColumnInfo("is_deleted", defaultValue = "0")
     var isDeleted: Int = 0,
     @ColumnInfo("is_sync", defaultValue = "0")

@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/date_tile_layout"
+    android:layout_width="46dp"
+    android:layout_height="50dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/bg_red_stroke_rounded"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sf_pro_medium"
+        android:text="1"
+        android:textColor="@color/heading_text_color"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wed"
+        android:textColor="@color/subheading_text_color"
+        android:textSize="11sp" />
+
+</LinearLayout>

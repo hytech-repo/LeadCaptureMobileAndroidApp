@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.IBinder
 import com.eva.lead.capture.data.local.AppDatabase
 import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
+import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.repository.AppDbRepository
 import com.eva.lead.capture.utils.AppLogger
 import com.eva.lead.capture.utils.getExternalFolderPath
@@ -30,9 +31,11 @@ class EvaRecordAudioService : Service() {
     private var job: Job? = null
     private var outputFile: File? = null
     private var isRecording = false
+    private var duration: Long = 0L
 
     private lateinit var log: AppLogger
     private var progressListener: ((Int, Int) -> Unit)? = null
+    private var repositoryDb: AppDbRepository? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -59,6 +62,9 @@ class EvaRecordAudioService : Service() {
 
     fun startRecording() {
         if (isRecording) return
+
+        val appDatabase = AppDatabase.getInstance(applicationContext)
+        repositoryDb = AppDbRepositoryImpl(appDatabase)
 
         // Prepare output file path (internal storage)
         val dir = applicationContext.getExternalFolderPath("recording")
@@ -89,9 +95,9 @@ class EvaRecordAudioService : Service() {
     fun onRecordingProgress() {
         job = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
-                val elapsed = (System.currentTimeMillis() - startTime) / 1000
+                duration = (System.currentTimeMillis() - startTime) / 1000
                 val amplitude = recorder?.maxAmplitude ?: 0
-                    progressListener?.invoke(elapsed.toInt(), amplitude)
+                    progressListener?.invoke(duration.toInt(), amplitude)
                 delay(50)
             }
         }
@@ -106,6 +112,27 @@ class EvaRecordAudioService : Service() {
         recorder = null
         isRecording = false
         return outputFile // finalized file is ready now
+    }
+
+    fun saveRecordingIntoDb(audioFile: File) {
+        CoroutineScope(Dispatchers.Default).launch {
+            val recordingDate = System.currentTimeMillis()  // This will give you the current date and time as a Long
+
+            // Calculate or get the duration of the recording (assuming you have the duration in milliseconds)
+//            val recordingDuration = duration ?: 0L
+
+            val recording = LeadAudioRecording(
+                recordingName = audioFile.nameWithoutExtension,
+                fileName = audioFile.name,
+                filePath = audioFile.absolutePath,
+                type = "recording",
+                recordingDate = recordingDate,
+                duration = duration
+            )
+
+            repositoryDb?.insertMediaFile(recording)
+        }
+
     }
 
     fun isRecordingInProgress(): Boolean = isRecording
