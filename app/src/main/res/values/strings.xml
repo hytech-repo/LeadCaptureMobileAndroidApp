@@ -37,4 +37,5 @@
     <string name="sign_out_subheading">After signing out, this device will no longer be active.</string>
     <string name="save_without_lead">Save without Lead</string>
     <string name="save_confirmation_lead">Would you like to save lead?</string>
+    <string name="internet_not_available">Internet not available</string>
 </resources>

@@ -73,6 +73,9 @@
         <action
             android:id="@+id/action_evaUserProfileFragment_to_evaDeviceListFragment"
             app:destination="@id/evaDeviceListFragment" />
+        <action
+            android:id="@+id/action_evaUserProfileFragment_to_evaWebviewPageFragment"
+            app:destination="@id/evaWebviewPageFragment" />
     </fragment>
 
     <fragment
@@ -143,5 +146,11 @@
         android:name="com.eva.lead.capture.ui.fragments.devicelist.EvaDeviceListFragment"
         android:label="EvaDeviceListFragment"
         tools:layout="@layout/fragment_eva_device_list" />
+    <fragment
+        android:id="@+id/evaWebviewPageFragment"
+        android:name="com.eva.lead.capture.ui.fragments.webpage.EvaWebviewPageFragment"
+        android:label="fragment_eva_webview_page"
+        tools:layout="@layout/fragment_eva_webview_page" />
+
 
 </navigation>

@@ -20,7 +20,10 @@ import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.activities.MainActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.ui.dialog.EvaConfirmationDialog
+import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.changeDrawableBgAndStroke
+import com.eva.lead.capture.utils.hasInternet
+import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -118,6 +121,8 @@ class EvaUserProfileFragment :
                 findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaDeviceListFragment)
             } else if (option.label == "Recording") {
                 findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaRecordingListFragment)
+            } else if (option.label == "Privacy Policy") {
+                openPrivacyPolicyFragment()
             } else if (option.label == "Sign out") {
                 showConfirmationDialog()
             }
@@ -141,6 +146,17 @@ class EvaUserProfileFragment :
 
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun openPrivacyPolicyFragment() {
+        if (mContext.hasInternet()) {
+            val bundle = Bundle()
+            bundle.putString("web_view_url", "https://www.evareg.com/privacy-policy/")
+            bundle.putString("page_title", "Privacy Policy")
+            findNavController().navigate(R.id.action_evaUserProfileFragment_to_evaWebviewPageFragment, bundle)
+        } else {
+            mContext.showToast(R.string.internet_not_available, ToastType.ERROR)
         }
     }
 
