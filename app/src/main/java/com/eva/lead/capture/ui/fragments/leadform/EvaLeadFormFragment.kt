@@ -319,7 +319,7 @@ class EvaLeadFormFragment :
                 }
 
                 R.id.mediumLead -> {
-                    binding.mediumLead.background = mContext.getDrawableStatus("medium")
+                    binding.mediumLead.background = mContext.getDrawableStatus("warm")
                 }
 
                 R.id.coldLead -> {
@@ -451,7 +451,7 @@ class EvaLeadFormFragment :
     private fun saveLeadData() {
         val tag = when (binding.rgLeads.checkedRadioButtonId) {
             R.id.hotLead -> "hot"
-            R.id.mediumLead -> "medium"
+            R.id.mediumLead -> "warm"
             R.id.coldLead -> "cold"
             else -> ""
         }

@@ -303,7 +303,7 @@ fun Context.getDrawableStatus(status: String?): Drawable {
 fun String.getStatusColor(): Int {
     return when (this) {
         "hot" -> R.color.toast_error_bg
-        "medium" -> R.color.status_yellow
+        "warm" -> R.color.status_yellow
         "cold" -> R.color.status_blue
         else -> R.color.status_yellow
     }
@@ -368,6 +368,11 @@ fun Long.formatDuration(): String {
     val seconds = (this / 1000) % 60
     return String.format("%02d:%02d", minutes, seconds)
 }
+
+fun Int.toColor(mcontext: Context): Int {
+    return ContextCompat.getColor(mcontext, this)
+}
+
 
 //fun String.generateQRCode(width: Int, height: Int): Bitmap? {
 //    return try {

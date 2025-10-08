@@ -150,9 +150,10 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cvTotolLeadGraph"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="330dp"
             android:layout_marginHorizontal="14dp"
             android:layout_marginTop="13dp"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
@@ -173,6 +174,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvLineLeadCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_pro_medium"
@@ -181,11 +183,13 @@
                     android:textSize="20sp" />
 
                 <!-- Placeholder for Chart -->
-                <View
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="#F3F3F8" />
+                    android:background="@color/white" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.cardview.widget.CardView>
@@ -194,9 +198,10 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cvTotalLeadBarChart"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="330dp"
             android:layout_marginHorizontal="14dp"
             android:layout_marginTop="13dp"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
@@ -217,6 +222,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvBarLeadCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_pro_medium"
@@ -225,11 +231,12 @@
                     android:textSize="20sp" />
 
                 <!-- Placeholder for Chart -->
-                <View
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="#F3F3F8" />
+                    android:background="@color/white" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

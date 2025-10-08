@@ -99,9 +99,9 @@ class EvaLeadListFragment :
         binding.cbMediumLead.setOnClickListener {
             if (binding.cbMediumLead.isChecked) {
                 binding.cbAll.isChecked = false
-                tags.add("medium")
+                tags.add("warm")
             } else {
-                tags.remove("medium")
+                tags.remove("warm")
             }
             filterListAccordingToTags()
         }

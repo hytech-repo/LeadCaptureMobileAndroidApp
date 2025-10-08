@@ -75,7 +75,7 @@ class EvaLeadListAdapter(val mContext: Context) :
 
             val imageRes = if (model.tag == "hot") {
                 R.drawable.ic_thunder
-            } else if (model.tag == "medium") {
+            } else if (model.tag == "warm") {
                 R.drawable.ic_fire
             } else {
                 R.drawable.ic_cold
