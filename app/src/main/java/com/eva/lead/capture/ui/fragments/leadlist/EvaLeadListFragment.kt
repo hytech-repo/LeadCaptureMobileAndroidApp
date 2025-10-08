@@ -9,6 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaLeadListBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.ui.activities.EventHostActivity
@@ -53,6 +54,9 @@ class EvaLeadListFragment :
     }
 
     private fun initListener() {
+        leadListAdapter.onItemClickListener = { data, position ->
+            navigateToNextScreen(data, position)
+        }
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -110,6 +114,15 @@ class EvaLeadListFragment :
             }
             filterListAccordingToTags()
         }
+    }
+
+    private fun navigateToNextScreen(
+        data: EvaLeadData,
+        position: Int
+    ) {
+        val bundle = Bundle()
+        bundle.putParcelable("lead_detail", data)
+        findNavController().navigate(R.id.action_evaLeadListFragment_to_evaAddManualLead, bundle)
     }
 
     private fun showLeadListOnUI(record: List<EvaLeadData>?) {

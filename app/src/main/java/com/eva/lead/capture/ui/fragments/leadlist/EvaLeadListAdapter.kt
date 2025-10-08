@@ -16,6 +16,8 @@ import java.util.Locale
 
 class EvaLeadListAdapter(val mContext: Context) :
     RecyclerView.Adapter<EvaLeadListAdapter.EvaLeadListVH>() {
+
+        var onItemClickListener: (data: EvaLeadData, position: Int) -> Unit = {data, position -> }
     private val colorResArray =
         arrayListOf<Int>(
             R.color.color_lime_green,
@@ -52,6 +54,7 @@ class EvaLeadListAdapter(val mContext: Context) :
 
     inner class EvaLeadListVH(val binding: ItemLeadBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(model: EvaLeadData, position: Int) {
             val colorRes = colorResArray[position % 5]
             val color = ContextCompat.getColor(mContext, colorRes)
@@ -82,6 +85,10 @@ class EvaLeadListAdapter(val mContext: Context) :
             binding.hotLabel.setTextColor(textColor)
             binding.icTag.setImageResource(imageRes)
             binding.hotLabel.text = model.tag.capitalize(Locale.ENGLISH)
+
+            binding.clMain.setOnClickListener {
+                onItemClickListener.invoke(model, position)
+            }
         }
     }
 }

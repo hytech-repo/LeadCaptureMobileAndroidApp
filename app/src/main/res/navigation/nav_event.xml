@@ -50,6 +50,9 @@
         android:label="EvaLeadListFragment"
         tools:layout="@layout/fragment_eva_lead_list">
 
+        <action
+            android:id="@+id/action_evaLeadListFragment_to_evaAddManualLead"
+            app:destination="@id/evaAddManualLead" />
     </fragment>
 
     <fragment
@@ -97,7 +100,9 @@
 
         <action
             android:id="@+id/action_evaCameraFragment_to_evaAddManualLead"
-            app:destination="@id/evaAddManualLead" />
+            app:destination="@id/evaAddManualLead"
+            app:popUpTo="@id/evaCameraFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

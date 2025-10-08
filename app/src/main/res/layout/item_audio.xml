@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/audioPlayerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:background="@drawable/bg_red_stroke_rounded_16"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
+    android:visibility="visible">
+
+    <!-- Play / Pause Button -->
+    <ImageView
+        android:id="@+id/btnPlayPause"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:contentDescription="Play"
+        android:src="@drawable/ic_play"
+        android:tint="#FF6D00" />
+
+    <!-- Time and SeekBar -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
+
+        <!-- Time -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_regular"
+            android:text="00:00 / 1:23"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <!-- SeekBar -->
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:splitTrack="false"
+            android:thumb="@android:color/transparent" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Volume Icon -->
+    <ImageView
+        android:id="@+id/btnVolume"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:contentDescription="Volume"
+        android:src="@drawable/ic_speaker"
+        android:tint="#757575" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

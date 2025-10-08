@@ -6,16 +6,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -31,7 +35,9 @@ import com.eva.lead.capture.ui.base.BaseFragment
 import com.eva.lead.capture.ui.dialog.EvaConfirmationDialog
 import com.eva.lead.capture.ui.fragments.camera.CapturedBusinessCardData
 import com.eva.lead.capture.utils.ToastType
+import com.eva.lead.capture.utils.formatDuration
 import com.eva.lead.capture.utils.getDrawableStatus
+import com.eva.lead.capture.utils.getExternalFolderPath
 import com.eva.lead.capture.utils.observe
 import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
@@ -51,10 +57,13 @@ class EvaLeadFormFragment :
     private var recordService: EvaRecordAudioService? = null
     private var isBound = false
     private var userInfo: CapturedBusinessCardData? = null
+    private var leadDetail: EvaLeadData? = null
     private val emailRegex = Regex(AppConstants.EMAIL_REGEX)
     private val phoneRegex = Regex(AppConstants.PHONE_REGEX)
     private val audioPermission = arrayOf(Manifest.permission.RECORD_AUDIO)
     private var selectedFile = arrayListOf<String>()
+    private var mediaPlayer: MediaPlayer? = null
+    private var isMuted = false
 
     private val mediaAdapter: EvaAttachedMediaAdapter by lazy {
         EvaAttachedMediaAdapter(mContext)
@@ -111,15 +120,95 @@ class EvaLeadFormFragment :
 
     private fun initBundle() {
         if (arguments != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                userInfo =
-                    arguments!!.getParcelable("user_info", CapturedBusinessCardData::class.java)
-            } else {
-                userInfo = arguments!!.getParcelable<CapturedBusinessCardData>("user_info")
-            }
+            this.checkUserBundle()
+            this.checkLeadDetail()
+        }
+    }
+
+    private fun checkUserBundle() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            userInfo = arguments!!.getParcelable("user_info", CapturedBusinessCardData::class.java)
+        } else {
+            userInfo = arguments!!.getParcelable<CapturedBusinessCardData>("user_info")
+        }
+        if (userInfo != null) {
             selectedFile = arrayListOf()
             val image = userInfo!!.imagePath
             selectedFile.add(image)
+        }
+    }
+
+    private fun checkLeadDetail() {
+        leadDetail = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments!!.getParcelable("lead_detail", EvaLeadData::class.java)
+        } else {
+            arguments!!.getParcelable("lead_detail")
+        }
+        if (leadDetail != null) {
+            showLeadDetailOnUI(leadDetail!!)
+        }
+    }
+
+    private fun showLeadDetailOnUI(leadDetail: EvaLeadData) {
+        binding.etFirstName.setText(leadDetail.firstName)
+        binding.etLastName.setText(leadDetail.lastName)
+        binding.etEmail.setText(leadDetail.email)
+        binding.etPhoneNumber.setText(leadDetail.phone)
+        binding.etNote.setText(leadDetail.notes)
+        binding.etCompanyName.setText(leadDetail.companyName)
+        binding.etAdditionalInfo.setText(leadDetail.additionalInfo)
+        if (leadDetail.audioFilePath != null) {
+            binding.incAudio.audioPlayerContainer.visibility = View.VISIBLE
+            loadAudioPlayer(leadDetail.audioFilePath!!)
+        }
+    }
+
+    private fun loadAudioPlayer(audioFile: String) {
+        mediaPlayer?.release()
+        val dir = mContext.getExternalFolderPath("recording")
+        val file = File(dir, audioFile)
+        mediaPlayer = MediaPlayer.create(mContext, Uri.fromFile(file))
+        binding.incAudio.seekBar.max = mediaPlayer?.duration ?: 0
+        val total = mediaPlayer?.duration?.toLong()?.formatDuration() ?: 0
+        binding.incAudio.tvTime.text = "00:00 / $total"
+        mediaPlayer?.setOnCompletionListener {
+            binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_play)
+        }
+    }
+
+    private fun playAudio() {
+        mediaPlayer?.start()
+        binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_pause)
+        updateSeekBar()
+    }
+
+    private fun pauseAudio() {
+        mediaPlayer?.pause()
+        binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun toggleMute() {
+        if (isMuted) {
+            // Unmute
+            mediaPlayer?.setVolume(1f, 1f)
+            binding.incAudio.btnVolume.setImageResource(R.drawable.ic_speaker)
+        } else {
+            // Mute
+            mediaPlayer?.setVolume(0f, 0f)
+            binding.incAudio.btnVolume.setImageResource(R.drawable.ic_speaker_off)
+        }
+        isMuted = !isMuted
+    }
+
+    private fun updateSeekBar() {
+        handler = Handler(Looper.getMainLooper())
+        mediaPlayer?.let {
+            binding.incAudio.seekBar.progress = it.currentPosition
+            val current = it.currentPosition.toLong().formatDuration()
+            val total = it.duration.toLong().formatDuration()
+            binding.incAudio.tvTime.text = "$current / $total"
+
+            if (mediaPlayer?.isPlaying == true) handler.postDelayed({ updateSeekBar() }, 500)
         }
     }
 
@@ -197,6 +286,21 @@ class EvaLeadFormFragment :
 
             }
         }
+        binding.incAudio.btnPlayPause.setOnClickListener {
+            playPauseAudioFile()
+        }
+        binding.incAudio.btnVolume.setOnClickListener {
+            toggleMute()
+        }
+        binding.incAudio.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) mediaPlayer?.seekTo(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -221,6 +325,19 @@ class EvaLeadFormFragment :
                 R.id.coldLead -> {
                     binding.coldLead.background = mContext.getDrawableStatus("cold")
                 }
+            }
+        }
+    }
+
+    private fun playPauseAudioFile() {
+        mediaPlayer?.let {
+            if (it.isPlaying) {
+                mediaPlayer?.pause()
+                binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_play)
+            } else {
+                mediaPlayer?.start()
+                binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_pause)
+                updateSeekBar()
             }
         }
     }
@@ -367,7 +484,7 @@ class EvaLeadFormFragment :
             notes = notes,
             imageFileNames = namesCommaSeparated,
             tag = tag,
-            audioFilePath = audioFile?.absolutePath,
+            audioFilePath = audioFile?.name,
             timestamp = System.currentTimeMillis()
         )
         audioFile?.let {

@@ -1,10 +1,13 @@
 package com.eva.lead.capture.domain.model.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "lead_data", indices = [Index(value = ["lead_id"], unique = true)])
 data class EvaLeadData(
     @PrimaryKey(autoGenerate = false)
@@ -39,4 +42,4 @@ data class EvaLeadData(
     var isDeleted: Int = 0,
     @ColumnInfo("is_sync", defaultValue = "0")
     var isSync: Int = 0
-)
+): Parcelable

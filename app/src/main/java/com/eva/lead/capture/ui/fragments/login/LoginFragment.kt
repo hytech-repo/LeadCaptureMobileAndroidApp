@@ -41,11 +41,20 @@ class LoginFragment :
 
     private lateinit var mContext: Context
     private var emailAddress: String = ""
+    private var scanQrId: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mContext = context
         this.TAG = "LoginFragment"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parentFragmentManager.setFragmentResultListener("scan_result", this) { _, bundle ->
+            scanQrId = bundle.getString("qr_info", "")
+            binding.etEmail.setText(scanQrId)
+        }
     }
 
     override fun createView(
@@ -133,7 +142,9 @@ class LoginFragment :
             }
         }
         binding.tvAccessQr.setOnClickListener {
-
+            val bundle = Bundle()
+            bundle.putBoolean("send_fragment_result", true)
+            findNavController().navigate(R.id.action_loginFragment_to_evaScanQRFragment, bundle)
         }
         binding.tvLicenseCode.setOnClickListener {
             showForgotPasswordDialog()

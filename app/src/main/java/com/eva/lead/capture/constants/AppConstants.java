@@ -30,7 +30,7 @@ public class AppConstants {
 
     public static int ALLOWED_SCAN = 1;
 
-    public static final String BARCODE_REGEX = "^[A-Za-z]+-\\d+$";
+    public static final String BARCODE_REGEX = "^[A-Za-z]+-?\\d+$";
     public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     public static final String PHONE_REGEX = "^\\d{10}$";
     public static final String IPV4_REGEX = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"

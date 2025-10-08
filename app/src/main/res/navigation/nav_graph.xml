@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_loginFragment_to_eventActivationFragment"
             app:destination="@id/eventActivationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_evaScanQRFragment"
+            app:destination="@id/evaScanQRFragment" />
     </fragment>
 
     <fragment
@@ -34,5 +37,11 @@
         tools:layout="@layout/fragment_eva_device_detail">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/evaScanQRFragment"
+        android:name="com.eva.lead.capture.ui.fragments.scanqr.EvaScanQRFragment"
+        android:label="EvaScanQRFragment"
+        tools:layout="@layout/fragment_eva_scan_qr" />
 
 </navigation>
