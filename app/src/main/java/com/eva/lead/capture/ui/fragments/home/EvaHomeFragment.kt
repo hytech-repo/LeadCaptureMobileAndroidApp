@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.toColor
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.eva.lead.capture.R
@@ -31,6 +32,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.HashMap
+import java.util.HashSet
 import java.util.Locale
 
 class EvaHomeFragment :
@@ -113,13 +116,26 @@ class EvaHomeFragment :
             Entry(hourTimestamp.toFloat(), leadsAtHour.size.toFloat())
         }.sortedBy { it.x }
 
+//        val sortedHours = groupedByHour.keys.sorted()
+//        for ((i, hour) in sortedHours.withIndex()) {
+//            val count = groupedByHour[hour]?.size?.toFloat() ?: 0f
+//            if (i == 0) {
+//                // Add zero at start
+//                entries.add(Entry(hour.toFloat(), 0f))
+//            }
+//            entries.add(Entry(hour.toFloat(), count))
+//        }
+
         val dataSet = LineDataSet(entries, "Leads by Hour").apply {
-            color = Color.DKGRAY
-            setCircleColor(Color.DKGRAY)
+            color = R.color.color_bluish_purple.toColor(mContext)
+            setCircleColor(R.color.color_bluish_purple.toColor(mContext))
             circleRadius = 3f
             lineWidth = 2f
             valueTextSize = 10f
             mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawFilled(true)
+            fillColor = R.color.color_purple_light.toColor(mContext)
+            fillAlpha = 50
         }
 
         val lineData = LineData(dataSet)
@@ -127,12 +143,14 @@ class EvaHomeFragment :
             data = lineData
             description.text = "Time in hour"
             axisRight.isEnabled = false
+            axisLeft.axisMinimum = 0f
             axisLeft.setDrawGridLines(false)
             xAxis.setDrawGridLines(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
 //            xAxis.labelRotationAngle = -45f
             xAxis.granularity = 60 * 60 * 1000f
             axisRight.setDrawGridLines(false)
+            legend.isEnabled = true
 
             xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
