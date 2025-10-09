@@ -52,6 +52,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -383,6 +384,35 @@ fun Context.toUri(file: File): Uri {
     )
 }
 
+fun Long.toLastLoginString(): String {
+    val now = Calendar.getInstance()
+    val then = Calendar.getInstance().apply { timeInMillis = this@toLastLoginString }
+
+    val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+    val timeString = timeFormat.format(Date(this))
+
+    return when {
+        now.isSameDay(then) -> "Today, $timeString"
+        now.isYesterday(then) -> "Yesterday, $timeString"
+        else -> {
+            val dateFormat = SimpleDateFormat("dd MM yyyy", Locale.getDefault())
+            val dateString = dateFormat.format(Date(this))
+            "$dateString, $timeString"
+        }
+    }
+}
+
+private fun Calendar.isSameDay(other: Calendar): Boolean {
+    return this.get(Calendar.YEAR) == other.get(Calendar.YEAR) &&
+            this.get(Calendar.DAY_OF_YEAR) == other.get(Calendar.DAY_OF_YEAR)
+}
+
+private fun Calendar.isYesterday(other: Calendar): Boolean {
+    this.add(Calendar.DAY_OF_YEAR, -1)
+    val result = this.isSameDay(other)
+    this.add(Calendar.DAY_OF_YEAR, 1) // reset
+    return result
+}
 
 //fun String.generateQRCode(width: Int, height: Int): Bitmap? {
 //    return try {

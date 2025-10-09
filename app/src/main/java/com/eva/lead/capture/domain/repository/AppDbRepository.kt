@@ -1,5 +1,6 @@
 package com.eva.lead.capture.domain.repository
 
+import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
@@ -40,6 +41,10 @@ interface AppDbRepository {
     fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
     fun getRecordingById(id: String): Flow<LeadAudioRecording?>
+
+    suspend fun insertDevice(device: DeviceInfo): Long
+
+    fun getAllDevices(): Flow<List<DeviceInfo>?>
 
 //    suspend fun deleteUser(user: User)
 

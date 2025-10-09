@@ -45,7 +45,7 @@ class RecordingListAdapter(val mContext: Context) :
 
         fun bind(model: LeadAudioRecording, position: Int) {
             binding.nameText.text = model.recordingName
-            binding.dateText.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(model.recordingDate!!))
+            binding.dateText.text = SimpleDateFormat("dd MM yyyy", Locale.getDefault()).format(Date(model.recordingDate!!))
             binding.tvDuration.text  = model.duration?.formatDuration() ?: "00:00"
 
             binding.root.setOnClickListener {

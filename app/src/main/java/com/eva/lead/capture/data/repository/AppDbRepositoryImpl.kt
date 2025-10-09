@@ -2,6 +2,7 @@ package com.eva.lead.capture.data.repository
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.eva.lead.capture.data.local.AppDatabase
+import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
@@ -54,6 +55,9 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
 
     override fun getRecordingById(id: String): Flow<LeadAudioRecording?> = dao.getRecordingById(id)
 
+    override suspend fun insertDevice(device: DeviceInfo): Long = dao.insertDevice(device)
+
+    override fun getAllDevices(): Flow<List<DeviceInfo>?> = dao.getAllDevices()
     override suspend fun executeRawQuery(query: String): Long {
         val rawQuery = SimpleSQLiteQuery(query)
         return dao.executeRawQuery(rawQuery)

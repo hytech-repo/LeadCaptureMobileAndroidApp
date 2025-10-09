@@ -23,12 +23,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dateText"
+        android:id="@+id/tvCurrent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="current"
+        android:text="Current"
+        android:visibility="gone"
         android:textColor="@color/subheading_text_color"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="@+id/tvDeviceName"
         app:layout_constraintTop_toBottomOf="@+id/tvDeviceName" />
@@ -49,12 +50,12 @@
         android:id="@+id/tvDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="03 Sep 2025"
         android:textColor="@color/subheading_text_color"
         android:textSize="13sp"
-        app:layout_constraintTop_toTopOf="@id/dateText"
-        app:layout_constraintBottom_toBottomOf="@id/dateText"
-        app:layout_constraintEnd_toEndOf="@+id/tvStatus"
-        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+        android:layout_marginTop="10dp"
+        tools:text="03 Sep 2025"
+        app:layout_constraintEnd_toEndOf="@id/tvStatus"
+        app:layout_constraintTop_toBottomOf="@+id/tvStatus"
+      />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

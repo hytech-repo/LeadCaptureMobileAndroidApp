@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaDeviceDetailBinding
+import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment

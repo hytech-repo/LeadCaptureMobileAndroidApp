@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
@@ -66,6 +67,12 @@ interface AppDao {
 
     @Query("SELECT * FROM audio_recording where type = 'recording' AND id = :recordingId")
     fun getRecordingById(recordingId: String): Flow<LeadAudioRecording?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDevice(device: DeviceInfo): Long
+
+    @Query("SELECT * FROM device_information ORDER BY id DESC")
+    fun getAllDevices(): Flow<List<DeviceInfo>?>
 
     @RawQuery
     suspend fun executeRawQuery(query: SupportSQLiteQuery): Long
