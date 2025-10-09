@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.lifecycleScope
@@ -115,6 +116,10 @@ class EvaQuestionsFragment :
         questionsListAdapter.onItemClickListener = { view, data, position ->
             if (view.id == R.id.ivOptionMenuDot) {
                 showPopupMenu(view, data, position)
+            } else if (view.id == R.id.sGuest) {
+                val icChecked = (view as Switch).isChecked
+                data.status = if (icChecked) 1 else 0
+                viewModel.updateQuestionIntoDb(data)
             }
         }
         binding.recyclerViewOptions.apply {
@@ -199,7 +204,7 @@ class EvaQuestionsFragment :
                 QuestionTabType.QUICK_NOTES -> "note"
             }
 
-            val questionOptionList = viewModel.fetchQuestionWithOptions(type).firstOrNull()
+            val questionOptionList = viewModel.fetchQuestionWithOptions(type, ).firstOrNull()
             if (questionOptionList != null) {
                 updateRecyclerView(questionOptionList)
             }

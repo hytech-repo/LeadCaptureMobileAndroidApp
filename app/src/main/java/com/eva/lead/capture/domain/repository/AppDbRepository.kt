@@ -33,6 +33,7 @@ interface AppDbRepository {
     suspend fun insertQuestionInfos(questionInfo: List<QuestionInfo>): List<Long>
 
     fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?>
+    fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?>
 
     suspend fun insertMediaFile(media: LeadAudioRecording): Long
 

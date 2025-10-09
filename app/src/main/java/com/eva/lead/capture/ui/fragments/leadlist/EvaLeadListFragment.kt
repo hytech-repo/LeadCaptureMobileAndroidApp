@@ -132,20 +132,6 @@ class EvaLeadListFragment :
 
     private fun exportLeadsToMail() {
         val uris = ArrayList<Uri>()
-//        if (!leadList.isNullOrEmpty()) {
-//            for (lead in leadList) {
-//                if (!lead.audioFilePath.isNullOrEmpty()) {
-//                    val recordingDir = mContext.getExternalFolderPath("recording")
-//                    val file = File(recordingDir, lead.audioFilePath)
-//                    val uri = FileProvider.getUriForFile(
-//                        mContext,
-//                        "${mContext.applicationContext.packageName}.fileprovider",
-//                        file
-//                    )
-//                    uris.add(uri)
-//                }
-//            }
-//        }
 
         val csvFile = FileUtils.createZipFileOfLeads(mContext, leadList)
         if (csvFile != null) {

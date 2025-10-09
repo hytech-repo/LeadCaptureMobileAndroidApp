@@ -31,7 +31,7 @@ class EvaLeadFormViewModel(mContext: Context) : BaseViewModel(mContext) {
 
 
     fun fetchQuestions(type: String): Flow<List<QuestionInfo>?> {
-        return repositoryDb.getQuestionsWithOptions(type)
+        return repositoryDb.getActiveQuestions(type)
     }
 
 }

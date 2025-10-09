@@ -55,6 +55,9 @@ interface AppDao {
     @Query("SELECT * FROM question_info WHERE type=:type AND is_deleted = 0")
     fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?>
 
+    @Query("SELECT * FROM question_info WHERE type=:type AND status = 1 AND is_deleted = 0")
+    fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?>
+
     @Insert
     suspend fun insertMediaFile(media: LeadAudioRecording): Long
 

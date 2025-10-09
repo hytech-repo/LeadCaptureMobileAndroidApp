@@ -44,6 +44,9 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
     override fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?> =
         dao.getQuestionsWithOptions(type)
 
+    override fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?> =
+        dao.getActiveQuestions(type)
+
     override suspend fun insertMediaFile(media: LeadAudioRecording): Long =
         dao.insertMediaFile(media)
 

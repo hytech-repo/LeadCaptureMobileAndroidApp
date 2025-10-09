@@ -75,7 +75,11 @@ class QuestionsListAdapter(
         fun bind(question: QuestionInfo) {
             binding.tvQuestion.text = question.question
 
-            binding.sGuest.isChecked = false
+            binding.sGuest.isChecked = question.status == 1
+
+            binding.sGuest.setOnClickListener {
+                onItemClickListener.invoke(it, question, absoluteAdapterPosition)
+            }
             binding.root.setOnClickListener {
                 onItemClickListener.invoke(it, question, absoluteAdapterPosition)
             }

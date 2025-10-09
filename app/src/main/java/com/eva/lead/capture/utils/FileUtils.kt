@@ -128,8 +128,8 @@ class FileUtils {
                     writer.append("${lead.notes ?: ""},")
                     writer.append("${lead.imageFileNames ?: ""},")
                     writer.append("${lead.audioFilePath ?: ""},")
-                    writer.append("${lead.timestamp ?: ""}")
-                    writer.append("${lead.quickNote ?: ""}")
+                    writer.append("${lead.timestamp ?: ""},")
+                    writer.append("${lead.quickNote ?: ""},")
                     writer.append("${lead.questionAnswer ?: ""}\n")
                 }
 
