@@ -33,7 +33,8 @@ class EvaAddLeadFragment :
     private lateinit var mContext: Context
     private var recordService: EvaRecordAudioService? = null
     private var isBound = false
-    private var leadList: ArrayList<String> = arrayListOf()
+    private var leadListName: ArrayList<String> = arrayListOf()
+    private var leadList: ArrayList<EvaLeadData>? = arrayListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,8 +81,9 @@ class EvaAddLeadFragment :
         lifecycleScope.launch {
             val leads = viewModel.getLeadList().firstOrNull()
             if (leads != null) {
+                leadList = leads as ArrayList
                 val leadsName = leads.map { "${it.firstName} ${it.lastName}" }
-                leadList = leadsName as ArrayList<String>
+                leadListName = leadsName as ArrayList<String>
             }
         }
     }
@@ -172,7 +174,7 @@ class EvaAddLeadFragment :
     fun showAudioSelectionDialog(audioFile: File) {
         val leadSelectionDialog = EvaLeadAudioSelectionDialog()
         val bundle = Bundle()
-        bundle.putStringArrayList("lead_list", leadList)
+        bundle.putParcelableArrayList("lead_list", leadList)
         leadSelectionDialog.arguments = bundle
         leadSelectionDialog.isCancelable = false
         leadSelectionDialog.apply {
@@ -180,11 +182,19 @@ class EvaAddLeadFragment :
                 when (action) {
                     "dismiss" -> deleteRecordingFile(audioFile)
                     "save_only" -> { recordService?.saveRecordingIntoDb(audioFile) }
-                    "save" -> { recordService?.saveRecordingIntoDb(audioFile) }
+                    "save" -> { saveRecordingWithLeadDetail(leadName, audioFile) }
                 }
                 dismiss()
             }
         }.show(requireActivity().supportFragmentManager, "EvaSaveLeadRecordingDialog")
+    }
+
+    fun saveRecordingWithLeadDetail(leadName: EvaLeadData?, audioFile: File) {
+        recordService?.saveRecordingIntoDb(audioFile)
+        if (leadName != null) {
+            leadName.audioFilePath = audioFile.name
+            viewModel.updateLeadData(leadName)
+        }
     }
 
     fun deleteRecordingFile(audioFile: File) {
