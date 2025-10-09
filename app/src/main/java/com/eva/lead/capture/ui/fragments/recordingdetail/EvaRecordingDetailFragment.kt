@@ -1,40 +1,44 @@
 package com.eva.lead.capture.ui.fragments.recordingdetail
 
-import android.content.Context
-import android.media.MediaPlayer
-import android.os.Bundle
-import android.speech.SpeechRecognizer
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import com.eva.lead.capture.R
-import com.eva.lead.capture.databinding.FragmentEvaRecordingDetailBinding
-import com.eva.lead.capture.ui.base.BaseFragment
-import com.eva.lead.capture.utils.ToastType
-import com.eva.lead.capture.utils.showToast
 //import com.google.cloud.speech.v1.RecognitionAudio
 //import com.google.cloud.speech.v1.RecognitionConfig
 //import com.google.cloud.speech.v1.RecognizeRequest
 //import com.google.cloud.speech.v1.SpeechClient
 //import com.google.protobuf.ByteString
-import kotlinx.coroutines.Dispatchers
+import android.content.Context
+import android.media.MediaPlayer
+import android.media.audiofx.Visualizer
+import android.os.Bundle
+import android.speech.SpeechRecognizer
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.eva.lead.capture.R
+import com.eva.lead.capture.databinding.FragmentEvaRecordingDetailBinding
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.utils.ToastType
+import com.eva.lead.capture.utils.getExternalFolderPath
+import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
 
-class EvaRecordingDetailFragment : BaseFragment<FragmentEvaRecordingDetailBinding,EvaRecordingDetailViewModel>(
-    EvaRecordingDetailViewModel::class.java) {
-    private var mContext: Context? = null
-    private lateinit var recordingId: String
+class EvaRecordingDetailFragment :
+    BaseFragment<FragmentEvaRecordingDetailBinding, EvaRecordingDetailViewModel>(
+        EvaRecordingDetailViewModel::class.java
+    ) {
+    private lateinit var mContext: Context
+    private lateinit var recordingName: String
     private var mediaPlayer: MediaPlayer? = null
     private var isPlayingAudio = false
     private var audioFile: File? = null
     private var speechRecognizer: SpeechRecognizer? = null
+    private var visualizer: Visualizer? = null
+    private var leadList: ArrayList<EvaLeadData> = arrayListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,8 +57,92 @@ class EvaRecordingDetailFragment : BaseFragment<FragmentEvaRecordingDetailBindin
     override fun startWorking(savedInstanceState: Bundle?) {
         this.initBundle()
         this.initView()
-        this.initObserver()
         this.initListener()
+        this.fetchLeadListDb()
+        this.prepareMediaPlayer()
+    }
+
+    private fun initBundle() {
+        if (arguments != null) {
+            recordingName = arguments!!.getString("recording_name", "")
+        }
+    }
+
+    private fun initAdapter() {
+        val leadsName = leadList.map { "${it.firstName} ${it.lastName}" }
+        val leadAdapter = ArrayAdapter<String>(
+            mContext,
+            R.layout.dropdown_text_item,
+            leadsName.toMutableList()
+        )
+        binding.actvLeadDropDown.apply {
+            setOnItemClickListener { _, _, position, _ ->
+                onItemSelected(leadList[position])
+            }
+            setAdapter(leadAdapter)
+        }
+    }
+
+    private fun onItemSelected(data: EvaLeadData) {
+        data.audioFilePath = recordingName
+        viewModel.updateLeadData(data)
+    }
+
+    private fun fetchLeadListDb() {
+        lifecycleScope.launch {
+            val leads = viewModel.getLeadList().firstOrNull()
+            if (leads != null) {
+                leadList = leads as ArrayList
+                initAdapter()
+            }
+        }
+    }
+
+    private fun prepareMediaPlayer() {
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(audioFile?.absolutePath)  // Set the audio file path
+            prepare()  // Prepare the media player
+            setOnCompletionListener {
+                // Audio has finished playing, reset the UI
+                isPlayingAudio = false
+                updatePlayPauseButton()
+            }
+        }
+        setupVisualizer()
+    }
+
+    private fun setupVisualizer() {
+        mediaPlayer?.audioSessionId?.let { sessionId ->
+            visualizer = Visualizer(sessionId).apply {
+                captureSize = Visualizer.getCaptureSizeRange()[1] // max capture size
+                setDataCaptureListener(object : Visualizer.OnDataCaptureListener {
+                    override fun onWaveFormDataCapture(
+                        visualizer: Visualizer?,
+                        waveform: ByteArray?,
+                        samplingRate: Int
+                    ) {
+                        waveform?.forEach { b ->
+                            binding.waveRecording.addAmplitude(b.toInt() * 75) // scale for view
+                        }
+                    }
+
+                    override fun onFftDataCapture(
+                        visualizer: Visualizer?,
+                        fft: ByteArray?,
+                        samplingRate: Int
+                    ) {
+                    }
+                }, Visualizer.getMaxCaptureRate() / 2, true, false)
+
+                enabled = true
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mediaPlayer?.release()
+        visualizer?.release()
     }
 
     private fun initListener() {
@@ -76,24 +164,17 @@ class EvaRecordingDetailFragment : BaseFragment<FragmentEvaRecordingDetailBindin
     private fun initView() {
         binding.incToolbar.tvTitle.text = "Recordings"
         binding.incToolbar.llcbtn.visibility = View.GONE
+
+        val audioDir = mContext.getExternalFolderPath("recording")
+        audioFile = File(audioDir, recordingName)
     }
 
     private fun playAudio() {
         try {
-            if (mediaPlayer == null) {
-                mediaPlayer = MediaPlayer().apply {
-                    setDataSource(audioFile?.absolutePath)  // Set the audio file path
-                    prepare()  // Prepare the media player
-                    setOnCompletionListener {
-                        // Audio has finished playing, reset the UI
-                        isPlayingAudio = false
-                        updatePlayPauseButton()
-                    }
-                }
-            }
             mediaPlayer?.start()
             isPlayingAudio = true
             updatePlayPauseButton()
+            visualizer?.enabled = true
         } catch (e: Exception) {
             e.printStackTrace()
             mContext!!.showToast("Error playing audio", ToastType.ERROR)
@@ -104,6 +185,8 @@ class EvaRecordingDetailFragment : BaseFragment<FragmentEvaRecordingDetailBindin
         mediaPlayer?.pause()
         isPlayingAudio = false
         updatePlayPauseButton()
+        visualizer?.enabled = false
+        binding.waveRecording.clearWaveform() // Clear old bars
     }
 
     private fun updatePlayPauseButton() {
@@ -112,23 +195,6 @@ class EvaRecordingDetailFragment : BaseFragment<FragmentEvaRecordingDetailBindin
         } else {
             binding.ivPlayPause.setImageResource(R.drawable.ic_play)
         }
-    }
-
-    private fun initObserver() {
-        lifecycleScope.launch {
-            try {
-                val recordingDetail = viewModel.getRecordingDetail(recordingId).firstOrNull()
-                if (recordingDetail != null) {
-                    audioFile = File(recordingDetail.filePath ?: "")
-                }
-            } catch (e: Exception) {
-                mContext?.showToast("Error fetching recording details", ToastType.ERROR)
-            }
-        }
-    }
-
-    private fun initBundle() {
-        recordingId = arguments?.getString("recording_id" , "0").toString()
     }
 
     private fun transcribeAudio() {
