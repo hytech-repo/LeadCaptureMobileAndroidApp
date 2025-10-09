@@ -176,17 +176,6 @@ class EvaLeadFormFragment :
         }
     }
 
-    private fun playAudio() {
-        mediaPlayer?.start()
-        binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_pause)
-        updateSeekBar()
-    }
-
-    private fun pauseAudio() {
-        mediaPlayer?.pause()
-        binding.incAudio.btnPlayPause.setImageResource(R.drawable.ic_play)
-    }
-
     private fun toggleMute() {
         if (isMuted) {
             // Unmute

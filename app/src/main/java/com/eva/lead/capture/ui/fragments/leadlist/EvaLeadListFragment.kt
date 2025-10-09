@@ -1,10 +1,14 @@
 package com.eva.lead.capture.ui.fragments.leadlist
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,8 +18,14 @@ import com.eva.lead.capture.databinding.FragmentEvaLeadListBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.utils.FileUtils
+import com.eva.lead.capture.utils.ToastType
+import com.eva.lead.capture.utils.getExternalFolderPath
+import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
 
 class EvaLeadListFragment :
     BaseFragment<FragmentEvaLeadListBinding, EvaLeadListViewModel>(EvaLeadListViewModel::class.java) {
@@ -50,12 +60,16 @@ class EvaLeadListFragment :
 
     private fun initView() {
         binding.incToolbar.tvTitle.text = "Lead list"
+        binding.incToolbar.llcbtn.visibility = View.VISIBLE
         this.initRecyclerView()
     }
 
     private fun initListener() {
         leadListAdapter.onItemClickListener = { data, position ->
             navigateToNextScreen(data, position)
+        }
+        binding.incToolbar.llcbtn.setOnClickListener {
+            exportLeadsToMail()
         }
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
@@ -113,6 +127,49 @@ class EvaLeadListFragment :
                 tags.remove("cold")
             }
             filterListAccordingToTags()
+        }
+    }
+
+    private fun exportLeadsToMail() {
+        val uris = ArrayList<Uri>()
+//        if (!leadList.isNullOrEmpty()) {
+//            for (lead in leadList) {
+//                if (!lead.audioFilePath.isNullOrEmpty()) {
+//                    val recordingDir = mContext.getExternalFolderPath("recording")
+//                    val file = File(recordingDir, lead.audioFilePath)
+//                    val uri = FileProvider.getUriForFile(
+//                        mContext,
+//                        "${mContext.applicationContext.packageName}.fileprovider",
+//                        file
+//                    )
+//                    uris.add(uri)
+//                }
+//            }
+//        }
+
+        val csvFile = FileUtils.createZipFileOfLeads(mContext, leadList)
+        if (csvFile != null) {
+            val uri = FileProvider.getUriForFile(
+                mContext,
+                "${mContext.applicationContext.packageName}.fileprovider",
+                csvFile
+            )
+            uris.add(uri)
+        }
+
+        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            type = "audio/*" // MIME type for audio files
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
+//            putExtra(Intent.EXTRA_EMAIL, arrayOf("recipient@example.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "Captured Leads")
+            putExtra(Intent.EXTRA_TEXT, "Hi \n\n Please find the attached details of leads")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        try {
+            mContext.startActivity(Intent.createChooser(intent, "Send email using:"))
+        } catch (e: ActivityNotFoundException) {
+            mContext.showToast("No email app found", ToastType.ERROR)
         }
     }
 

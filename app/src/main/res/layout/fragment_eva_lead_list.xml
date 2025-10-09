@@ -127,7 +127,7 @@
                     android:drawableTint="@drawable/ic_fire_color_selector"
                     android:fontFamily="@font/sf_pro_regular"
                     android:paddingHorizontal="25dp"
-                    android:text="Medium Lead"
+                    android:text="Warm Lead"
                     android:textColor="@drawable/checked_text_color_selector"
                     android:textSize="14sp" />
 

@@ -39,7 +39,8 @@
             android:background="@drawable/bg_rounded_primary_stroke"
             android:gravity="center"
             android:paddingHorizontal="25dp"
-            android:paddingVertical="5dp">
+            android:paddingVertical="5dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ivBtnImage"

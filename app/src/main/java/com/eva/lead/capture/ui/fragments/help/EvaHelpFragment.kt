@@ -52,7 +52,7 @@ class EvaHelpFragment :
     }
 
     private fun initView() {
-        binding.incToolbar.llcbtn.visibility = View.VISIBLE
+        binding.incToolbar.llcbtn.visibility = View.GONE
         binding.incToolbar.tvTitle.text = "Help"
         this.initRecyclerView()
     }

@@ -15,6 +15,7 @@ import android.graphics.drawable.GradientDrawable
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,6 +32,7 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -371,6 +373,14 @@ fun Long.formatDuration(): String {
 
 fun Int.toColor(mcontext: Context): Int {
     return ContextCompat.getColor(mcontext, this)
+}
+
+fun Context.toUri(file: File): Uri {
+    return FileProvider.getUriForFile(
+        this,
+        "${this.applicationContext.packageName}.fileprovider",
+        file
+    )
 }
 
 

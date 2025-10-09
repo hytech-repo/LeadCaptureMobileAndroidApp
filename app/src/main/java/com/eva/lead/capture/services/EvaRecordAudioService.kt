@@ -68,7 +68,7 @@ class EvaRecordAudioService : Service() {
 
         // Prepare output file path (internal storage)
         val dir = applicationContext.getExternalFolderPath("recording")
-        outputFile = File(dir, "recording_${System.currentTimeMillis()}.mp4")
+        outputFile = File(dir, "recording_${System.currentTimeMillis()}.m4a")
 
         recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             MediaRecorder(this.applicationContext)
