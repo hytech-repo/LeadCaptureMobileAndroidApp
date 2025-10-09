@@ -7,6 +7,7 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import com.eva.lead.capture.domain.repository.AppDbRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -47,6 +48,20 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
 
     override fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?> =
         dao.getActiveQuestions(type)
+
+    override suspend fun insertQuickNoteOption(note: QuickNote): Long =
+        dao.insertQuickNoteOption(note)
+
+    override suspend fun insertQuickNoteOptionList(note: List<QuickNote>): List<Long> =
+        dao.insertQuickNoteOptionList(note)
+
+    override suspend fun updateQuickNote(note: QuickNote): Int = dao.updateQuickNote(note)
+
+    override suspend fun deleteQuickNote(note: QuickNote): Int = dao.deleteQuickNote(note)
+
+    override fun getQuickNoteList(): Flow<List<QuickNote>?> = dao.getQuickNoteList()
+
+    override fun getActiveQuickNotes(): Flow<List<QuickNote>?> = dao.getActiveQuickNotes()
 
     override suspend fun insertMediaFile(media: LeadAudioRecording): Long =
         dao.insertMediaFile(media)

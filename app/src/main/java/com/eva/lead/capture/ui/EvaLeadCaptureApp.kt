@@ -6,6 +6,7 @@ import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.data.local.AppDatabase
 import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import com.eva.lead.capture.domain.model.entity.exhibitors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ class EvaLeadCaptureApp : Application() {
             }
 
             insertPreDefineQuestion(appDbRepository)
+            insertQuickNote(appDbRepository)
         }
     }
 
@@ -62,5 +64,16 @@ class EvaLeadCaptureApp : Application() {
             questionList.add(question)
         }
         appDbRepository.insertQuestionInfos(questionList)
+    }
+
+    private suspend fun insertQuickNote(appDbRepository: AppDbRepositoryImpl) {
+        val quickNoteOption = listOf("Add to mailing list", "Schedule Demo")
+        for (note in quickNoteOption) {
+            val noteObj = QuickNote(
+                text = note,
+                status = 1
+            )
+            appDbRepository.insertQuickNoteOption(noteObj)
+        }
     }
 }

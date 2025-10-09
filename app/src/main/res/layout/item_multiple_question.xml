@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llcQuestion"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -22,11 +23,13 @@
             android:textColor="@color/heading_text_color"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/ivOptionMenuDot"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_dots" />
+        <Switch
+            android:id="@+id/sactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:thumb="@drawable/ic_circle"
+            android:track="@drawable/track_selector" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -37,6 +40,72 @@
         android:layout_marginTop="13dp"
         android:orientation="vertical">
 
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llcAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_switch_off" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="7dp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llcDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="7dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_delete"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/primary_color"
+                    android:fontFamily="@font/sf_pro_bold"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@color/primary_color"
+                    android:textStyle="normal" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llcEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingVertical="7dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/sf_pro_bold"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textColor="@color/primary_color"
+                    android:textStyle="normal"
+                    app:drawableStartCompat="@drawable/ic_edit_board"
+                    app:drawableTint="@color/primary_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

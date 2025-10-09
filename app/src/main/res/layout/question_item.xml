@@ -17,7 +17,7 @@
         android:textSize="15sp" />
 
     <Switch
-        android:id="@+id/sGuest"
+        android:id="@+id/sactive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"

@@ -12,11 +12,12 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 
 
 @Database(
     entities = [Exhibitor::class, EvaLeadData::class, LeadAudioRecording::class,
-        QuestionInfo::class, DeviceInfo::class],
+        QuestionInfo::class, DeviceInfo::class, QuickNote::class],
     version = 1,
     exportSchema = false
 )

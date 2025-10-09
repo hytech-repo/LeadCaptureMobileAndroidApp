@@ -5,6 +5,7 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import kotlinx.coroutines.flow.Flow
 
 interface AppDbRepository {
@@ -14,7 +15,6 @@ interface AppDbRepository {
     fun getExhibitorById(id: String): Flow<Exhibitor?>
 
     fun getExhibitorByLeadCode(leadCode: String): Flow<Exhibitor?>
-
 
     suspend fun insertExhibitor(user: Exhibitor): Long
 
@@ -35,6 +35,18 @@ interface AppDbRepository {
 
     fun getQuestionsWithOptions(type: String): Flow<List<QuestionInfo>?>
     fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?>
+
+    suspend fun insertQuickNoteOption(note: QuickNote): Long
+
+    suspend fun insertQuickNoteOptionList(note: List<QuickNote>): List<Long>
+
+    suspend fun updateQuickNote(note: QuickNote): Int
+
+    suspend fun deleteQuickNote(note: QuickNote): Int
+
+    fun getQuickNoteList(): Flow<List<QuickNote>?>
+
+    fun getActiveQuickNotes(): Flow<List<QuickNote>?>
 
     suspend fun insertMediaFile(media: LeadAudioRecording): Long
 

@@ -30,6 +30,20 @@ data class QuestionInfo(
     var isDeleted: Int = 0,
 ): Parcelable
 
+@Entity(tableName = "quick_note", indices = [Index(value = [/*"server_id",*/ "text"], unique = true)])
+data class QuickNote(
+    @PrimaryKey(autoGenerate = false)
+    var id: Long? = null,
+    @ColumnInfo("server_id")
+    var serverId: Int? = null,
+    @ColumnInfo("status")
+    var status: Int = 1,
+    @ColumnInfo("text")
+    var text: String? = null,
+    @ColumnInfo("is_deleted")
+    var isDeleted: Boolean = false
+)
+
 //@Entity(
 //    tableName = "question_options",
 //    foreignKeys = [

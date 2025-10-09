@@ -3,6 +3,7 @@ package com.eva.lead.capture.ui.fragments.question
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import com.eva.lead.capture.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -12,6 +13,11 @@ class EvaQuestionsViewModel(mcontext: Context) : BaseViewModel(mcontext) {
     fun fetchQuestionWithOptions(type: String): Flow<List<QuestionInfo>?> {
         return repositoryDb.getQuestionsWithOptions(type)
     }
+
+    fun getQuickNote(): Flow<List<QuickNote>?> {
+        return repositoryDb.getQuickNoteList()
+    }
+
 
     fun saveQuestionIntoList(
         question: String,
@@ -44,6 +50,28 @@ class EvaQuestionsViewModel(mcontext: Context) : BaseViewModel(mcontext) {
     fun updateQuestionIntoDb(question: QuestionInfo, callback: (() -> Unit)? = null) {
         viewModelScope.launch {
             repositoryDb.updateQuestionInfo(question)
+            callback?.invoke()
+        }
+    }
+
+    fun addQuickNote(note: String, callback: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            val obj = QuickNote(text = note)
+            repositoryDb.insertQuickNoteOption(obj)
+            callback?.invoke()
+        }
+    }
+
+    fun updateQuickNote(note: QuickNote, callback: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            repositoryDb.updateQuickNote(note)
+            callback?.invoke()
+        }
+    }
+
+    fun deleteNote(note: QuickNote, callback: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            repositoryDb.deleteQuickNote(note)
             callback?.invoke()
         }
     }

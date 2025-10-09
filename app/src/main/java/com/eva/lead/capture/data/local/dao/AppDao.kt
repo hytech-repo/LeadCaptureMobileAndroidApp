@@ -1,6 +1,7 @@
 package com.eva.lead.capture.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -12,6 +13,7 @@ import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -47,7 +49,7 @@ interface AppDao {
     @Update
     suspend fun updateQuestionInfo(questionInfo: QuestionInfo)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -58,6 +60,24 @@ interface AppDao {
 
     @Query("SELECT * FROM question_info WHERE type=:type AND status = 1 AND is_deleted = 0")
     fun getActiveQuestions(type: String): Flow<List<QuestionInfo>?>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuickNoteOption(note: QuickNote): Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertQuickNoteOptionList(note: List<QuickNote>): List<Long>
+
+    @Update
+    suspend fun updateQuickNote(note: QuickNote): Int
+
+    @Delete
+    suspend fun deleteQuickNote(note: QuickNote): Int
+
+    @Query("SELECT * FROM quick_note where is_deleted = 0")
+    fun getQuickNoteList(): Flow<List<QuickNote>?>
+
+    @Query("SELECT * FROM quick_note where status = '1' AND is_deleted = 0")
+    fun getActiveQuickNotes(): Flow<List<QuickNote>?>
 
     @Insert
     suspend fun insertMediaFile(media: LeadAudioRecording): Long

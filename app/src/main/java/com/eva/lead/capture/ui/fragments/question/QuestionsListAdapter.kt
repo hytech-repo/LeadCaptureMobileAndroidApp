@@ -19,14 +19,14 @@ import com.eva.lead.capture.utils.QuestionTabType
 private const val TYPE_NORMAL = 0
 private const val TYPE_MULTIPLE = 1
 
-class QuestionsListAdapter(
-    private val mContext: Context
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class QuestionsListAdapter(private val mContext: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<QuestionInfo> = emptyList()
     private var tabType: QuestionTabType = QuestionTabType.QUESTIONS
 
-    var onItemClickListener: (view: View, data: QuestionInfo, position: Int) -> Unit = { view, data, position -> }
+    var onItemClickListener: (view: View, data: QuestionInfo, position: Int) -> Unit =
+        { view, data, position -> }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_MULTIPLE) {
@@ -75,9 +75,9 @@ class QuestionsListAdapter(
         fun bind(question: QuestionInfo) {
             binding.tvQuestion.text = question.question
 
-            binding.sGuest.isChecked = question.status == 1
+            binding.sactive.isChecked = question.status == 1
 
-            binding.sGuest.setOnClickListener {
+            binding.sactive.setOnClickListener {
                 onItemClickListener.invoke(it, question, absoluteAdapterPosition)
             }
             binding.root.setOnClickListener {
@@ -93,6 +93,7 @@ class QuestionsListAdapter(
             val questionInfo = question.question
             if (questionInfo != null) {
                 binding.tvQuestion.text = questionInfo
+                binding.llcAction.visibility = View.VISIBLE
                 val options = question.options
                 if (!options.isNullOrEmpty()) {
                     binding.llcOptions.removeAllViews()
@@ -108,9 +109,16 @@ class QuestionsListAdapter(
             }
 
             // Setup click listeners or bind real options if you have
-            binding.ivOptionMenuDot.setOnClickListener {
+            binding.llcDelete.setOnClickListener {
+                onItemClickListener.invoke(it, question, absoluteAdapterPosition)
+            }
+            binding.llcEdit.setOnClickListener {
+                onItemClickListener.invoke(it, question, absoluteAdapterPosition)
+            }
+            binding.sactive.setOnClickListener {
                 onItemClickListener.invoke(it, question, absoluteAdapterPosition)
             }
         }
     }
+
 }
