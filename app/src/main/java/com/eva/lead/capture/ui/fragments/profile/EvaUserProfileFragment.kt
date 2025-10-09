@@ -52,7 +52,7 @@ class EvaUserProfileFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
-        (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
         setupToolbar()
         setupRecyclerView()
         setupInfoCard()
