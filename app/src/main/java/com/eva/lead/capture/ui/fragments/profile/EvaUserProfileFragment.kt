@@ -174,6 +174,7 @@ class EvaUserProfileFragment :
             onConfirmationListener = { isPrimaryBtnClicked ->
                 if (!isPrimaryBtnClicked) {
                     showProgressDialog(false)
+                    dismiss()
                     clearLoginUserData()
                 }
                 dismiss()
@@ -198,7 +199,7 @@ class EvaUserProfileFragment :
     private fun navigateToMainActivity() {
         val intent = Intent(mContext, MainActivity::class.java)
         mContext.startActivity(intent)
-        requireActivity().overridePendingTransition(0, 0)
+        requireActivity().finishAffinity()
     }
 
     private fun fetchExhibitorFromDb() {
