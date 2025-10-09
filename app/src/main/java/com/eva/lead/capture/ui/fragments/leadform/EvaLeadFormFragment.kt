@@ -34,6 +34,7 @@ import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.databinding.FragmentEvaLeadFormBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
+import com.eva.lead.capture.domain.model.entity.QuickNote
 import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
@@ -358,82 +359,53 @@ class EvaLeadFormFragment :
         }
     }
 
-    private fun displayQuickNote(questions: List<QuestionInfo>) {
+    private fun displayQuickNote(questions: List<QuickNote>) {
         val typeRegular = ResourcesCompat.getFont(mContext, R.font.sf_pro_regular)
         val typeMedium = ResourcesCompat.getFont(mContext, R.font.sf_pro_medium)
+        val questionBlock = LinearLayoutCompat(mContext).apply {
+            orientation = LinearLayoutCompat.VERTICAL
+            setPadding(16, 8, 16, 16)
+        }
+
+        // Create a TextView for the question
+        val questionTextView = TextView(mContext).apply {
+            text = "Quick Note"
+            textSize = 16f
+            setTypeface(typeMedium, Typeface.BOLD)
+            setPadding(0, 16, 0, 16)
+        }
+
+        // Add TextView for the question to the container
+        questionBlock.addView(questionTextView)
+
+        val radioGroup = LinearLayoutCompat(mContext).apply {
+            orientation = LinearLayoutCompat.VERTICAL
+            setPadding(0, 16, 0, 16)
+        }
+
         questions.forEach { questionInfo ->
-
-            val questionBlock = LinearLayoutCompat(mContext).apply {
-                orientation = LinearLayoutCompat.VERTICAL
-                setPadding(16, 8, 16, 16)
-            }
-
-            // Create a TextView for the question
-            val questionTextView = TextView(mContext).apply {
-                text = questionInfo.question
-                textSize = 16f
-                setTypeface(typeMedium, Typeface.BOLD)
+            val checkBox = CheckBox(mContext).apply {
+                text = questionInfo.text
+                textSize = 14f
+                setTypeface(typeRegular, Typeface.NORMAL)
+                buttonTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.subheading_text_color
+                    )
+                )
+                setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.subheading_text_color
+                    )
+                )
                 setPadding(0, 16, 0, 16)
             }
-
-            // Add TextView for the question to the container
-            questionBlock.addView(questionTextView)
-
-            // Create a RadioGroup for the options
-            if (questionInfo.isMultipleChoice == false) {
-                val radioGroup = RadioGroup(mContext).apply {
-                    orientation = RadioGroup.VERTICAL
-                    setPadding(0, 16, 0, 16)
-                }
-
-                // Add RadioButton for each option in the options list
-                questionInfo.options?.forEach { option ->
-                    val radioButton = RadioButton(mContext).apply {
-                        text = option
-                        textSize = 14f
-                        setTypeface(typeRegular, Typeface.NORMAL)
-                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector)
-                        setTextColor(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.subheading_text_color
-                            )
-                        )
-                        setPadding(0, 20, 0, 20)
-                    }
-                    radioGroup.addView(radioButton)
-                }
-                questionBlock.addView(radioGroup)
-            } else {
-                val radioGroup = LinearLayoutCompat(mContext).apply {
-                    orientation = LinearLayoutCompat.VERTICAL
-                    setPadding(0, 16, 0, 16)
-                }
-                questionInfo.options?.forEach { option ->
-                    val checkBox = CheckBox(mContext).apply {
-                        text = option
-                        textSize = 14f
-                        setTypeface(typeRegular, Typeface.NORMAL)
-                        buttonTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.subheading_text_color
-                            )
-                        )
-                        setTextColor(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.subheading_text_color
-                            )
-                        )
-                        setPadding(0, 16, 0, 16)
-                    }
-                    radioGroup.addView(checkBox)
-                }
-                questionBlock.addView(radioGroup)
-            }
-            binding.llcQuickNote.addView(questionBlock)
+            radioGroup.addView(checkBox)
         }
+        questionBlock.addView(radioGroup)
+        binding.llcQuickNote.addView(questionBlock)
     }
 
     private fun displayQuestions(questions: List<QuestionInfo>) {
@@ -578,7 +550,7 @@ class EvaLeadFormFragment :
         lifecycleScope.launch {
             val questionList = viewModel.fetchQuestions("remote").firstOrNull()
             val localQuestionList = viewModel.fetchQuestions("question").firstOrNull()
-            val quickNote = viewModel.fetchQuestions("note").firstOrNull()
+            val quickNote = viewModel.getActiveQuickNote().firstOrNull()
             if (!quickNote.isNullOrEmpty()) {
                 binding.llcQuickNote.visibility = View.VISIBLE
                 displayQuickNote(quickNote)
