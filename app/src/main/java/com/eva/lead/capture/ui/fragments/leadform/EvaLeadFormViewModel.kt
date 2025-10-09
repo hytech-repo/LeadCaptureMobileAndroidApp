@@ -22,6 +22,14 @@ class EvaLeadFormViewModel(mContext: Context) : BaseViewModel(mContext) {
         }
     }
 
+    fun updateLeadData(leadData: EvaLeadData) {
+        viewModelScope.launch {
+//            _loader.value = ResultWrapper.Loading
+            repositoryDb.updateLead(leadData)
+        }
+    }
+
+
     fun fetchQuestions(type: String): Flow<List<QuestionInfo>?> {
         return repositoryDb.getQuestionsWithOptions(type)
     }

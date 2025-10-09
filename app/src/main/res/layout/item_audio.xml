@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     android:paddingHorizontal="20dp"
     android:paddingVertical="10dp"
-    android:visibility="visible">
+    android:visibility="gone">
 
     <!-- Play / Pause Button -->
     <ImageView

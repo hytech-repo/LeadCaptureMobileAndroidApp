@@ -110,7 +110,7 @@ class FileUtils {
 
                 // CSV Header
                 writer.append(
-                    "id,lead_id,tag,first_name,last_name,email,phone,designation,company_name,additional_info,notes,images,audio_file,timestamp\n"
+                    "id,lead_id,tag,first_name,last_name,email,phone,designation,company_name,additional_info,notes,images,audio_file,timestamp,quicknote,questionanswer\n"
                 )
 
                 // CSV Rows
@@ -128,7 +128,9 @@ class FileUtils {
                     writer.append("${lead.notes ?: ""},")
                     writer.append("${lead.imageFileNames ?: ""},")
                     writer.append("${lead.audioFilePath ?: ""},")
-                    writer.append("${lead.timestamp ?: ""}\n")
+                    writer.append("${lead.timestamp ?: ""}")
+                    writer.append("${lead.quickNote ?: ""}")
+                    writer.append("${lead.questionAnswer ?: ""}\n")
                 }
 
                 writer.flush()

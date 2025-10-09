@@ -38,6 +38,10 @@ data class EvaLeadData(
     var audioFilePath: String? = null,
     @ColumnInfo("timestamp")
     var timestamp: Long? = null,
+    @ColumnInfo("quicknote")
+    var quickNote: String? = null,
+    @ColumnInfo("questionAnswer")
+    var questionAnswer: String? = null,
     @ColumnInfo("is_deleted", defaultValue = "0")
     var isDeleted: Int = 0,
     @ColumnInfo("is_sync", defaultValue = "0")

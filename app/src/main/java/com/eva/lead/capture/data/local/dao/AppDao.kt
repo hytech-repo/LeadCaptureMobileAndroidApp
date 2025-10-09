@@ -34,6 +34,9 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertLead(leadData: EvaLeadData): Long
 
+    @Update
+    suspend fun updateLead(leadData: EvaLeadData): Int
+
     @Query("SELECT * FROM lead_data ORDER BY id DESC")
     fun getAllLeadData(): Flow<List<EvaLeadData>?>
 

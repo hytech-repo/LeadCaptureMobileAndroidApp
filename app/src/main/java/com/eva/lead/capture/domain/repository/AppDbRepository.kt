@@ -20,6 +20,7 @@ interface AppDbRepository {
     suspend fun updateExhibitor(user: Exhibitor)
 
     suspend fun insertLead(lead: EvaLeadData): Long
+    suspend fun updateLead(lead: EvaLeadData): Int
 
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
 

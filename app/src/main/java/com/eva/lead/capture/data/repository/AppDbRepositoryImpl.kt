@@ -26,6 +26,8 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
 
     override suspend fun insertLead(lead: EvaLeadData): Long = dao.insertLead(lead)
 
+    override suspend fun updateLead(lead: EvaLeadData): Int = dao.updateLead(lead)
+
     override fun getLeadById(leadId: String): Flow<EvaLeadData?> = dao.getLeadById(leadId)
 
     override fun getAllLeads(): Flow<List<EvaLeadData>?> = dao.getAllLeadData()
@@ -33,7 +35,8 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
     override suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long =
         dao.insertQuestionInfo(questionInfo)
 
-    override suspend fun updateQuestionInfo(questionInfo: QuestionInfo) = dao.updateQuestionInfo(questionInfo)
+    override suspend fun updateQuestionInfo(questionInfo: QuestionInfo) =
+        dao.updateQuestionInfo(questionInfo)
 
     override suspend fun insertQuestionInfos(questionInfo: List<QuestionInfo>): List<Long> =
         dao.insertQuestionInfos(questionInfo)

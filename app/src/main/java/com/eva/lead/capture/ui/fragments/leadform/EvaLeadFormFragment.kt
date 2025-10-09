@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -17,10 +18,14 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -116,6 +121,7 @@ class EvaLeadFormFragment :
         this.init()
         this.initObserver()
         this.initListener()
+        this.randerLeadDetail()
     }
 
     private fun initBundle() {
@@ -144,12 +150,10 @@ class EvaLeadFormFragment :
         } else {
             arguments!!.getParcelable("lead_detail")
         }
-        if (leadDetail != null) {
-            showLeadDetailOnUI(leadDetail!!)
-        }
     }
 
     private fun showLeadDetailOnUI(leadDetail: EvaLeadData) {
+        binding.btnSave.text = "Update Lead"
         binding.etFirstName.setText(leadDetail.firstName)
         binding.etLastName.setText(leadDetail.lastName)
         binding.etEmail.setText(leadDetail.email)
@@ -157,6 +161,23 @@ class EvaLeadFormFragment :
         binding.etNote.setText(leadDetail.notes)
         binding.etCompanyName.setText(leadDetail.companyName)
         binding.etAdditionalInfo.setText(leadDetail.additionalInfo)
+        binding.incToolbar.tvRecording.visibility = View.GONE
+        when (leadDetail.tag) {
+            "hot" -> binding.hotLead.isChecked = true
+            "warm" -> binding.mediumLead.isChecked = true
+            "cold" -> binding.coldLead.isChecked = true
+        }
+        if (!leadDetail.imageFileNames.isNullOrEmpty()) {
+            val imageDir = mContext.getExternalFolderPath("clicked_image")
+            val imageFile = leadDetail.imageFileNames!!.split(",")
+            for (image in imageFile) {
+                val imageFile = File(imageDir, image)
+                if (imageFile.exists()) {
+                    selectedFile.add(imageFile.absolutePath)
+                }
+            }
+            mediaAdapter.setList(selectedFile)
+        }
         if (leadDetail.audioFilePath != null) {
             binding.incAudio.audioPlayerContainer.visibility = View.VISIBLE
             loadAudioPlayer(leadDetail.audioFilePath!!)
@@ -318,6 +339,12 @@ class EvaLeadFormFragment :
         }
     }
 
+    private fun randerLeadDetail() {
+        if (leadDetail != null) {
+            showLeadDetailOnUI(leadDetail!!)
+        }
+    }
+
     private fun playPauseAudioFile() {
         mediaPlayer?.let {
             if (it.isPlaying) {
@@ -331,39 +358,169 @@ class EvaLeadFormFragment :
         }
     }
 
-    private fun displayQuestions(questions: List<QuestionInfo>) {
+    private fun displayQuickNote(questions: List<QuestionInfo>) {
+        val typeRegular = ResourcesCompat.getFont(mContext, R.font.sf_pro_regular)
+        val typeMedium = ResourcesCompat.getFont(mContext, R.font.sf_pro_medium)
         questions.forEach { questionInfo ->
+
+            val questionBlock = LinearLayoutCompat(mContext).apply {
+                orientation = LinearLayoutCompat.VERTICAL
+                setPadding(16, 8, 16, 16)
+            }
+
             // Create a TextView for the question
             val questionTextView = TextView(mContext).apply {
                 text = questionInfo.question
                 textSize = 16f
-                setTypeface(null, Typeface.BOLD)
-                setPadding(16, 16, 16, 16)
+                setTypeface(typeMedium, Typeface.BOLD)
+                setPadding(0, 16, 0, 16)
             }
 
             // Add TextView for the question to the container
-            binding.llcQuestionContainer.addView(questionTextView)
+            questionBlock.addView(questionTextView)
 
             // Create a RadioGroup for the options
-            val radioGroup = RadioGroup(mContext).apply {
-                orientation = RadioGroup.VERTICAL
+            if (questionInfo.isMultipleChoice == false) {
+                val radioGroup = RadioGroup(mContext).apply {
+                    orientation = RadioGroup.VERTICAL
+                    setPadding(0, 16, 0, 16)
+                }
+
+                // Add RadioButton for each option in the options list
+                questionInfo.options?.forEach { option ->
+                    val radioButton = RadioButton(mContext).apply {
+                        text = option
+                        textSize = 14f
+                        setTypeface(typeRegular, Typeface.NORMAL)
+                        buttonTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setTextColor(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setPadding(0, 20, 0, 20)
+                    }
+                    radioGroup.addView(radioButton)
+                }
+                questionBlock.addView(radioGroup)
+            } else {
+                val radioGroup = LinearLayoutCompat(mContext).apply {
+                    orientation = LinearLayoutCompat.VERTICAL
+                    setPadding(0, 16, 0, 16)
+                }
+                questionInfo.options?.forEach { option ->
+                    val checkBox = CheckBox(mContext).apply {
+                        text = option
+                        textSize = 14f
+                        setTypeface(typeRegular, Typeface.NORMAL)
+                        buttonTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setTextColor(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setPadding(0, 16, 0, 16)
+                    }
+                    radioGroup.addView(checkBox)
+                }
+                questionBlock.addView(radioGroup)
+            }
+            binding.llcQuickNote.addView(questionBlock)
+        }
+    }
+
+    private fun displayQuestions(questions: List<QuestionInfo>) {
+        val typeRegular = ResourcesCompat.getFont(mContext, R.font.sf_pro_regular)
+        val typeMedium = ResourcesCompat.getFont(mContext, R.font.sf_pro_medium)
+        questions.forEach { questionInfo ->
+            // Create a TextView for the question
+
+            val questionBlock = LinearLayoutCompat(mContext).apply {
+                orientation = LinearLayoutCompat.VERTICAL
                 setPadding(16, 8, 16, 16)
             }
 
-            // Add RadioButton for each option in the options list
-            questionInfo.options?.forEach { option ->
-                val radioButton = RadioButton(mContext).apply {
-                    text = option
-                    textSize = 14f
-                    setPadding(16, 8, 16, 8)
-
-
-                }
-                radioGroup.addView(radioButton)
+            // Add question text to the question block
+            val questionTextView = TextView(mContext).apply {
+                text = questionInfo.question
+                textSize = 16f
+                setTypeface(typeMedium, Typeface.BOLD)
+                setPadding(0, 16, 0, 16)
+                setTextColor(ContextCompat.getColor(mContext, R.color.heading_text_color))
             }
+            questionBlock.addView(questionTextView)
 
-            // Add the RadioGroup to the container
-            binding.llcQuestionContainer.addView(radioGroup)
+            // Showing options
+            if (questionInfo.isMultipleChoice == false) {
+                val radioGroup = RadioGroup(mContext).apply {
+                    orientation = RadioGroup.VERTICAL
+                    setPadding(0, 16, 0, 16)
+                }
+
+                // Add RadioButton for each option in the options list
+                questionInfo.options?.forEach { option ->
+                    val radioButton = RadioButton(mContext).apply {
+                        text = option
+                        textSize = 14f
+                        buttonTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setTextColor(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setTypeface(typeRegular, Typeface.NORMAL)
+                        setPadding(0, 20, 0, 20)
+                    }
+                    radioGroup.addView(radioButton)
+                }
+                questionBlock.addView(radioGroup)
+            } else {
+                val radioGroup = LinearLayoutCompat(mContext).apply {
+                    orientation = LinearLayoutCompat.VERTICAL
+                    setPadding(0, 16, 0, 16)
+                }
+                questionInfo.options?.forEach { option ->
+                    val checkBox = CheckBox(mContext).apply {
+                        text = option
+                        textSize = 14f
+                        setTypeface(typeRegular, Typeface.NORMAL)
+                        buttonTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setTextColor(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.subheading_text_color
+                            )
+                        )
+                        setPadding(0, 20, 0, 20)
+                    }
+                    radioGroup.addView(checkBox)
+                }
+                questionBlock.addView(radioGroup)
+            }
+            binding.llcQuestionContainer.addView(questionBlock)
         }
     }
 
@@ -407,7 +564,9 @@ class EvaLeadFormFragment :
             log.d("Recording", "progress: $progress, ampl $ampl")
             binding.incToolbar.tvRecording.text = duration
         }
-        recordService?.startRecording()
+        if (leadDetail == null) {
+            recordService?.startRecording()
+        }
     }
 
     override fun onStop() {
@@ -416,9 +575,10 @@ class EvaLeadFormFragment :
     }
 
     private fun resetRadioButtonBackground() {
-        binding.hotLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
-        binding.mediumLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
-        binding.coldLead.background = mContext.getDrawable(R.drawable.bg_rounded_stroke_16)
+        val bgDrawable = ContextCompat.getDrawable(mContext, R.drawable.bg_rounded_stroke_16)
+        binding.hotLead.background = bgDrawable
+        binding.mediumLead.background = bgDrawable
+        binding.coldLead.background = bgDrawable
     }
 
     private fun initObserver() {
@@ -427,8 +587,19 @@ class EvaLeadFormFragment :
         }
         lifecycleScope.launch {
             val questionList = viewModel.fetchQuestions("remote").firstOrNull()
+            val localQuestionList = viewModel.fetchQuestions("question").firstOrNull()
+            val quickNote = viewModel.fetchQuestions("note").firstOrNull()
+            if (!quickNote.isNullOrEmpty()) {
+                binding.llcQuickNote.visibility = View.VISIBLE
+                displayQuickNote(quickNote)
+            } else {
+                binding.llcQuickNote.visibility = View.GONE
+            }
             if (!questionList.isNullOrEmpty()) {
                 displayQuestions(questionList)
+            }
+            if (!localQuestionList.isNullOrEmpty()) {
+                displayQuestions(localQuestionList)
             }
         }
     }
@@ -462,7 +633,14 @@ class EvaLeadFormFragment :
         val company = binding.etCompanyName.text.toString()
         val additional = binding.etAdditionalInfo.text.toString()
         val notes = binding.etNote.text.toString()
+        val audioFileName = if (leadDetail == null) {
+            recordService?.stopRecording()?.name
+        } else {
+            leadDetail!!.audioFilePath
+        }
         val audioFile = recordService?.stopRecording()
+        val quickNoteAnswers = getSelectedAnswers(binding.llcQuickNote)
+        val questionAnswers = getSelectedAnswers(binding.llcQuestionContainer)
         val leadData = EvaLeadData(
             firstName = firstName,
             lastName = lastName,
@@ -473,15 +651,57 @@ class EvaLeadFormFragment :
             notes = notes,
             imageFileNames = namesCommaSeparated,
             tag = tag,
-            audioFilePath = audioFile?.name,
-            timestamp = System.currentTimeMillis()
+            audioFilePath = audioFileName,
+            timestamp = System.currentTimeMillis(),
+            quickNote = quickNoteAnswers,
+            questionAnswer = questionAnswers
         )
-        audioFile?.let {
-            recordService?.saveRecordingIntoDb(it)
+        if (leadDetail == null) {
+            audioFile?.let {
+                recordService?.saveRecordingIntoDb(it)
+            }
+            viewModel.saveLeadData(leadData)
+        } else {
+            leadData.id = leadDetail!!.id
+            viewModel.updateLeadData(leadData)
+        }
+        findNavController().popBackStack()
+    }
+
+    private fun getSelectedAnswers(container: LinearLayoutCompat): String {
+        val sb = StringBuilder()
+
+        for (i in 0 until container.childCount) {
+            val questionBlock = container.getChildAt(i) as? LinearLayoutCompat ?: continue
+            val questionText = (questionBlock.getChildAt(0) as? TextView)?.text.toString()
+            val selectedOptions = mutableListOf<String>()
+
+            for (j in 1 until questionBlock.childCount) {
+                val optionsContainer = questionBlock.getChildAt(j)
+                when (optionsContainer) {
+                    is RadioGroup -> {
+                        val selectedId = optionsContainer.checkedRadioButtonId
+                        if (selectedId != -1) {
+                            val radioButton = optionsContainer.findViewById<RadioButton>(selectedId)
+                            selectedOptions.add(radioButton.text.toString())
+                        }
+                    }
+                    is LinearLayoutCompat -> { // checkboxes
+                        for (k in 0 until optionsContainer.childCount) {
+                            val checkBox = optionsContainer.getChildAt(k) as? CheckBox
+                            if (checkBox?.isChecked == true) selectedOptions.add(checkBox.text.toString())
+                        }
+                    }
+                }
+            }
+
+            if (selectedOptions.isNotEmpty()) {
+                if (sb.isNotEmpty()) sb.append("::") // separator between questions
+                sb.append("$questionText=${selectedOptions.joinToString(",")}")
+            }
         }
 
-        viewModel.saveLeadData(leadData)
-        findNavController().popBackStack()
+        return sb.toString()
     }
 
     private fun validateLoginField(): Boolean {
