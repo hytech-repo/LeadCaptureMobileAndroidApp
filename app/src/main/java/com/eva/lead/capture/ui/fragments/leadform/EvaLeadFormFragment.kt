@@ -362,6 +362,15 @@ class EvaLeadFormFragment :
     private fun displayQuickNote(questions: List<QuickNote>) {
         val typeRegular = ResourcesCompat.getFont(mContext, R.font.sf_pro_regular)
         val typeMedium = ResourcesCompat.getFont(mContext, R.font.sf_pro_medium)
+
+        val selectedOption = arrayListOf<String>()
+        if (leadDetail != null) {
+            val quickNote = leadDetail!!.quickNote?.split("=")
+            if (!quickNote.isNullOrEmpty() && quickNote.size == 2) {
+                selectedOption.addAll(quickNote[1].split("|||"))
+            }
+        }
+
         val questionBlock = LinearLayoutCompat(mContext).apply {
             orientation = LinearLayoutCompat.VERTICAL
             setPadding(16, 8, 16, 16)
@@ -387,6 +396,7 @@ class EvaLeadFormFragment :
             val checkBox = CheckBox(mContext).apply {
                 text = questionInfo.text
                 textSize = 14f
+                isChecked = selectedOption.contains(questionInfo.text)
                 setTypeface(typeRegular, Typeface.NORMAL)
                 buttonTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
@@ -411,6 +421,22 @@ class EvaLeadFormFragment :
     private fun displayQuestions(questions: List<QuestionInfo>) {
         val typeRegular = ResourcesCompat.getFont(mContext, R.font.sf_pro_regular)
         val typeMedium = ResourcesCompat.getFont(mContext, R.font.sf_pro_medium)
+
+        val savedQuestionAnswer = HashMap<String, String>()
+        if (leadDetail != null) {
+            if (!leadDetail!!.questionAnswer.isNullOrEmpty()) {
+                val dbQuestionAnswer = leadDetail!!.questionAnswer?.split("::")
+                if (!dbQuestionAnswer.isNullOrEmpty()) {
+                    for (quesAns in dbQuestionAnswer) {
+                        val arr = quesAns.split("=")
+                        if (!arr.isNullOrEmpty() && arr.size == 2) {
+                            savedQuestionAnswer.put(arr[0], arr[1])
+                        }
+                    }
+                }
+            }
+        }
+
         questions.forEach { questionInfo ->
             // Create a TextView for the question
 
@@ -429,6 +455,12 @@ class EvaLeadFormFragment :
             }
             questionBlock.addView(questionTextView)
 
+            val selectedOption = arrayListOf<String>()
+            val options = savedQuestionAnswer[questionInfo.question]?.split("|||")
+            if (!options.isNullOrEmpty()) {
+                selectedOption.addAll(options)
+            }
+
             // Showing options
             if (questionInfo.isMultipleChoice == false) {
                 val radioGroup = RadioGroup(mContext).apply {
@@ -441,6 +473,7 @@ class EvaLeadFormFragment :
                     val radioButton = RadioButton(mContext).apply {
                         text = option
                         textSize = 14f
+                        isChecked = selectedOption.contains(option)
                         buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector)
                         setTextColor(
                             ContextCompat.getColor(
@@ -463,6 +496,7 @@ class EvaLeadFormFragment :
                     val checkBox = CheckBox(mContext).apply {
                         text = option
                         textSize = 14f
+                        isChecked = selectedOption.contains(option)
                         setTypeface(typeRegular, Typeface.NORMAL)
                         buttonTintList = ColorStateList.valueOf(
                             ContextCompat.getColor(
@@ -494,7 +528,7 @@ class EvaLeadFormFragment :
         bundle.putString("primary_btn_text", mContext.getString(R.string.save_lead))
         bundle.putString("seconday_btn_text", mContext.getString(R.string.eva_discard))
         bundle.putInt("icon_bgcolor", R.color.color_lime_green)
-        bundle.putInt("ivIcon", R.drawable.ic_user_grp)
+        bundle.putInt("ivIcon", R.drawable.ic_group_unselected)
         confirmationDialog.arguments = bundle
         confirmationDialog.isCancelable = false
         confirmationDialog.apply {
@@ -659,7 +693,7 @@ class EvaLeadFormFragment :
 
             if (selectedOptions.isNotEmpty()) {
                 if (sb.isNotEmpty()) sb.append("::") // separator between questions
-                sb.append("$questionText=${selectedOptions.joinToString(",")}")
+                sb.append("$questionText=${selectedOptions.joinToString("|||")}")
             }
         }
 
