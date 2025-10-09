@@ -6,7 +6,7 @@ import com.eva.lead.capture.constants.AppConstants
 import com.eva.lead.capture.data.local.AppDatabase
 import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
 import com.eva.lead.capture.domain.model.entity.QuestionInfo
-import com.eva.lead.capture.domain.model.entity.dummyUser
+import com.eva.lead.capture.domain.model.entity.exhibitors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +25,9 @@ class EvaLeadCaptureApp : Application() {
         CoroutineScope(Dispatchers.IO).launch {
             val appDatabase = AppDatabase.getInstance(this@EvaLeadCaptureApp)
             val appDbRepository = AppDbRepositoryImpl(appDatabase)
-            appDbRepository.insertExhibitor(dummyUser)
+            exhibitors.forEach {
+                appDbRepository.insertExhibitor(it)
+            }
 
             insertPreDefineQuestion(appDbRepository)
         }

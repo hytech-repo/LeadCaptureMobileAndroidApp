@@ -55,4 +55,9 @@ class EventHostActivity : BaseActivity() {
         binding.cvBottomNavBar.visibility = if (isShown) View.VISIBLE else View.GONE
     }
 
+    fun activeNavMenu(menuId: Int) {
+        binding.bottomNav.menu.findItem(menuId).isChecked = true
+    }
+
+
 }

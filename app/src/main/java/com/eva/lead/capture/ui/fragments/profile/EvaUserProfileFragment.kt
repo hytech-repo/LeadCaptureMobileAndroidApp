@@ -182,6 +182,7 @@ class EvaUserProfileFragment :
     }
 
     private fun clearLoginUserData() {
+        viewModel.clearAllData()
         Handler(Looper.getMainLooper()).postDelayed({
             prefManager.remove(AppConstants.USER_ID)
             prefManager.remove(AppConstants.FIRST_NAME)

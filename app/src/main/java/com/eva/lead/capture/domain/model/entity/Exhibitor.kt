@@ -23,14 +23,6 @@ data class Exhibitor(
     var deviceName: String? = null
 )
 
-val dummyUser = Exhibitor(
-    leadCode = "LC001",
-    userId = "U001",
-    firstName = "Laxmi",
-    lastName = "Kant",
-    email = "lakshmikant@evareg.com"
-)
-
 fun Exhibitor.generateUpdateQuery(): String {
     val updates = mutableListOf<String>()
 
@@ -45,5 +37,38 @@ fun Exhibitor.generateUpdateQuery(): String {
 
     val setClause = updates.joinToString(", ")
     return "update exhibitor SET $setClause WHERE lead_code = '${this.leadCode}'"
+}
+
+val leadIds = listOf(
+    "LC001", "LC002", "LC003", "LC004", "LC005", "LC006",
+    "LC007", "LC008", "LC009", "LC010", "LC011", "LC012",
+    "LC013"
+)
+val firstNames = listOf(
+    "Rajeev", "Damnish", "Neeraj", "Pramil", "Matt", "Gaurav",
+    "Darrean", "Jason", "Gil", "Avin", "Mehdi", "Murali",
+    "Manoj"
+)
+val lastNames = listOf(
+    "Gupta", "Kumar", "Garg", "Verma", "Peterson", "Chawla",
+    "Janes", "Luu", "Gonzalez", "Kumar", "Raza", "Puttaparthi",
+    "Vyas"
+)
+val emails = listOf(
+    "rg@aplusify.com", "dk@maplelms.com", "garg@hytechpro.com", "pramil@maplelms.com",
+    "matt@maplelms.com", "gaurav@ablypro.com", "darrean@maplelms.com", "jason.l@ablypro.com",
+    "gil@evareg.com", "avi@maplelms.com", "mehdi@evareg.com", "murali@ablypro.com",
+    "manoj.vyas@hytechpro.com"
+)
+
+val exhibitors = leadIds.mapIndexed { index, leadCode ->
+    Exhibitor(
+        leadCode = leadCode,
+        userId = "U_00${index + 1}", // example userId
+        firstName = firstNames.getOrNull(index),
+        lastName = lastNames.getOrNull(index),
+        email = emails.getOrNull(index),
+//        deviceName = "Device_${index + 1}" // example device name
+    )
 }
 

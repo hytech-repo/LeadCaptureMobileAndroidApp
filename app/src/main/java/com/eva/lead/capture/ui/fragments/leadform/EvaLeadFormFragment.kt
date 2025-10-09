@@ -392,12 +392,7 @@ class EvaLeadFormFragment :
                         text = option
                         textSize = 14f
                         setTypeface(typeRegular, Typeface.NORMAL)
-                        buttonTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.subheading_text_color
-                            )
-                        )
+                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector)
                         setTextColor(
                             ContextCompat.getColor(
                                 mContext,
@@ -474,12 +469,7 @@ class EvaLeadFormFragment :
                     val radioButton = RadioButton(mContext).apply {
                         text = option
                         textSize = 14f
-                        buttonTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.subheading_text_color
-                            )
-                        )
+                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector)
                         setTextColor(
                             ContextCompat.getColor(
                                 mContext,
