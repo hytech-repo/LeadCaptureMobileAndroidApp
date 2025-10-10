@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/sf_pro_medium"
-            android:text="Etsy Annual Expo 2025"
+            android:text="Dreamforce 2025"
             android:textColor="@color/subheading_text_color"
             android:textSize="16sp"
             android:textStyle="normal"

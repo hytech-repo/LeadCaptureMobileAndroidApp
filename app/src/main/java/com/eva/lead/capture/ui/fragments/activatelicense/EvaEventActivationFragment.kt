@@ -2,6 +2,8 @@ package com.eva.lead.capture.ui.fragments.activatelicense
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -89,6 +91,11 @@ class EvaEventActivationFragment :
                 if (currentId == R.id.end) {
                     binding.btnActivate.slideLayout.isInteractionEnabled = false
                     prefManager.put(AppConstants.LICENSE_ACTIVATED, true)
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        navigateToOtherScreen()
+                    }, 2000)
+
                 }
             }
 
@@ -98,9 +105,9 @@ class EvaEventActivationFragment :
             }
         })
 
-        binding.btnActivate.slideLayout.setOnClickListener {
-            navigateToOtherScreen()
-        }
+//        binding.btnActivate.slideLayout.setOnClickListener {
+//            navigateToOtherScreen()
+//        }
     }
 
     private fun navigateToOtherScreen() {

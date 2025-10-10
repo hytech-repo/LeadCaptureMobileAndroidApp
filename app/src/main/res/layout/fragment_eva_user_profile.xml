@@ -70,6 +70,24 @@
                 app:layout_constraintTop_toBottomOf="@id/llDataCount"
                 tools:listitem="@layout/item_profile_option" />
 
+
+            <TextView
+                android:id="@+id/tvWarning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/sf_pro_regular"
+                android:gravity="center"
+                android:background="@drawable/bg_red_stroke_rounded"
+                android:padding="10dp"
+                android:text="@string/event_activation_msg"
+                android:textAlignment="gravity"
+                android:textColor="@color/heading_text_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewOptions"
+                android:textSize="12sp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

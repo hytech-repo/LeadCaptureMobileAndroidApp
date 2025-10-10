@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/sf_pro_medium"
-                        android:text="Etsy Annual Expo 2025"
+                        android:text="Dreamforce 2025"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -69,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sf_pro_regular"
-                        android:text="September 14, 2025"
+                        android:text="Oct 14- Oct 15"
                         android:textColor="@color/text_color_grey"
                         android:textSize="14sp" />
 
@@ -84,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="14dp"
-                android:backgroundTint="#FAFAFA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="1dp"
                 app:cardUseCompatPadding="true">
@@ -94,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:background="@drawable/bg_gradient_white_green"
                     android:padding="16dp">
 
                     <ImageView

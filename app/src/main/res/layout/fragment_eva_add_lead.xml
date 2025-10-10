@@ -163,7 +163,7 @@
             android:drawablePadding="5dp"
             android:fontFamily="@font/sf_pro_regular"
             android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
+            android:paddingVertical="8dp"
             android:text="Tap to record"
             android:textColor="@color/heading_text_color"
             android:textSize="15sp" />
