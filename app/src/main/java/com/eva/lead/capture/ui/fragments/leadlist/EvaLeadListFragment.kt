@@ -52,7 +52,6 @@ class EvaLeadListFragment :
     }
 
     override fun startWorking(savedInstanceState: Bundle?) {
-        (requireActivity() as EventHostActivity).activeNavMenu(R.id.nav_total_lead)
         this.initView()
         this.initListener()
         this.fetchLeadList()
@@ -63,6 +62,12 @@ class EvaLeadListFragment :
         binding.incToolbar.ivBack.visibility = View.GONE
         binding.incToolbar.llcbtn.visibility = View.VISIBLE
         this.initRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as EventHostActivity).activeNavMenu(R.id.nav_total_lead)
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
     }
 
     private fun initListener() {
