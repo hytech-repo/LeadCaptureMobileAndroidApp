@@ -61,6 +61,7 @@ class EvaLeadListFragment :
         binding.incToolbar.tvTitle.text = "Lead list"
         binding.incToolbar.ivBack.visibility = View.GONE
         binding.incToolbar.llcbtn.visibility = View.VISIBLE
+        binding.incToolbar.ivUserImage.visibility = View.VISIBLE
         this.initRecyclerView()
     }
 
@@ -133,6 +134,10 @@ class EvaLeadListFragment :
                 tags.remove("cold")
             }
             filterListAccordingToTags()
+        }
+
+        binding.incToolbar.ivUserImage.setOnClickListener {
+            findNavController().navigate(R.id.action_evaLeadListFragment_to_evaUserProfileFragment)
         }
     }
 

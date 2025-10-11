@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.ConfirmationDialogBinding
 
 class EvaConfirmationDialog : AdaptiveDialogFragment<ConfirmationDialogBinding>() {
@@ -57,6 +59,7 @@ class EvaConfirmationDialog : AdaptiveDialogFragment<ConfirmationDialogBinding>(
         binding.tvSubHeading.text = tvSubHeading
         binding.tvPrimaryBtn.text = tvPrimaryBtn
         binding.tvSecondaryBtn.text = tvSecondaryBtn
+        binding.ivCross.visibility = if (tvHeading == mcontext.getString(R.string.eva_stop_recording)) View.VISIBLE else View.GONE
 
         val color = ContextCompat.getColor(mcontext, iconBgcolor)
         val alphaBgColor = ColorUtils.setAlphaComponent(color, 15)
@@ -71,6 +74,10 @@ class EvaConfirmationDialog : AdaptiveDialogFragment<ConfirmationDialogBinding>(
 
         binding.tvSecondaryBtn.setOnClickListener {
             onConfirmationListener.invoke(false)
+        }
+
+        binding.ivCross.setOnClickListener {
+            dismiss()
         }
     }
 }

@@ -79,6 +79,15 @@
             android:textSize="13sp"
             android:visibility="gone" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="gone"
+            android:layout_marginStart="5dp"
+            android:contentDescription="Profile"
+            android:src="@drawable/ic_user_placeholder" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

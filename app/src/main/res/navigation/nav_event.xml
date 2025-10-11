@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_evaLeadListFragment_to_evaAddManualLead"
             app:destination="@id/evaAddManualLead" />
+        <action
+            android:id="@+id/action_evaLeadListFragment_to_evaUserProfileFragment"
+            app:destination="@id/evaUserProfileFragment" />
     </fragment>
 
     <fragment

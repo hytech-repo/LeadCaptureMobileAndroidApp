@@ -32,6 +32,7 @@ class EvaRecordAudioService : Service() {
     private var outputFile: File? = null
     private var isRecording = false
     private var duration: Long = 0L
+    private var isPaused = false
 
     private lateinit var log: AppLogger
     private var progressListener: ((Int, Int) -> Unit)? = null
@@ -87,8 +88,28 @@ class EvaRecordAudioService : Service() {
 
         startTime = System.currentTimeMillis()
         isRecording = true
-
+        isPaused = false
         onRecordingProgress()
+    }
+
+    fun pauseRecording() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isRecording && !isPaused) {
+            recorder?.pause()
+            isPaused = true
+            isRecording = false
+            stopProgressTracking()
+            log.d(TAG, "Recording paused.")
+        }
+    }
+
+    fun resumeRecording() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isPaused) {
+            recorder?.resume()
+            isPaused = false
+            isRecording = true
+            startProgressTracking()
+            log.d(TAG, "Recording resumed.")
+        }
     }
 
     // Update progress every second
@@ -114,6 +135,23 @@ class EvaRecordAudioService : Service() {
         return outputFile // finalized file is ready now
     }
 
+    private fun startProgressTracking() {
+        stopProgressTracking()
+        job = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive && isRecording) {
+                duration = (System.currentTimeMillis() - startTime) / 1000
+                val amplitude = recorder?.maxAmplitude ?: 0
+                progressListener?.invoke(duration.toInt(), amplitude)
+                delay(100)
+            }
+        }
+    }
+
+    private fun stopProgressTracking() {
+        job?.cancel()
+        job = null
+    }
+
     fun saveRecordingIntoDb(audioFile: File) {
         CoroutineScope(Dispatchers.Default).launch {
             val recordingDate = System.currentTimeMillis()  // This will give you the current date and time as a Long
@@ -136,6 +174,7 @@ class EvaRecordAudioService : Service() {
     }
 
     fun isRecordingInProgress(): Boolean = isRecording
+    fun isRecordingPaused(): Boolean = isPaused
 
     override fun onDestroy() {
         super.onDestroy()

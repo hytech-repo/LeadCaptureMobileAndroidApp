@@ -95,11 +95,11 @@ class EvaAddLeadFragment :
 
     private fun checkAudioRecording() {
         if (recordService?.isRecordingInProgress() == true) {
-            binding.llcRecording.visibility = View.VISIBLE
+            binding.clRecording.visibility = View.VISIBLE
             binding.btnRecord.visibility = View.GONE
             checkAudioPermission()
         } else {
-            binding.llcRecording.visibility = View.GONE
+            binding.clRecording.visibility = View.GONE
             binding.btnRecord.visibility = View.VISIBLE
         }
     }
@@ -130,8 +130,38 @@ class EvaAddLeadFragment :
         binding.ivStopRecording.setOnClickListener {
             showSavedRecordingFile()
         }
+
+        binding.ivPlayPauseRecording.setOnClickListener {
+            when {
+                recordService?.isRecordingPaused() == true -> {
+                    recordService?.resumeRecording()
+                }
+                recordService?.isRecordingInProgress() == true -> {
+                    recordService?.pauseRecording()
+                }
+                else -> {
+                    recordService?.startRecording()
+                }
+            }
+            updatePlayPauseButton()
+        }
+
         binding.incToolbar.ivUserImage.setOnClickListener {
             findNavController().navigate(R.id.action_evaAddLeadFragment_to_evaUserProfileFragment)
+        }
+    }
+
+    private fun updatePlayPauseButton() {
+        when {
+            recordService?.isRecordingPaused() == true -> {
+                binding.ivPlayPauseRecording.setImageResource(R.drawable.ic_play)
+            }
+            recordService?.isRecordingInProgress() == true -> {
+                binding.ivPlayPauseRecording.setImageResource(R.drawable.ic_pause)
+            }
+            else -> {
+//                binding.ivPlayPauseRecording.setImageResource(R.drawable.ic_pause)
+            }
         }
     }
 
@@ -140,13 +170,12 @@ class EvaAddLeadFragment :
         val file = recordService?.stopRecording()
         binding.waveRecording.addAmplitude(0)
         binding.btnRecord.visibility = View.VISIBLE
-        binding.llcRecording.visibility = View.GONE
+        binding.clRecording.visibility = View.GONE
 
         if (file != null) {
             showConfirmationDialog(file)
         }
     }
-
 
     private fun showConfirmationDialog(audioFile: File) {
         val confirmationDialog = EvaConfirmationDialog()
@@ -208,7 +237,8 @@ class EvaAddLeadFragment :
 
     private fun startRecordingAtBackground() {
         recordService?.setOnProgressListener { progress, amplifiy ->
-            binding.llcRecording.visibility = View.VISIBLE
+            binding.clRecording.visibility = View.VISIBLE
+            binding.ivPlayPauseRecording.setImageResource(R.drawable.ic_pause)
             binding.btnRecord.visibility = View.GONE
             log.d("Recording", "progress ${progress}, amp: $amplifiy")
             binding.waveRecording.addAmplitude(amplifiy)

@@ -30,6 +30,16 @@
         app:layout_constraintStart_toStartOf="@id/vbg"
         app:layout_constraintTop_toTopOf="@id/vbg" />
 
+    <ImageView
+        android:id="@+id/ivCross"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:tint="@color/heading_text_color"
+        android:src="@drawable/ic_cross"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvHeading"
         android:layout_width="match_parent"

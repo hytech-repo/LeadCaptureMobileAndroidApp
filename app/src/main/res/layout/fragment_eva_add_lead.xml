@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#FFFFFF"
     android:fillViewport="true"
     android:orientation="vertical">
@@ -163,10 +164,16 @@
             android:drawablePadding="5dp"
             android:fontFamily="@font/sf_pro_regular"
             android:paddingHorizontal="30dp"
-            android:paddingVertical="8dp"
+            android:paddingVertical="10dp"
             android:text="Tap to record"
             android:textColor="@color/heading_text_color"
             android:textSize="15sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRecording"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llcRecording"
@@ -174,10 +181,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:background="@drawable/bg_red_stroke_rounded"
             android:gravity="center"
-            android:paddingHorizontal="20dp"
-            android:visibility="gone">
+            android:paddingEnd="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.eva.lead.capture.ui.view.WaveformView
                 android:id="@+id/waveRecording"
@@ -187,12 +195,51 @@
                 android:layout_marginEnd="10dp" />
 
             <ImageView
+                android:id="@+id/ivPlayPauseRecording"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="10dp"
+                app:tint="@color/primary_color"
+                android:src="@drawable/ic_pause"/>
+
+            <ImageView
                 android:id="@+id/ivStopRecording"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:background="@drawable/ic_rectangle" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!-- Tap to record Button -->
+            <TextView
+                android:id="@+id/tvRecording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/sf_pro_regular"
+                android:layout_marginTop="5dp"
+                android:text="Recording"
+                android:textColor="@color/heading_text_color"
+                app:layout_constraintStart_toStartOf="@id/llcRecording"
+                app:layout_constraintTop_toBottomOf="@id/llcRecording"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/sf_pro_regular"
+                android:layout_marginTop="5dp"
+                tools:text="00:00:05"
+                android:textColor="@color/heading_text_color"
+                app:layout_constraintEnd_toEndOf="@id/llcRecording"
+                app:layout_constraintTop_toBottomOf="@id/llcRecording"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="15sp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
