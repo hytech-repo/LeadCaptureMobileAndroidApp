@@ -562,6 +562,9 @@ class EvaLeadFormFragment :
         }
         if (leadDetail == null) {
             recordService?.startRecording()
+            if (recordService?.isRecordingPaused() == true) {
+                recordService?.resumeRecording()
+            }
         }
     }
 

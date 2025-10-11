@@ -6,6 +6,7 @@ import android.media.MediaRecorder
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import com.eva.lead.capture.data.local.AppDatabase
 import com.eva.lead.capture.data.repository.AppDbRepositoryImpl
 import com.eva.lead.capture.domain.model.entity.LeadAudioRecording
@@ -32,6 +33,7 @@ class EvaRecordAudioService : Service() {
     private var outputFile: File? = null
     private var isRecording = false
     private var duration: Long = 0L
+    private var totalDuration: Long = 0L
     private var isPaused = false
 
     private lateinit var log: AppLogger
@@ -87,16 +89,18 @@ class EvaRecordAudioService : Service() {
         }
 
         startTime = System.currentTimeMillis()
+        totalDuration = 0L
         isRecording = true
         isPaused = false
-        onRecordingProgress()
+        onRecordingProgress(true)
     }
 
     fun pauseRecording() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isRecording && !isPaused) {
             recorder?.pause()
             isPaused = true
-            isRecording = false
+//            isRecording = false
+            totalDuration += (System.currentTimeMillis() - startTime) // accumulate
             stopProgressTracking()
             log.d(TAG, "Recording paused.")
         }
@@ -106,22 +110,32 @@ class EvaRecordAudioService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isPaused) {
             recorder?.resume()
             isPaused = false
-            isRecording = true
+//            isRecording = true
+//            totalDuration = System.currentTimeMillis() - pauseTimeStamp
+            startTime = System.currentTimeMillis()
             startProgressTracking()
             log.d(TAG, "Recording resumed.")
         }
     }
 
     // Update progress every second
-    fun onRecordingProgress() {
+    fun onRecordingProgress(isRecording: Boolean) {
         job = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive) {
-                duration = (System.currentTimeMillis() - startTime) / 1000
+            while (isActive && isRecording) {
+                val currentTime = System.currentTimeMillis()
+                val currentDuration = totalDuration + (currentTime - startTime)
+                duration = currentDuration / 1000
                 val amplitude = recorder?.maxAmplitude ?: 0
+                Log.d("check_progress", "${duration}, total_duration -> ${totalDuration}")
                     progressListener?.invoke(duration.toInt(), amplitude)
-                delay(50)
+                delay(100)
             }
         }
+    }
+
+    private fun startProgressTracking() {
+        stopProgressTracking()
+        onRecordingProgress(isRecording)
     }
 
     fun stopRecording(): File? {
@@ -135,21 +149,10 @@ class EvaRecordAudioService : Service() {
         return outputFile // finalized file is ready now
     }
 
-    private fun startProgressTracking() {
-        stopProgressTracking()
-        job = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive && isRecording) {
-                duration = (System.currentTimeMillis() - startTime) / 1000
-                val amplitude = recorder?.maxAmplitude ?: 0
-                progressListener?.invoke(duration.toInt(), amplitude)
-                delay(100)
-            }
-        }
-    }
-
     private fun stopProgressTracking() {
         job?.cancel()
         job = null
+        Log.d("recording Pause Duration", duration.toString())
     }
 
     fun saveRecordingIntoDb(audioFile: File) {

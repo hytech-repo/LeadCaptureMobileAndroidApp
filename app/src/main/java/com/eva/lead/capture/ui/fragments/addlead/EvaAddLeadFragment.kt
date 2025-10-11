@@ -61,6 +61,7 @@ class EvaAddLeadFragment :
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as EvaRecordAudioService.AudioBinder
             recordService = binder.getService()
+            checkRecordingStatus()
             isBound = true
         }
 
@@ -75,6 +76,10 @@ class EvaAddLeadFragment :
         this.initView()
         this.initListener()
         this.fetchLeadList()
+    }
+
+    fun checkRecordingStatus() {
+        checkAudioRecording()
     }
 
     private fun fetchLeadList() {
@@ -98,6 +103,7 @@ class EvaAddLeadFragment :
             binding.clRecording.visibility = View.VISIBLE
             binding.btnRecord.visibility = View.GONE
             checkAudioPermission()
+            updatePlayPauseButton()
         } else {
             binding.clRecording.visibility = View.GONE
             binding.btnRecord.visibility = View.VISIBLE
@@ -166,18 +172,10 @@ class EvaAddLeadFragment :
     }
 
     private fun showSavedRecordingFile() {
-        recordService?.removeProgressCallback()
-        val file = recordService?.stopRecording()
-        binding.waveRecording.addAmplitude(0)
-        binding.btnRecord.visibility = View.VISIBLE
-        binding.clRecording.visibility = View.GONE
-
-        if (file != null) {
-            showConfirmationDialog(file)
-        }
+            showConfirmationDialog()
     }
 
-    private fun showConfirmationDialog(audioFile: File) {
+    private fun showConfirmationDialog() {
         val confirmationDialog = EvaConfirmationDialog()
         val bundle = Bundle()
         bundle.putString("heading", mContext.getString(R.string.eva_stop_recording))
@@ -190,10 +188,17 @@ class EvaAddLeadFragment :
         confirmationDialog.isCancelable = false
         confirmationDialog.apply {
             onConfirmationListener = { isPrimaryBtnClicked ->
-                if (isPrimaryBtnClicked) {
-                    showAudioSelectionDialog(audioFile)
-                } else {
-                    deleteRecordingFile(audioFile)
+                recordService?.removeProgressCallback()
+                val file = recordService?.stopRecording()
+                binding.waveRecording.addAmplitude(0)
+                binding.btnRecord.visibility = View.VISIBLE
+                binding.clRecording.visibility = View.GONE
+                file?.let {
+                    if (isPrimaryBtnClicked) {
+                        showAudioSelectionDialog(it)
+                    } else {
+                        deleteRecordingFile(it)
+                    }
                 }
                 dismiss()
             }
@@ -241,6 +246,16 @@ class EvaAddLeadFragment :
             binding.ivPlayPauseRecording.setImageResource(R.drawable.ic_pause)
             binding.btnRecord.visibility = View.GONE
             log.d("Recording", "progress ${progress}, amp: $amplifiy")
+
+            val hrs = progress / 3600
+            val mins = (progress % 3600) / 60
+            val secs = progress % 60
+            val duration = if (hrs > 0) {
+                String.format("%02d:%02d:%02d", hrs, mins, secs)
+            } else {
+                String.format("%02d:%02d", mins, secs)
+            }
+            binding.tvDuration.text = duration
             binding.waveRecording.addAmplitude(amplifiy)
         }
         recordService?.startRecording()
