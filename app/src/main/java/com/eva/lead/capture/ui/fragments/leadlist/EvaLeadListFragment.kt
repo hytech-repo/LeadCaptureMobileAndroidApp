@@ -183,7 +183,10 @@ class EvaLeadListFragment :
         binding.rvLeadList.visibility = if (record.isNullOrEmpty()) View.GONE else View.VISIBLE
         binding.tvNoLeads.visibility = if (record.isNullOrEmpty()) View.VISIBLE else View.GONE
         leadListAdapter.setLeadDataList(record)
-        binding.tvLeadCounts.text = "${record?.size?: 0} Leads"
+        if (!record.isNullOrEmpty()) {
+            binding.tvLeadCounts.visibility = View.VISIBLE
+            binding.tvLeadCounts.text = "${record?.size?: 0} Leads"
+        }
     }
 
     private fun filterListAccordingToTags() {

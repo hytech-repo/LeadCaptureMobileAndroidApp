@@ -253,6 +253,10 @@ class EvaLeadFormFragment :
     }
 
     private fun randerInfo(data: CapturedBusinessCardData) {
+        if (data.qrCodes.isNotEmpty()) {
+            val text = data.qrCodes.toString()
+            binding.etAdditionalInfo.setText(text)
+        }
         if (data.businessCardInfo.isNotEmpty()) {
             val name = data.businessCardInfo["name"]?.split(" ")
             if (name != null && name.isNotEmpty()) {
@@ -396,7 +400,9 @@ class EvaLeadFormFragment :
             val checkBox = CheckBox(mContext).apply {
                 text = questionInfo.text
                 textSize = 14f
-                isChecked = selectedOption.contains(questionInfo.text)
+                if (selectedOption.contains(questionInfo.text)) {
+                    isChecked = true
+                }
                 setTypeface(typeRegular, Typeface.NORMAL)
                 buttonTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
@@ -473,8 +479,10 @@ class EvaLeadFormFragment :
                     val radioButton = RadioButton(mContext).apply {
                         text = option
                         textSize = 14f
-                        isChecked = selectedOption.contains(option)
-                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector)
+                        if (selectedOption.contains(option)) {
+                            isChecked = true
+                        }
+                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector_2)
                         setTextColor(
                             ContextCompat.getColor(
                                 mContext,
@@ -496,7 +504,9 @@ class EvaLeadFormFragment :
                     val checkBox = CheckBox(mContext).apply {
                         text = option
                         textSize = 14f
-                        isChecked = selectedOption.contains(option)
+                        if (selectedOption.contains(option)) {
+                            isChecked = true
+                        }
                         setTypeface(typeRegular, Typeface.NORMAL)
                         buttonTintList = ColorStateList.valueOf(
                             ContextCompat.getColor(
@@ -595,9 +605,11 @@ class EvaLeadFormFragment :
                 binding.llcQuickNote.visibility = View.GONE
             }
             if (!questionList.isNullOrEmpty()) {
+                binding.tvQuestions.visibility = View.VISIBLE
                 displayQuestions(questionList)
             }
             if (!localQuestionList.isNullOrEmpty()) {
+                binding.tvQuestions.visibility = View.VISIBLE
                 displayQuestions(localQuestionList)
             }
         }
@@ -653,7 +665,7 @@ class EvaLeadFormFragment :
             audioFilePath = audioFileName,
             timestamp = System.currentTimeMillis(),
             quickNote = quickNoteAnswers,
-            questionAnswer = questionAnswers
+            questionAnswer = if (questionAnswers.isNotEmpty()) questionAnswers else leadDetail?.questionAnswer?: ""
         )
         if (leadDetail == null) {
             audioFile?.let {

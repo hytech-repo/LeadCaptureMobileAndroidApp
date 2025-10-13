@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -87,6 +88,10 @@ class EvaHomeFragment :
         val sortedLeads = leadList.filter { it.timestamp != null }.sortedBy { it.timestamp }
         binding.tvLineLeadCount.text = "${leadList.size}"
 
+        if (leadList.isNotEmpty()) {
+            binding.cvTotolLeadGraph.visibility = View.VISIBLE
+        }
+
 //        val hourFormatter = SimpleDateFormat("yyyy-MM-dd HH:00", Locale.getDefault())
         val hourLabelFormatter = SimpleDateFormat("HH:00", Locale.getDefault())
 
@@ -99,32 +104,9 @@ class EvaHomeFragment :
             calendar.timeInMillis
         }
 
-//        val groupedByHour = sortedLeads.groupBy {
-//            hourFormatter.format(Date(it.timestamp!!))
-//        }
-
-//        val firstTimestamp = hourFormatter.parse(
-//            hourFormatter.format(Date(sortedLeads.first().timestamp!!))
-//        )?.time?.toFloat() ?: 0f
-
-//        val entries = groupedByHour.entries.map { (dateHourStr, leadsAtHour) ->
-//            val hourTimeMillis = hourFormatter.parse(dateHourStr)?.time?.toFloat() ?: 0f
-//            Entry(hourTimeMillis - firstTimestamp, leadsAtHour.size.toFloat()) // normalize
-//        }.sortedBy { it.x }
-
         val entries = groupedByHour.entries.map { (hourTimestamp, leadsAtHour) ->
             Entry(hourTimestamp.toFloat(), leadsAtHour.size.toFloat())
         }.sortedBy { it.x }
-
-//        val sortedHours = groupedByHour.keys.sorted()
-//        for ((i, hour) in sortedHours.withIndex()) {
-//            val count = groupedByHour[hour]?.size?.toFloat() ?: 0f
-//            if (i == 0) {
-//                // Add zero at start
-//                entries.add(Entry(hour.toFloat(), 0f))
-//            }
-//            entries.add(Entry(hour.toFloat(), count))
-//        }
 
         val dataSet = LineDataSet(entries, "Leads by Hour").apply {
             color = R.color.color_bluish_purple.toColor(mContext)
@@ -166,6 +148,9 @@ class EvaHomeFragment :
         val barEntries = ArrayList<BarEntry>()
         val tags = arrayOf("hot", "warm", "cold", "appointment")
         binding.tvBarLeadCount.text = "${leadList.size}"
+        if (leadList.isNotEmpty()) {
+            binding.cvTotalLeadBarChart.visibility = View.VISIBLE
+        }
 
         tags.forEachIndexed { index, tag ->
             val count = tagCounts[tag]?.toFloat() ?: 0f

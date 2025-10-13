@@ -169,6 +169,7 @@
         android:text="1 Lead"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/etSearch"
         app:layout_constraintTop_toBottomOf="@id/cvTags" />
 

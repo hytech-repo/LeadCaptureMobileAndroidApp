@@ -156,7 +156,7 @@ class LoginFragment :
         lifecycleScope.launch {
             val exhibitor = viewModel.checkExhibitor(code).firstOrNull()
             if (exhibitor == null) {
-                mContext.showToast("Exhibitor not found", ToastType.ERROR)
+                mContext.showToast(R.string.license_not_found, ToastType.ERROR)
             } else {
                 prefManager.put(AppConstants.LEAD_CODE, code)
                 findNavController().navigate(R.id.action_loginFragment_to_eventActivationFragment)

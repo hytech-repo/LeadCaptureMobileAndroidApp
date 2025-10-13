@@ -9,6 +9,7 @@
     <string name="login">Login</string>
     <string name="empty_license_code_field">License code is empty</string>
     <string name="invalid_email_msg">Please enter valid email</string>
+    <string name="license_not_found">License code not found</string>
     <string name="email_address">Email address</string>
     <string name="resend_code">Resend Code</string>
     <string name="send_code">Send Code</string>
