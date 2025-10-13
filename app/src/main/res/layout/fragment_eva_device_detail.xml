@@ -58,6 +58,7 @@
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="13dp"
                 android:text="Gill Gonzalez"
+                android:textColor="@color/subheading_text_color"
                 android:textSize="13dp" />
 
             <!-- Last Name -->
@@ -83,6 +84,7 @@
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="13dp"
                 android:text="Gill Gonzalez"
+                android:textColor="@color/subheading_text_color"
                 android:textSize="13dp" />
 
             <!-- Email -->
@@ -108,6 +110,7 @@
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="13dp"
                 android:text="Gill.zetsy@gmail.com"
+                android:textColor="@color/subheading_text_color"
                 android:textSize="13dp" />
 
             <!-- Device Name -->
