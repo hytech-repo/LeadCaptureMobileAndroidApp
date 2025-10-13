@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg_color">
+    android:background="@color/screen_bg_color"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/incToolbar"
@@ -143,11 +144,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/sf_pro_bold"
-        tools:text="1 Recording"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/etSearch"
-        app:layout_constraintTop_toBottomOf="@id/cvTags" />
+        app:layout_constraintTop_toBottomOf="@id/cvTags"
+        tools:text="1 Recording" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecordingList"

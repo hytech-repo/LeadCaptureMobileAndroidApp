@@ -1,176 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg_color"
-    tools:context=".ui.fragments.activatelicense.EvaEventActivationFragment">
+    android:fitsSystemWindows="true"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTopLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:paddingVertical="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.335">
+        android:background="@color/screen_bg_color"
+        tools:context=".ui.fragments.activatelicense.EvaEventActivationFragment">
 
-        <ImageView
-            android:id="@+id/ivBadge"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/ic_badge"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTopLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:paddingVertical="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Logo -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvImageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            app:cardCornerRadius="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivBadge">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.335">
 
             <ImageView
-                android:id="@+id/ivLogo"
+                android:id="@+id/ivBadge"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_badge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Logo -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvImageView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivBadge">
+
+                <ImageView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_logo_orange" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/sf_pro_medium"
+                android:text="Gill Gonzalez"
+                android:textColor="@color/heading_text_color"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvImageView" />
+
+            <!-- Event Title -->
+            <TextView
+                android:id="@+id/tvEventTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/sf_pro_medium"
+                android:text="Dreamforce 2025"
+                android:textColor="@color/subheading_text_color"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+
+            <!-- Activate Button -->
+            <include
+                android:id="@+id/btnActivate"
+                layout="@layout/slider_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvEventTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/sf_pro_regular"
+            android:text="Slide to Activate Your license code"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clTopLayout" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_top_rounded_corner_16"
+            android:backgroundTint="@color/screen_bg_color"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_logo_orange" />
+                android:layout_height="match_parent">
+
+                <!-- Warning Box -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/cardWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_red_stroke_rounded"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/sf_pro_bold"
+                        android:text="@string/welcome"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:fontFamily="@font/sf_pro_regular"
+                        android:gravity="center"
+                        android:lineHeight="25dp"
+                        android:text="@string/event_activation_msg"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/heading_text_color"
+                        android:textSize="12sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <TextView
+                    android:id="@+id/tvFooter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cardWarning"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:text="EVA Event Tech Hub | Powered by evareg.com"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
-
-        <!-- Name -->
-        <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/sf_pro_medium"
-            android:text="Gill Gonzalez"
-            android:textColor="@color/heading_text_color"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cvImageView" />
-
-        <!-- Event Title -->
-        <TextView
-            android:id="@+id/tvEventTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/sf_pro_medium"
-            android:text="Dreamforce 2025"
-            android:textColor="@color/subheading_text_color"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
-
-        <!-- Activate Button -->
-        <include
-            android:id="@+id/btnActivate"
-            layout="@layout/slider_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventTitle" />
+        <!-- Footer -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tvHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/sf_pro_regular"
-        android:text="Slide to Activate Your license code"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clTopLayout" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_top_rounded_corner_16"
-        android:backgroundTint="@color/screen_bg_color"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- Warning Box -->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/cardWarning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/bg_red_stroke_rounded"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/sf_pro_bold"
-                    android:text="@string/welcome"
-                    android:textColor="@color/heading_text_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:fontFamily="@font/sf_pro_regular"
-                    android:gravity="center"
-                    android:lineHeight="25dp"
-                    android:text="@string/event_activation_msg"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/heading_text_color"
-                    android:textSize="12sp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <TextView
-                android:id="@+id/tvFooter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardWarning"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="16dp"
-                android:text="EVA Event Tech Hub | Powered by evareg.com"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp" />
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <!-- Footer -->
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

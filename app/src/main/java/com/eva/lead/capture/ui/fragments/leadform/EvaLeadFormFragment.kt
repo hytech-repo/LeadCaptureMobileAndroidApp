@@ -243,7 +243,8 @@ class EvaLeadFormFragment :
     }
 
     private fun init() {
-        binding.incToolbar.tvTitle.text = "Add Manually"
+        val title = if (leadDetail == null) "Add Manually" else "Lead Details"
+        binding.incToolbar.tvTitle.text = title
         binding.incToolbar.llcbtn.visibility = View.GONE
         binding.incToolbar.tvRecording.visibility = View.VISIBLE
 
@@ -736,11 +737,11 @@ class EvaLeadFormFragment :
             mContext.showToast("Email is invalid", ToastType.ERROR)
             return false
         }
-        val phone = binding.etPhoneNumber.text
-        if (!phoneRegex.matches(phone)) {
-            mContext.showToast("Phone number is invalid", ToastType.ERROR)
-            return false
-        }
+//        val phone = binding.etPhoneNumber.text
+//        if (!phone.isNullOrEmpty() && !phoneRegex.matches(phone)) {
+//            mContext.showToast("Phone number is invalid", ToastType.ERROR)
+//            return false
+//        }
         if (binding.rgLeads.checkedRadioButtonId == 0) {
             mContext.showToast("Please select tag", ToastType.ERROR)
             return false

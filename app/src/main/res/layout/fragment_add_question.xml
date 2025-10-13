@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg_color">
+    android:background="@color/screen_bg_color"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/incToolbar"
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="@drawable/bg_input_rounded"
+            app:cardBackgroundColor="@color/screen_bg_color"
             app:cardCornerRadius="4dp"
             app:cardElevation="3dp">
 
@@ -68,7 +70,8 @@
                     android:inputType="textMultiLine"
                     android:minHeight="75dp"
                     android:padding="12dp"
-                    android:textColor="@color/subheading_text_color"
+                    android:textColor="@color/heading_text_color"
+                    android:textColorHint="@color/subheading_text_color"
                     android:textSize="13sp" />
 
                 <!-- Question type label -->
