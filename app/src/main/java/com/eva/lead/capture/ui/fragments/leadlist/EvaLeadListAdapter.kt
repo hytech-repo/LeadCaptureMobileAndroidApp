@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.ItemLeadBinding
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.utils.convertIntoDate
 import com.eva.lead.capture.utils.getDrawableStatus
 import com.eva.lead.capture.utils.getStatusColor
 import java.util.Locale
@@ -85,6 +86,11 @@ class EvaLeadListAdapter(val mContext: Context) :
             binding.hotLabel.setTextColor(textColor)
             binding.icTag.setImageResource(imageRes)
             binding.hotLabel.text = model.tag.capitalize(Locale.ENGLISH)
+
+            val date = model.timestamp?.convertIntoDate("dd MMM YYYY")
+            val time = model.timestamp?.convertIntoDate("hh:mm a")
+            binding.dateText.text = date
+            binding.timeText.text = time
 
             binding.clMain.setOnClickListener {
                 onItemClickListener.invoke(model, position)

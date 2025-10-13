@@ -280,6 +280,17 @@ fun Long.convertIntoDate(): String {
     return ""
 }
 
+fun Long.convertIntoDate(patteren: String): String {
+    try {
+        val date = Date(this)
+        val format = SimpleDateFormat(patteren)
+        format.timeZone = TimeZone.getDefault()
+        return format.format(date)
+    } catch (e: java.lang.Exception) {
+    }
+    return ""
+}
+
 enum class SearchFilter {
     NAME, ADDRESS, STATE, CITY, CAPACITY, PRICE, VARIETY, QUANTITY;
 }

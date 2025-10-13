@@ -41,8 +41,8 @@ fun Exhibitor.generateUpdateQuery(): String {
 
 val leadIds = listOf(
     "LC001", "LC002", "LC003", "LC004", "LC005", "LC006",
-    "LC007", "LC008", "LC009", "LC010", "LC011", "LC012",
-    "LC013"
+    "LC007", "LC008", "LC009", "LC0010", "LC0011", "LC0012",
+    "LC0013"
 )
 val firstNames = listOf(
     "Rajeev", "Damnish", "Neeraj", "Pramil", "Matt", "Gaurav",

@@ -152,7 +152,7 @@ class LoginFragment :
     }
 
     private fun checkExhibitorAndMoveAhead() {
-        val code = binding.etEmail.text.toString()
+        val code = binding.etEmail.text.toString().trim()
         lifecycleScope.launch {
             val exhibitor = viewModel.checkExhibitor(code).firstOrNull()
             if (exhibitor == null) {

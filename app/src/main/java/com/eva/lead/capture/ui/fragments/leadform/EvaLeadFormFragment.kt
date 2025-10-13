@@ -172,7 +172,7 @@ class EvaLeadFormFragment :
             val imageDir = mContext.getExternalFolderPath("clicked_image")
             val imageFile = leadDetail.imageFileNames!!.split(",")
             for (image in imageFile) {
-                val imageFile = File(imageDir, image)
+                val imageFile = File(imageDir, image.trim())
                 if (imageFile.exists()) {
                     selectedFile.add(imageFile.absolutePath)
                 }
@@ -555,6 +555,7 @@ class EvaLeadFormFragment :
 
     private fun openCameraForClickedImage() {
         val bundle = Bundle()
+        bundle.putString("model", "manual")
         bundle.putBoolean("send_fragment_result", true)
         findNavController().navigate(R.id.action_evaAddManualLead_to_evaCameraFragment, bundle)
     }
@@ -582,6 +583,9 @@ class EvaLeadFormFragment :
 
     override fun onStop() {
         super.onStop()
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer?.stop()
+        }
         recordService?.removeProgressCallback()
     }
 
@@ -635,7 +639,7 @@ class EvaLeadFormFragment :
                 val file = File(filePath)
                 if (file.exists()) file.name else null
             }
-            namesCommaSeparated = fileNames.joinToString(", ")
+            namesCommaSeparated = fileNames.joinToString(",")
             log.d("Files", namesCommaSeparated)
         }
 

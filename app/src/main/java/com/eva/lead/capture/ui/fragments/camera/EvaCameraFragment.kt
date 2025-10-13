@@ -302,21 +302,13 @@ class EvaCameraFragment :
                 }
 
                 "manual" -> {
-                    processQRCodeFromImage(image) { qrResults ->
-                        val results = mutableMapOf<String, Any>()
-                        if (qrResults.isNotEmpty()) {
-                            results["qrCodes"] = qrResults
-                        }
-                        handleAllResults(results, imageFile)
-                    }
-
-                    processTextFromImage(image) { textResults ->
-                        val results = mutableMapOf<String, Any>()
-                        if (textResults.isNotEmpty()) {
-                            results["businessCardInfo"] = textResults
-                        }
-                        handleAllResults(results, imageFile)
-                    }
+                    val combinedResult = CapturedBusinessCardData(
+                        imagePath = imageFile.absolutePath,
+                        qrCodes = emptyList(),
+                        businessCardInfo = emptyMap(),
+                        timestamp = System.currentTimeMillis()
+                    )
+                    handleCombinedResults(combinedResult)
                 }
 
                 else -> {
