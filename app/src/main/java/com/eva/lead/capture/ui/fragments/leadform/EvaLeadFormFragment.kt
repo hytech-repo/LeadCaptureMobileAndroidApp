@@ -482,7 +482,8 @@ class EvaLeadFormFragment :
                         if (selectedOption.contains(option)) {
                             isChecked = true
                         }
-                        buttonDrawable = ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector_2)
+                        buttonDrawable =
+                            ContextCompat.getDrawable(mContext, R.drawable.radio_btn_selector_2)
                         setTextColor(
                             ContextCompat.getColor(
                                 mContext,
@@ -665,7 +666,8 @@ class EvaLeadFormFragment :
             audioFilePath = audioFileName,
             timestamp = System.currentTimeMillis(),
             quickNote = quickNoteAnswers,
-            questionAnswer = if (questionAnswers.isNotEmpty()) questionAnswers else leadDetail?.questionAnswer?: ""
+            questionAnswer = if (questionAnswers.isNotEmpty()) questionAnswers else leadDetail?.questionAnswer
+                ?: ""
         )
         if (leadDetail == null) {
             audioFile?.let {
@@ -697,6 +699,7 @@ class EvaLeadFormFragment :
                             selectedOptions.add(radioButton.text.toString())
                         }
                     }
+
                     is LinearLayoutCompat -> { // checkboxes
                         for (k in 0 until optionsContainer.childCount) {
                             val checkBox = optionsContainer.getChildAt(k) as? CheckBox

@@ -158,13 +158,13 @@ class EvaLeadListFragment :
             type = "audio/*" // MIME type for audio files
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
 //            putExtra(Intent.EXTRA_EMAIL, arrayOf("recipient@example.com"))
-            putExtra(Intent.EXTRA_SUBJECT, "Captured Leads")
-            putExtra(Intent.EXTRA_TEXT, "Hi \n\n Please find the attached details of leads")
+            putExtra(Intent.EXTRA_SUBJECT, "Exported Leads from EVA Lead Capture")
+            putExtra(Intent.EXTRA_TEXT, "Hi \n\n Please find attached the zipped lead folders along with the CSV file containing all lead details.")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
         try {
-            mContext.startActivity(Intent.createChooser(intent, "Send email using:"))
+            mContext.startActivity(Intent.createChooser(intent, "Send Leads Email using:"))
         } catch (e: ActivityNotFoundException) {
             mContext.showToast("No email app found", ToastType.ERROR)
         }
