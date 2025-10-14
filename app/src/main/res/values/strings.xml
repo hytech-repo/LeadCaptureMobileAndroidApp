@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EvaLeadCapture</string>
+    <string name="app_name">LeadCapture</string>
     <string name="welcome">Welcome!</string>
     <string name="enter_your_code">Please enter your Code</string>
     <string name="license_code">License Code</string>

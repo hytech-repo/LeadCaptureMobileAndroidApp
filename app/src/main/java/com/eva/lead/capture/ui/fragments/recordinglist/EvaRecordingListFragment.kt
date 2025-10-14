@@ -78,9 +78,9 @@ class EvaRecordingListFragment :
         }
 
         recordingListAdapter.onItemClick = { option, position ->
-//            val bundle = Bundle()
-//            bundle.putString("recording_name", option.fileName.toString())
-//            findNavController().navigate(R.id.action_evaRecordingListFragment_to_evaRecordingDetailFragment, bundle)
+            val bundle = Bundle()
+            bundle.putString("recording_name", option.fileName.toString())
+            findNavController().navigate(R.id.action_evaRecordingListFragment_to_evaRecordingDetailFragment, bundle)
         }
     }
 

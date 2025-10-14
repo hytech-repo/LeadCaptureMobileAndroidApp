@@ -194,14 +194,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_rounded_stroke_16"
-                android:hint="james@andr@gmail.com"
+                android:hint="james@gmail.com"
                 android:padding="18dp"
                 android:textColor="@color/heading_text_color"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="@+id/txtEmail"
                 app:layout_constraintStart_toStartOf="@+id/txtEmail"
                 app:layout_constraintTop_toBottomOf="@id/txtEmail" />
-
 
             <!-- Phone Number -->
             <TextView
