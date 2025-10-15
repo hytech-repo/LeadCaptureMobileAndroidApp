@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:elevation="5dp"
+    android:padding="15dp"
+    app:cardBackgroundColor="@color/screen_bg_color"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <!-- Profile Picture and Name -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/avatarText"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/ic_circle"
+                android:fontFamily="@font/sf_pro_medium"
+                android:gravity="center"
+                android:text="A"
+                android:textColor="@color/heading_text_color"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_pro_bold"
+                    android:text="Alex Turner"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/organization_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/sf_pro_regular"
+                    android:text="InnoSoft"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="13sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <ImageView
+                android:id="@+id/ivOptions"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_dots" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/light_grey" />
+
+        <!-- Appointment Date and Time -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/appointment_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/sf_pro_regular"
+                android:text="03 Sep 2025"
+                android:textColor="@color/light_grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/appointment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawableStart="@drawable/ic_clock"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/sf_pro_regular"
+                android:text="01:00 PM - 02:00 PM"
+                android:textColor="@color/light_grey"
+                android:textSize="14sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!-- Location or Meeting Type -->
+        <TextView
+            android:id="@+id/location_or_meeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_pro_regular"
+            android:text="Meeting room 1, InnoSoft HQ"
+            android:textColor="@color/light_grey"
+            android:textSize="14sp" />
+
+        <!-- Countdown Timer -->
+        <TextView
+            android:id="@+id/countdown_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_rounded_status"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="5dp"
+            android:text="Start in 02d : 02h : 30m : 58s"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>

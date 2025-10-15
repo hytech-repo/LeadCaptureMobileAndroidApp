@@ -63,33 +63,25 @@
         app:layout_constraintStart_toStartOf="@id/roleText"
         app:layout_constraintTop_toBottomOf="@id/roleText">
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
-            android:src="@android:drawable/ic_menu_my_calendar"
-            android:tint="@android:color/darker_gray" />
-
         <TextView
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/ic_calendar"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/sf_pro_regular"
             android:text="03 Sep 2025"
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp" />
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="4dp"
-            android:src="@android:drawable/ic_lock_idle_alarm"
-            android:tint="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/timeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/sf_pro_regular"
             android:text="01:00 PM"
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp" />

@@ -15,11 +15,12 @@
         android:id="@+id/nav_appointment"
         android:icon="@drawable/nav_appointment"
         android:title="Appointment"
-        android:visible="false" />
+        android:visible="true" />
 
     <item
         android:id="@+id/nav_total_lead"
         android:icon="@drawable/nav_group_lead"
-        android:title="Total Leads" />
+        android:title="Total Leads"
+        android:visible="false" />
 
 </menu>

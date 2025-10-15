@@ -40,7 +40,7 @@ object CustomToast {
                         R.color.toast_error_bg
                     )
                 )
-                imageView.setImageResource(R.drawable.ic_circle_info)
+                imageView.setImageResource(R.drawable.ic_cancel_circle)
             }
 
             ToastType.WARNING -> {
@@ -50,7 +50,7 @@ object CustomToast {
                         R.color.toast_warning_bg
                     )
                 )
-                imageView.setImageResource(R.drawable.ic_circle_info)
+                imageView.setImageResource(R.drawable.ic_warning)
             }
 
             ToastType.INFO -> {

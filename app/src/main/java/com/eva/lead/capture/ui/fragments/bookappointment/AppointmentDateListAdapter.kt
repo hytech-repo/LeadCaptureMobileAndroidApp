@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eva.lead.capture.databinding.ItemDateTileBinding
-import com.eva.lead.capture.ui.fragments.bookappointment.DateItem
 
-class DateAdapter(val mContext: Context) :
-    RecyclerView.Adapter<DateAdapter.EvaDateVH>() {
+class AppointmentDateListAdapter(val mContext: Context) :
+    RecyclerView.Adapter<AppointmentDateListAdapter.EvaDateVH>() {
     var onDateSelected: ((DateItem) -> Unit)? = null
     private var dateList: List<DateItem>? = null
     val currentList: List<DateItem> get() = dateList ?: emptyList()

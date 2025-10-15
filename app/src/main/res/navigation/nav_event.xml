@@ -42,6 +42,9 @@
         android:label="EvaAppointmentFragment"
         tools:layout="@layout/fragment_eva_appointment">
 
+        <action
+            android:id="@+id/action_evaAppointmentFragment_to_evaBookAppointmentFragment"
+            app:destination="@id/evaBookAppointmentFragment" />
     </fragment>
 
     <fragment
@@ -159,6 +162,10 @@
         android:name="com.eva.lead.capture.ui.fragments.webpage.EvaWebviewPageFragment"
         android:label="fragment_eva_webview_page"
         tools:layout="@layout/fragment_eva_webview_page" />
-
+    <fragment
+        android:id="@+id/evaBookAppointmentFragment"
+        android:name="com.eva.lead.capture.ui.fragments.bookappointment.EvaBookAppointmentFragment"
+        android:label="EvaBookAppointmentFragment"
+        tools:layout="@layout/fragment_eva_book_appointment" />
 
 </navigation>

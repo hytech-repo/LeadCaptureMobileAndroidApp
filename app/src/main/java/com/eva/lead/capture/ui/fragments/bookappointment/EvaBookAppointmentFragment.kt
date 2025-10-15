@@ -4,11 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaBookAppointmentBinding
+import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -17,10 +21,15 @@ class EvaBookAppointmentFragment :
     BaseFragment<FragmentEvaBookAppointmentBinding, EvaBookAppointmentViewModel>(
         EvaBookAppointmentViewModel::class.java
     ) {
-    private var mContext: Context? = null
-    private lateinit var dateAdapter: DateAdapter
+    private lateinit var mContext: Context
     private lateinit var lastGeneratedDate: LocalDate
     private var isLoading = false
+    private val appointmentDateListAdapter : AppointmentDateListAdapter by lazy {
+        AppointmentDateListAdapter(mContext)
+    }
+    private val timeSlotAdapter: AppointmentTimeSlotAdapter by lazy {
+        AppointmentTimeSlotAdapter(mContext)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,32 +47,29 @@ class EvaBookAppointmentFragment :
 
     override fun startWorking(savedInstanceState: Bundle?) {
         lastGeneratedDate = LocalDate.now()
-        this.setupDateRecyclerView()
+        this.initView()
+        this.initListener()
         this.loadInitialDates()
     }
 
-    private fun loadInitialDates() {
-        // Load the first chunk (e.g., 30 days)
-        val initialList = generateNextDays(lastGeneratedDate, 30, true)
-        dateAdapter.setDateList(initialList)
 
-        // Update the last generated date for the next chunk
-        lastGeneratedDate = initialList.lastOrNull()?.let {
-            LocalDate.parse(it.fullDate)
-        } ?: LocalDate.now()
+    private fun initView() {
+        this.showDateRecyclerView()
+        this.showTimeSlotList()
     }
 
-    private fun setupDateRecyclerView() {
-        dateAdapter = DateAdapter(requireContext()).apply {
-            onDateSelected = { selectedDate ->
-                handleDateSelection(selectedDate)
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
+    }
 
-        binding.dateRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = dateAdapter
+    private fun showDateRecyclerView() {
+        appointmentDateListAdapter.onDateSelected = { selectedDate ->
+            handleDateSelection(selectedDate)
+        }
+        binding.rvDatesList.apply {
+            layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+            adapter = appointmentDateListAdapter
 
             // Add the scroll listener for dynamic loading
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -85,12 +91,36 @@ class EvaBookAppointmentFragment :
         }
     }
 
+    private fun showTimeSlotList() {
+        binding.rvTimeSlots.apply {
+            layoutManager = GridLayoutManager(mContext, 3)
+            adapter = timeSlotAdapter
+        }
+    }
+
+    private fun loadInitialDates() {
+        // Load the first chunk (e.g., 30 days)
+        val initialList = generateNextDays(lastGeneratedDate, 30, true)
+        appointmentDateListAdapter.setDateList(initialList)
+
+        // Update the last generated date for the next chunk
+        lastGeneratedDate = initialList.lastOrNull()?.let {
+            LocalDate.parse(it.fullDate)
+        } ?: LocalDate.now()
+    }
+
+    private fun initListener() {
+        binding.rgMode.setOnCheckedChangeListener { btn, checkBtnId ->
+            binding.llcLocation.visibility = if (checkBtnId == R.id.rbInPerson) View.VISIBLE else View.GONE
+        }
+    }
+
     private fun loadMoreDates() {
         if (isLoading) return
         isLoading = true
 
         // 💡 FIX: Access the current list using the new public getter
-        val combinedList = dateAdapter.currentList.toMutableList()
+        val combinedList = appointmentDateListAdapter.currentList.toMutableList()
 
         // Generate the next chunk of dates (e.g., 15 more days)
         // We start one day after the last date we loaded
@@ -100,14 +130,14 @@ class EvaBookAppointmentFragment :
         combinedList.addAll(newDates)
 
         // Re-set the full list in the adapter
-        dateAdapter.setDateList(combinedList)
+        appointmentDateListAdapter.setDateList(combinedList)
 
         // Update the starting point for the next load
         lastGeneratedDate = newDates.lastOrNull()?.let {
             LocalDate.parse(it.fullDate)
         } ?: lastGeneratedDate.plusDays(15)
 
-        Log.d("Scrolling", "Loaded ${newDates.size} new dates. Total: ${dateAdapter.itemCount}")
+        Log.d("Scrolling", "Loaded ${newDates.size} new dates. Total: ${appointmentDateListAdapter.itemCount}")
 
         isLoading = false
     }
