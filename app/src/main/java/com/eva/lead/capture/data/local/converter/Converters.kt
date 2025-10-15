@@ -1,9 +1,11 @@
 package com.eva.lead.capture.data.local.converter
 
+import androidx.annotation.Keep
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+@Keep
 class Converters {
 
     @TypeConverter
@@ -13,7 +15,6 @@ class Converters {
 
     @TypeConverter
     fun toStringList(value: String): List<String>? {
-        val listType = object : TypeToken<List<String>>() {}.type
-        return Gson().fromJson(value, listType)
+        return Gson().fromJson(value, Array<String>::class.java)?.toList()
     }
 }

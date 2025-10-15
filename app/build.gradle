@@ -20,9 +20,31 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
+    signingConfigs {
+        debug {
+            storeFile file("/home/laxmikant/Desktop/keystore/eva_keystore.jks")
+            keyAlias 'eva_production'
+            keyPassword 'evareg'
+            storePassword 'evareg'
+        }
         release {
+            storeFile file("/home/laxmikant/Desktop/keystore/eva_keystore.jks")
+            keyAlias 'eva_production'
+            keyPassword 'evareg'
+            storePassword 'evareg'
+        }
+    }
+
+    buildTypes {
+        debug {
             minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            debuggable = false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
