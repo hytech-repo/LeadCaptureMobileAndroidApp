@@ -49,7 +49,7 @@ class AppointmentDateListAdapter(val mContext: Context) :
         init {
             // Setup click listener on the root view (the whole tile)
             binding.root.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION && adapterPosition != selectedPosition) {
+                if (absoluteAdapterPosition != RecyclerView.NO_POSITION && absoluteAdapterPosition != selectedPosition) {
 
                     // 1. Deselect the previously selected item
                     val oldSelectedPosition = selectedPosition
@@ -59,7 +59,7 @@ class AppointmentDateListAdapter(val mContext: Context) :
                     }
 
                     // 2. Select the new item
-                    selectedPosition = adapterPosition
+                    selectedPosition = absoluteAdapterPosition
                     val newDateItem = dateList!![selectedPosition]
                     newDateItem.isSelected = true
                     notifyItemChanged(selectedPosition) // Refresh the new selection's view
@@ -72,7 +72,7 @@ class AppointmentDateListAdapter(val mContext: Context) :
             binding.tvDate.text = dateItem.dayNumber
             binding.tvDay.text  = dateItem.dayName
 
-            binding.root.isSelected = dateItem.isSelected
+            binding.llcDateLayout.isSelected = dateItem.isSelected
         }
 
     }

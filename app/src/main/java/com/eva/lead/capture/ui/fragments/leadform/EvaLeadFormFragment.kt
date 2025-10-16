@@ -535,19 +535,21 @@ class EvaLeadFormFragment :
     private fun takeConfirmationFromUser() {
         val confirmationDialog = EvaConfirmationDialog()
         val bundle = Bundle()
-        bundle.putString("heading", mContext.getString(R.string.save_lead))
-        bundle.putString("sub_heading", mContext.getString(R.string.save_confirmation_lead))
-        bundle.putString("primary_btn_text", mContext.getString(R.string.save_lead))
-        bundle.putString("seconday_btn_text", mContext.getString(R.string.eva_discard))
-        bundle.putInt("icon_bgcolor", R.color.color_lime_green)
-        bundle.putInt("ivIcon", R.drawable.ic_group_unselected)
+        bundle.putString("heading", mContext.getString(R.string.book_appointment_heading))
+        bundle.putString("sub_heading", mContext.getString(R.string.eva_schedule_appointment_msg))
+        bundle.putString("primary_btn_text", mContext.getString(R.string.eva_book_appointment))
+        bundle.putString("seconday_btn_text", mContext.getString(R.string.save_lead))
+        bundle.putInt("icon_bgcolor", R.color.status_blue)
+        bundle.putInt("ivIcon", R.drawable.ic_appointment)
         confirmationDialog.arguments = bundle
         confirmationDialog.isCancelable = false
         confirmationDialog.apply {
             onConfirmationListener = { isPrimaryBtnClicked ->
-                if (isPrimaryBtnClicked) {
-                    saveLeadData()
-                }
+                saveLeadData(isPrimaryBtnClicked)
+//                if (isPrimaryBtnClicked) {
+//                } else {
+//                    saveLeadData()
+//                }
                 dismiss()
             }
         }.show(requireActivity().supportFragmentManager, "EvaConfirmationAudioDialog")
@@ -625,7 +627,39 @@ class EvaLeadFormFragment :
         showProgressDialog(false)
     }
 
-    private fun saveLeadData() {
+    private fun saveLeadData(bookAppointment: Boolean) {
+        val leadData = prepareLeadData()
+
+        if (bookAppointment) {
+            val bundle = Bundle()
+            bundle.putParcelable("lead_detail", leadData)
+            findNavController().navigate(R.id.action_evaAddManualLead_to_evaBookAppointmentFragment, bundle)
+        } else {
+            saveOrUpdateLeadData(leadData)
+        }
+    }
+
+    private fun saveOrUpdateLeadData(leadData: EvaLeadData) {
+        val audioFile = recordService?.stopRecording()
+        val audioFileName = if (leadDetail == null) {
+            audioFile?.name
+        } else {
+            leadDetail!!.audioFilePath
+        }
+        leadData.audioFilePath = audioFileName
+        if (leadDetail == null) {
+            audioFile?.let {
+                recordService?.saveRecordingIntoDb(it)
+            }
+            viewModel.saveLeadData(leadData)
+        } else {
+            leadData.id = leadDetail!!.id
+            viewModel.updateLeadData(leadData)
+        }
+        findNavController().popBackStack()
+    }
+
+    private fun prepareLeadData(): EvaLeadData {
         val tag = when (binding.rgLeads.checkedRadioButtonId) {
             R.id.hotLead -> "hot"
             R.id.mediumLead -> "warm"
@@ -650,12 +684,6 @@ class EvaLeadFormFragment :
         val company = binding.etCompanyName.text.toString()
         val additional = binding.etAdditionalInfo.text.toString()
         val notes = binding.etNote.text.toString()
-        val audioFileName = if (leadDetail == null) {
-            recordService?.stopRecording()?.name
-        } else {
-            leadDetail!!.audioFilePath
-        }
-        val audioFile = recordService?.stopRecording()
         val quickNoteAnswers = getSelectedAnswers(binding.llcQuickNote)
         val questionAnswers = getSelectedAnswers(binding.llcQuestionContainer)
         val leadData = EvaLeadData(
@@ -668,22 +696,12 @@ class EvaLeadFormFragment :
             notes = notes,
             imageFileNames = namesCommaSeparated,
             tag = tag,
-            audioFilePath = audioFileName,
             timestamp = System.currentTimeMillis(),
             quickNote = quickNoteAnswers,
             questionAnswer = if (questionAnswers.isNotEmpty()) questionAnswers else leadDetail?.questionAnswer
                 ?: ""
         )
-        if (leadDetail == null) {
-            audioFile?.let {
-                recordService?.saveRecordingIntoDb(it)
-            }
-            viewModel.saveLeadData(leadData)
-        } else {
-            leadData.id = leadDetail!!.id
-            viewModel.updateLeadData(leadData)
-        }
-        findNavController().popBackStack()
+        return leadData
     }
 
     private fun getSelectedAnswers(container: LinearLayoutCompat): String {

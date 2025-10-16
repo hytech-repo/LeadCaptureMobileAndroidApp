@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_evaAddManualLead_to_evaCameraFragment"
             app:destination="@id/evaCameraFragment" />
+        <action
+            android:id="@+id/action_evaAddManualLead_to_evaBookAppointmentFragment"
+            app:destination="@id/evaBookAppointmentFragment" />
     </fragment>
 
     <fragment

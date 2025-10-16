@@ -1,19 +1,30 @@
 package com.eva.lead.capture.ui.fragments.bookappointment
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ArrayAdapter
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaBookAppointmentBinding
+import com.eva.lead.capture.domain.model.entity.EvaLeadData
+import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -24,7 +35,14 @@ class EvaBookAppointmentFragment :
     private lateinit var mContext: Context
     private lateinit var lastGeneratedDate: LocalDate
     private var isLoading = false
-    private val appointmentDateListAdapter : AppointmentDateListAdapter by lazy {
+    private var leadDetail: EvaLeadData? = null
+    private var recordService: EvaRecordAudioService? = null
+
+    private var firstHour: Int = 10
+    private var lastHour: Int = 20
+    private var slotGap: Int = 60
+
+    private val appointmentDateListAdapter: AppointmentDateListAdapter by lazy {
         AppointmentDateListAdapter(mContext)
     }
     private val timeSlotAdapter: AppointmentTimeSlotAdapter by lazy {
@@ -45,17 +63,99 @@ class EvaBookAppointmentFragment :
         return FragmentEvaBookAppointmentBinding.inflate(inflater, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+        val intent = Intent(mContext, EvaRecordAudioService::class.java)
+//        mContext.startService(intent)
+        mContext.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        if (recordService != null) {
+            showProgressOfAudio()
+        }
+    }
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as EvaRecordAudioService.AudioBinder
+            recordService = binder.getService()
+            showProgressOfAudio()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            recordService = null
+        }
+    }
+
+    private fun showProgressOfAudio() {
+        recordService?.setOnProgressListener { progress, ampl ->
+            val hrs = progress / 3600
+            val mins = (progress % 3600) / 60
+            val secs = progress % 60
+            val duration = if (hrs > 0) {
+                String.format("%02d:%02d:%02d", hrs, mins, secs)
+            } else {
+                String.format("%02d:%02d", mins, secs)
+            }
+            log.d("Recording", "progress: $progress, ampl $ampl")
+            binding.incToolbar.tvRecording.visibility = View.VISIBLE
+            binding.incToolbar.tvRecording.text = duration
+        }
+    }
+
     override fun startWorking(savedInstanceState: Bundle?) {
         lastGeneratedDate = LocalDate.now()
+        this.initBundle()
         this.initView()
         this.initListener()
+        this.loadLeadList()
         this.loadInitialDates()
+    }
+
+    private fun loadLeadList() {
+        lifecycleScope.launch {
+            val leads = viewModel.getLeadList().firstOrNull()
+            if (leads != null) {
+                loadAdapterIntoLeadList(leads)
+            }
+        }
+    }
+
+    private fun loadAdapterIntoLeadList(leadList: List<EvaLeadData>) {
+        val leadsName = leadList.map { "${it.firstName} ${it.lastName}" }
+        val leadAdapter = ArrayAdapter<String>(
+            mContext,
+            R.layout.dropdown_text_item,
+            leadsName.toMutableList()
+        )
+        binding.actvLeadDropDown.apply {
+            setOnItemClickListener { _, _, position, _ ->
+//                onItemSelected(leadList[position])
+            }
+            setAdapter(leadAdapter)
+        }
+    }
+
+    private fun initBundle() {
+        if (arguments != null) {
+            leadDetail = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments!!.getParcelable("lead_detail", EvaLeadData::class.java)
+            } else {
+                arguments!!.getParcelable("lead_detail")
+            }
+        }
     }
 
 
     private fun initView() {
+        binding.actvLeadDropDown.setDropDownBackgroundResource(R.color.white)
+        binding.llcLeadDropDown.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+        binding.llcCompany.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+        this.initToolbar()
         this.showDateRecyclerView()
         this.showTimeSlotList()
+    }
+
+    private fun initToolbar() {
+        binding.incToolbar.tvTitle.text = "Book Appointment"
     }
 
     override fun onResume() {
@@ -65,7 +165,7 @@ class EvaBookAppointmentFragment :
 
     private fun showDateRecyclerView() {
         appointmentDateListAdapter.onDateSelected = { selectedDate ->
-            handleDateSelection(selectedDate)
+            showTimeSlots(selectedDate)
         }
         binding.rvDatesList.apply {
             layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
@@ -76,16 +176,16 @@ class EvaBookAppointmentFragment :
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                    // Logic to detect when the user is near the end of the list
-                    val threshold = 5 // Load when 5 items remain
-                    if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold) && firstVisibleItemPosition >= 0) {
-                        loadMoreDates()
-                    }
+//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                    val visibleItemCount = layoutManager.childCount
+//                    val totalItemCount = layoutManager.itemCount
+//                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//                    // Logic to detect when the user is near the end of the list
+//                    val threshold = 5 // Load when 5 items remain
+//                    if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold) && firstVisibleItemPosition >= 0) {
+//                        loadMoreDates()
+//                    }
                 }
             })
         }
@@ -100,18 +200,53 @@ class EvaBookAppointmentFragment :
 
     private fun loadInitialDates() {
         // Load the first chunk (e.g., 30 days)
-        val initialList = generateNextDays(lastGeneratedDate, 30, true)
+        val initialList = generateNextDays(lastGeneratedDate, 15, true)
         appointmentDateListAdapter.setDateList(initialList)
 
         // Update the last generated date for the next chunk
         lastGeneratedDate = initialList.lastOrNull()?.let {
             LocalDate.parse(it.fullDate)
         } ?: LocalDate.now()
+
+        val firstDate = initialList.firstOrNull()
+        firstDate?.let {
+            showTimeSlots(it)
+        }
+    }
+
+    private fun generateTimeSlotsForDate(selectedDate: DateItem): List<String> {
+        val slots = mutableListOf<String>()
+        val now = java.time.LocalTime.now()
+        val isToday = selectedDate.fullDate == LocalDate.now().toString()
+
+        var hour = firstHour
+        while (hour <= lastHour) {
+            var minute = 0
+            while (minute < 60) {
+                val slotTime = java.time.LocalTime.of(hour, minute)
+                // Skip past slots if today
+                if (!isToday || slotTime.isAfter(now)) {
+                    slots.add(formatTime(slotTime))
+                }
+                minute += slotGap
+            }
+            hour += 1
+        }
+        return slots
+    }
+
+    private fun formatTime(time: java.time.LocalTime): String {
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        return time.format(formatter)
     }
 
     private fun initListener() {
         binding.rgMode.setOnCheckedChangeListener { btn, checkBtnId ->
-            binding.llcLocation.visibility = if (checkBtnId == R.id.rbInPerson) View.VISIBLE else View.GONE
+            binding.llcLocation.visibility =
+                if (checkBtnId == R.id.rbInPerson) View.VISIBLE else View.GONE
+        }
+        binding.incToolbar.ivBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -137,7 +272,10 @@ class EvaBookAppointmentFragment :
             LocalDate.parse(it.fullDate)
         } ?: lastGeneratedDate.plusDays(15)
 
-        Log.d("Scrolling", "Loaded ${newDates.size} new dates. Total: ${appointmentDateListAdapter.itemCount}")
+        Log.d(
+            "Scrolling",
+            "Loaded ${newDates.size} new dates. Total: ${appointmentDateListAdapter.itemCount}"
+        )
 
         isLoading = false
     }
@@ -167,16 +305,11 @@ class EvaBookAppointmentFragment :
         return dates
     }
 
-    private fun handleDateSelection(selectedDate: DateItem) {
-        Log.d(
-            "DateSelection",
-            "New Date Selected: ${selectedDate.fullDate} (${selectedDate.dayName})"
-        )
-        Toast.makeText(
-            requireContext(),
-            "Fetching times for ${selectedDate.dayName}, ${selectedDate.dayNumber}",
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun showTimeSlots(selectedDate: DateItem) {
+        val slots = generateTimeSlotsForDate(selectedDate)
+        timeSlotAdapter.setSlotList(slots)
+        binding.rvTimeSlots.visibility = if (slots.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.tvNoSlots.visibility = if (slots.isNotEmpty()) View.GONE else View.VISIBLE
     }
 
     companion object {

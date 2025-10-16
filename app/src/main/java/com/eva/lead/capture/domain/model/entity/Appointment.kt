@@ -7,11 +7,13 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "appointments",
-    indices = [Index(value = ["lead_code", "user_id"], unique = true)]
+//    indices = [Index(value = ["lead_code", "user_id"], unique = true)]
 )
 data class Appointment(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
+    @ColumnInfo("lead_code")
+    var leadCode: String? = null,
     @ColumnInfo("user_name")
     var userName: String? = null,
     @ColumnInfo("user_email")

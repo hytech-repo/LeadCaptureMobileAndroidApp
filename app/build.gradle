@@ -51,6 +51,12 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+
+        // Enable core library desugaring
+        // This allows using Java 8+ APIs such as LocalDate, LocalTime, Optional, Stream, etc.
+        // on devices running API 24+ (our minSdk is 24).
+        // Without this, APIs like LocalDate would crash on devices < API 26.
+        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = '17'
@@ -72,6 +78,10 @@ dependencies {
     implementation libs.androidx.navigation.fragment.ktx
     implementation libs.androidx.navigation.ui.ktx
     implementation libs.androidx.fragment.ktx
+
+    // Required library for core library desugaring
+    // Provides backport implementations of Java 8+ APIs for older Android versions
+    coreLibraryDesugaring libs.androidx.desuger
 
     //jetpack compose dependencies
     implementation libs.androidx.activity.compose

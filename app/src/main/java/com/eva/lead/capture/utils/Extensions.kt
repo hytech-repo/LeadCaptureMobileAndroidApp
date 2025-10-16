@@ -52,6 +52,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -240,6 +243,13 @@ fun String.convertPatternOfDate(oldPattern: String, newPattern: String): String 
     } catch (et: Exception) {
         ""
     }
+}
+
+fun LocalDate.getTimeStamp(selectedTime: LocalTime? = null): Long {
+    val time = selectedTime ?: LocalTime.MIDNIGHT
+    val dateTime = this.atTime(time) // LocalDateTime
+    val zone = ZoneId.systemDefault()
+    return dateTime.atZone(zone).toInstant().toEpochMilli() // timestamp in millis
 }
 
 fun View.hideKeyboard() {

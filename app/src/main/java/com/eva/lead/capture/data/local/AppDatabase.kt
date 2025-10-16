@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.eva.lead.capture.data.local.converter.Converters
 import com.eva.lead.capture.data.local.dao.AppDao
+import com.eva.lead.capture.domain.model.entity.Appointment
 import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
@@ -17,7 +18,7 @@ import com.eva.lead.capture.domain.model.entity.QuickNote
 
 @Database(
     entities = [Exhibitor::class, EvaLeadData::class, LeadAudioRecording::class,
-        QuestionInfo::class, DeviceInfo::class, QuickNote::class],
+        QuestionInfo::class, DeviceInfo::class, QuickNote::class, Appointment::class],
     version = 1,
     exportSchema = false
 )
