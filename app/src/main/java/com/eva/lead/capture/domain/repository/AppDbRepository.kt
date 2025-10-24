@@ -1,5 +1,6 @@
 package com.eva.lead.capture.domain.repository
 
+import com.eva.lead.capture.domain.model.entity.Appointment
 import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
@@ -26,6 +27,12 @@ interface AppDbRepository {
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
 
     fun getAllLeads(): Flow<List<EvaLeadData>?>
+
+    suspend fun insertAppointment(appointment: Appointment): Long
+
+    suspend fun updateAppointment(appointment: Appointment): Int
+
+    fun getAllApointments(): Flow<List<Appointment>?>
 
     suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long
 

@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:text="A"
                 android:textColor="@color/heading_text_color"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -115,6 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="7dp"
             android:fontFamily="@font/sf_pro_regular"
             android:text="Meeting room 1, InnoSoft HQ"
             android:textColor="@color/light_grey"
@@ -130,7 +132,7 @@
             android:paddingHorizontal="15dp"
             android:paddingVertical="5dp"
             android:text="Start in 02d : 02h : 30m : 58s"
-            android:textColor="@android:color/holo_green_dark"
+            android:textColor="@color/color_lime_green"
             android:textSize="14sp"
             android:textStyle="bold" />
 

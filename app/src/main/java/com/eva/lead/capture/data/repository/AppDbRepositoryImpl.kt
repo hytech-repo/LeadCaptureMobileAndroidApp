@@ -2,6 +2,7 @@ package com.eva.lead.capture.data.repository
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.eva.lead.capture.data.local.AppDatabase
+import com.eva.lead.capture.domain.model.entity.Appointment
 import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
@@ -33,6 +34,12 @@ class AppDbRepositoryImpl(appDatabase: AppDatabase) : AppDbRepository {
     override fun getLeadById(leadId: String): Flow<EvaLeadData?> = dao.getLeadById(leadId)
 
     override fun getAllLeads(): Flow<List<EvaLeadData>?> = dao.getAllLeadData()
+
+    override suspend fun insertAppointment(appointment: Appointment): Long = dao.insertAppointment(appointment)
+
+    override suspend fun updateAppointment(appointment: Appointment): Int = dao.updateAppoinment(appointment)
+
+    override fun getAllApointments(): Flow<List<Appointment>?> = dao.getAllAppointments()
 
     override suspend fun insertQuestionInfo(questionInfo: QuestionInfo): Long =
         dao.insertQuestionInfo(questionInfo)

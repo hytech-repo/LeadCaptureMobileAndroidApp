@@ -19,13 +19,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eva.lead.capture.R
 import com.eva.lead.capture.databinding.FragmentEvaBookAppointmentBinding
+import com.eva.lead.capture.domain.model.entity.Appointment
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.services.EvaRecordAudioService
 import com.eva.lead.capture.ui.activities.EventHostActivity
 import com.eva.lead.capture.ui.base.BaseFragment
+import com.eva.lead.capture.utils.ToastType
+import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class EvaBookAppointmentFragment :
@@ -41,6 +46,10 @@ class EvaBookAppointmentFragment :
     private var firstHour: Int = 10
     private var lastHour: Int = 20
     private var slotGap: Int = 60
+
+    private var selectedDate: DateItem? = null
+    private var selectedTimeSlot: String = ""
+    private var selectedLeadUserName: String = ""
 
     private val appointmentDateListAdapter: AppointmentDateListAdapter by lazy {
         AppointmentDateListAdapter(mContext)
@@ -61,6 +70,15 @@ class EvaBookAppointmentFragment :
         savedInstanceState: Bundle?,
     ): FragmentEvaBookAppointmentBinding {
         return FragmentEvaBookAppointmentBinding.inflate(inflater, container, false)
+    }
+
+    override fun startWorking(savedInstanceState: Bundle?) {
+        lastGeneratedDate = LocalDate.now()
+        this.initBundle()
+        this.initView()
+        this.initListener()
+        this.loadLeadList()
+        this.loadInitialDates()
     }
 
     override fun onStart() {
@@ -101,15 +119,6 @@ class EvaBookAppointmentFragment :
         }
     }
 
-    override fun startWorking(savedInstanceState: Bundle?) {
-        lastGeneratedDate = LocalDate.now()
-        this.initBundle()
-        this.initView()
-        this.initListener()
-        this.loadLeadList()
-        this.loadInitialDates()
-    }
-
     private fun loadLeadList() {
         lifecycleScope.launch {
             val leads = viewModel.getLeadList().firstOrNull()
@@ -128,6 +137,12 @@ class EvaBookAppointmentFragment :
         )
         binding.actvLeadDropDown.apply {
             setOnItemClickListener { _, _, position, _ ->
+                selectedLeadUserName = leadsName[position]
+                leadDetail = leadList[position]
+                if (!leadDetail?.companyName.isNullOrEmpty()) {
+                    binding.llcCompany.visibility = View.GONE
+                }
+                binding.etEmail.setText(leadDetail?.email?:"")
 //                onItemSelected(leadList[position])
             }
             setAdapter(leadAdapter)
@@ -147,11 +162,18 @@ class EvaBookAppointmentFragment :
 
     private fun initView() {
         binding.actvLeadDropDown.setDropDownBackgroundResource(R.color.white)
-        binding.llcLeadDropDown.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
-        binding.llcCompany.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+        this.updateLeadsViewVisibility()
         this.initToolbar()
         this.showDateRecyclerView()
         this.showTimeSlotList()
+    }
+
+    private fun updateLeadsViewVisibility() {
+        binding.llcLeadDropDown.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+        binding.llcCompany.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+        if (leadDetail != null) {
+            binding.etEmail.setText(leadDetail?.email?:"")
+        }
     }
 
     private fun initToolbar() {
@@ -192,6 +214,9 @@ class EvaBookAppointmentFragment :
     }
 
     private fun showTimeSlotList() {
+        timeSlotAdapter.onTimeSelected = { timeSlot ->
+            this.selectedTimeSlot = timeSlot
+        }
         binding.rvTimeSlots.apply {
             layoutManager = GridLayoutManager(mContext, 3)
             adapter = timeSlotAdapter
@@ -248,6 +273,50 @@ class EvaBookAppointmentFragment :
         binding.incToolbar.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.btnSave.setOnClickListener {
+            if (validateUserInputs()) {
+                saveAppointmentIntoDb()
+            }
+        }
+    }
+
+    private fun saveAppointmentIntoDb() {
+        val appointment = Appointment()
+        appointment.userName = selectedLeadUserName
+        appointment.userEmail = binding.etEmail.text.toString()
+        appointment.appointmentMode = if (binding.rbInPerson.isChecked) "person" else "virtual"
+        appointment.subject = binding.etSubject.text.toString()
+        appointment.appointmentDate = selectedDate?.fullDate
+        appointment.appointmentTime = selectedTimeSlot
+        appointment.location = binding.etLocation.text.toString()
+        if (!leadDetail?.companyName.isNullOrEmpty()) {
+            appointment.companyName = leadDetail?.companyName
+        } else {
+            appointment.companyName = binding.etCompanyName.text.toString()
+        }
+
+        val fullDateTimeString = "${selectedDate?.fullDate} $selectedTimeSlot"
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
+        val localDateTime = LocalDateTime.parse(fullDateTimeString, formatter)
+        appointment.timestamp = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        viewModel.saveAppointment(appointment) {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun validateUserInputs(): Boolean {
+        val userEmail = binding.etEmail.text
+        if (userEmail.isNullOrEmpty()) {
+            mContext.showToast("Opps! Email is empty", ToastType.ERROR)
+            return false
+        }
+        if (selectedTimeSlot.isEmpty()) {
+            mContext.showToast("Opps! you forgot appointment time", ToastType.ERROR)
+            return false
+        }
+
+        return true
     }
 
     private fun loadMoreDates() {
@@ -306,6 +375,7 @@ class EvaBookAppointmentFragment :
     }
 
     private fun showTimeSlots(selectedDate: DateItem) {
+        this.selectedDate = selectedDate
         val slots = generateTimeSlotsForDate(selectedDate)
         timeSlotAdapter.setSlotList(slots)
         binding.rvTimeSlots.visibility = if (slots.isNotEmpty()) View.VISIBLE else View.GONE

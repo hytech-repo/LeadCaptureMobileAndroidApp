@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_evaAppointmentFragment_to_evaBookAppointmentFragment"
             app:destination="@id/evaBookAppointmentFragment" />
+        <action
+            android:id="@+id/action_evaAppointmentFragment_to_evaUserProfileFragment"
+            app:destination="@id/evaUserProfileFragment" />
     </fragment>
 
     <fragment

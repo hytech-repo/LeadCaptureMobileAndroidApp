@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.eva.lead.capture.domain.model.entity.Appointment
 import com.eva.lead.capture.domain.model.entity.DeviceInfo
 import com.eva.lead.capture.domain.model.entity.EvaLeadData
 import com.eva.lead.capture.domain.model.entity.Exhibitor
@@ -45,6 +46,15 @@ interface AppDao {
 
     @Query("SELECT * FROM lead_data where lead_id = :leadId")
     fun getLeadById(leadId: String): Flow<EvaLeadData?>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAppointment(appointment: Appointment): Long
+
+    @Update
+    suspend fun updateAppoinment(appointment: Appointment): Int
+
+    @Query("select * from appointments ORDER BY id DESC")
+    fun getAllAppointments(): Flow<List<Appointment>?>
 
     @Update
     suspend fun updateQuestionInfo(questionInfo: QuestionInfo)

@@ -26,7 +26,6 @@ class AppointmentTimeSlotAdapter(val mContext: Context) :
         position: Int
     ) {
         holder.bind(slotList[position], position)
-
     }
 
     override fun getItemCount(): Int = slotList.size?: 0

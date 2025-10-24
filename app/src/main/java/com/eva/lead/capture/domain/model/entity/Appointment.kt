@@ -18,6 +18,8 @@ data class Appointment(
     var userName: String? = null,
     @ColumnInfo("user_email")
     var userEmail: String? = null,
+    @ColumnInfo("companyname")
+    var companyName: String? = null,
     @ColumnInfo("appointment_date")
     var appointmentDate: String? = null,
     @ColumnInfo("appointment_time")

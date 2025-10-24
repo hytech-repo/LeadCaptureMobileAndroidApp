@@ -37,6 +37,7 @@
             app:itemActiveIndicatorStyle="@style/NoActiveIndicatorStyle"
             app:itemIconTint="@drawable/nav_item_selector"
             app:itemTextColor="@drawable/nav_item_selector"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_nav_menu" />
 
     </androidx.cardview.widget.CardView>
