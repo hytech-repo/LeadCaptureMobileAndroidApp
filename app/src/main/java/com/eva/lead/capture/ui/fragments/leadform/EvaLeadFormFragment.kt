@@ -633,6 +633,7 @@ class EvaLeadFormFragment :
         if (bookAppointment) {
             val bundle = Bundle()
             bundle.putParcelable("lead_detail", leadData)
+            bundle.putString("appointment_mode", "from_lead")
             findNavController().navigate(R.id.action_evaAddManualLead_to_evaBookAppointmentFragment, bundle)
         } else {
             saveOrUpdateLeadData(leadData)

@@ -104,7 +104,9 @@
             app:destination="@id/evaCameraFragment" />
         <action
             android:id="@+id/action_evaAddManualLead_to_evaBookAppointmentFragment"
-            app:destination="@id/evaBookAppointmentFragment" />
+            app:destination="@id/evaBookAppointmentFragment"
+            app:popUpTo="@id/evaAddLeadFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment

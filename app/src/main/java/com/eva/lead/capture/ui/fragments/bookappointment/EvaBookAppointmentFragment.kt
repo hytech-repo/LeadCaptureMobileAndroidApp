@@ -50,6 +50,7 @@ class EvaBookAppointmentFragment :
     private var selectedDate: DateItem? = null
     private var selectedTimeSlot: String = ""
     private var selectedLeadUserName: String = ""
+    private var appoinmentMode: String = ""
 
     private val appointmentDateListAdapter: AppointmentDateListAdapter by lazy {
         AppointmentDateListAdapter(mContext)
@@ -139,10 +140,11 @@ class EvaBookAppointmentFragment :
             setOnItemClickListener { _, _, position, _ ->
                 selectedLeadUserName = leadsName[position]
                 leadDetail = leadList[position]
-                if (!leadDetail?.companyName.isNullOrEmpty()) {
-                    binding.llcCompany.visibility = View.GONE
-                }
+//                if (!leadDetail?.companyName.isNullOrEmpty()) {
+//                    binding.llcCompany.visibility = View.GONE
+//                }
                 binding.etEmail.setText(leadDetail?.email?:"")
+                binding.etCompanyName.setText(leadDetail?.companyName?: "")
 //                onItemSelected(leadList[position])
             }
             setAdapter(leadAdapter)
@@ -156,6 +158,7 @@ class EvaBookAppointmentFragment :
             } else {
                 arguments!!.getParcelable("lead_detail")
             }
+            appoinmentMode = arguments!!.getString("appointment_mode", "")
         }
     }
 
@@ -170,9 +173,10 @@ class EvaBookAppointmentFragment :
 
     private fun updateLeadsViewVisibility() {
         binding.llcLeadDropDown.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
-        binding.llcCompany.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
+//        binding.llcCompany.visibility = if (leadDetail == null) View.VISIBLE else View.GONE
         if (leadDetail != null) {
             binding.etEmail.setText(leadDetail?.email?:"")
+            binding.etCompanyName.setText(leadDetail?.companyName?: "")
         }
     }
 
@@ -294,12 +298,31 @@ class EvaBookAppointmentFragment :
         } else {
             appointment.companyName = binding.etCompanyName.text.toString()
         }
+        if (leadDetail != null) {
+            val fullName = "${leadDetail?.firstName} ${leadDetail?.lastName}"
+            appointment.userName = fullName
+        }
 
         val fullDateTimeString = "${selectedDate?.fullDate} $selectedTimeSlot"
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
         val localDateTime = LocalDateTime.parse(fullDateTimeString, formatter)
         appointment.timestamp = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
+        if (appoinmentMode == "from_lead") {
+            val audioFile = recordService?.stopRecording()
+            val audioFileName = if (leadDetail == null) {
+                audioFile?.name
+            } else {
+                leadDetail!!.audioFilePath
+            }
+            leadDetail?.audioFilePath = audioFileName
+            audioFile?.let {
+                recordService?.saveRecordingIntoDb(it)
+            }
+            leadDetail?.let {
+                viewModel.saveLeadData(it)
+            }
+        }
         viewModel.saveAppointment(appointment) {
             findNavController().popBackStack()
         }

@@ -127,6 +127,7 @@ class EvaAppointmentFragment :
     ) {
         val bundle = Bundle()
         bundle.putParcelable("appointment_detail", model)
+        bundle.putString("appointment_mode", "reschedule")
         findNavController().navigate(
             R.id.action_evaAppointmentFragment_to_evaBookAppointmentFragment,
             bundle
@@ -175,7 +176,9 @@ class EvaAppointmentFragment :
 
     private fun initListener() {
         binding.incToolbar.llcbtn.setOnClickListener {
-            findNavController().navigate(R.id.action_evaAppointmentFragment_to_evaBookAppointmentFragment)
+            val bundle = Bundle()
+            bundle.putString("appointment_mode", "book")
+            findNavController().navigate(R.id.action_evaAppointmentFragment_to_evaBookAppointmentFragment, bundle)
         }
         binding.incToolbar.ivUserImage.setOnClickListener {
             findNavController().navigate(R.id.action_evaAppointmentFragment_to_evaUserProfileFragment)
