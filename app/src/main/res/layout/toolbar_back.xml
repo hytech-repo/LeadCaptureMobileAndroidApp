@@ -32,6 +32,13 @@
             android:textSize="17sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/ivOptions"
+            android:layout_width="20dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_dots"
+            android:visibility="gone" />
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llcbtn"
             android:layout_width="wrap_content"
@@ -83,10 +90,10 @@
             android:id="@+id/ivUserImage"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:visibility="gone"
             android:layout_marginStart="5dp"
             android:contentDescription="Profile"
-            android:src="@drawable/ic_user_placeholder" />
+            android:src="@drawable/ic_user_placeholder"
+            android:visibility="gone" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

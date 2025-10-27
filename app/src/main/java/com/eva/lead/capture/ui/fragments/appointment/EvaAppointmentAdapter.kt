@@ -1,5 +1,6 @@
 package com.eva.lead.capture.ui.fragments.appointment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,8 @@ class EvaAppointmentAdapter(val mContext: Context) :
 
     private var appointmentList: List<Appointment>? = null
 
-    var onItemClickListener: (model: Appointment, id: Int, position: Int) -> Unit = { model, id, position -> }
+    var onItemClickListener: (model: Appointment, view: View, position: Int) -> Unit =
+        { model, id, position -> }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,6 +46,7 @@ class EvaAppointmentAdapter(val mContext: Context) :
     inner class EvaAppointmentVH(val binding: ItemAppointmentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("DefaultLocale")
         fun bind(model: Appointment, position: Int) {
             binding.userName.text = model.userName
             binding.countdownTimer.background = mContext.changeDrawableBgAndStroke(
@@ -52,7 +55,7 @@ class EvaAppointmentAdapter(val mContext: Context) :
                 2,
                 15
             )
-            val usernames = model.userName?.split(" ")?: emptyList()
+            val usernames = model.userName?.split(" ") ?: emptyList()
             if (usernames.isNotEmpty()) {
                 val firstletter = if (usernames.size >= 2) {
                     "${usernames[0].first()}${usernames[1].first()}"
@@ -67,10 +70,18 @@ class EvaAppointmentAdapter(val mContext: Context) :
             val date = model.timestamp?.convertIntoDate("dd MM yyyy")
             val time = model.timestamp?.convertIntoDate("hh:mm a")
 
+            binding.ivOptions.setOnClickListener {
+                onItemClickListener.invoke(model, it, position)
+            }
+            binding.cvAppointment.setOnClickListener {
+                onItemClickListener.invoke(model, it, position)
+            }
+
             model.timestamp?.let { timestamp ->
                 val currentTime = System.currentTimeMillis()
                 var difference = timestamp - currentTime
                 if (difference > 0) {
+                    binding.countdownTimer.visibility = View.VISIBLE
                     val secondsInMilli: Long = 1000
                     val minutesInMilli = secondsInMilli * 60
                     val hoursInMilli = minutesInMilli * 60
@@ -86,18 +97,29 @@ class EvaAppointmentAdapter(val mContext: Context) :
 
                     val elapsedSeconds = difference / secondsInMilli
 
-                    val countdownText = String.format(
-                        "%02dd: %02dh: %02dm: %02ds",
-                        elapsedDays,
-                        elapsedHours,
-                        elapsedMinutes,
-                        elapsedSeconds
-                    )
+                    val countdownText = if (elapsedDays != 0L) {
+                        String.format(
+                            "%02dd: %02dh: %02dm: %02ds",
+                            elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds
+                        )
+                    } else {
+                        if (elapsedHours != 0L) {
+                            String.format(
+                                "%02dh: %02dm: %02ds",
+                                elapsedHours, elapsedMinutes, elapsedSeconds
+                            )
+                        } else {
+                            String.format(
+                                "%02dm: %02ds",
+                                elapsedMinutes, elapsedSeconds
+                            )
+                        }
+                    }
                     binding.countdownTimer.text = countdownText
+                } else {
+                    binding.countdownTimer.visibility = View.GONE
                 }
-
             }
-
             binding.appointmentDate.text = date
             binding.appointmentTime.text = time
             binding.organizationName.text = model.companyName

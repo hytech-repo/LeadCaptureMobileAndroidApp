@@ -53,7 +53,7 @@ interface AppDao {
     @Update
     suspend fun updateAppoinment(appointment: Appointment): Int
 
-    @Query("select * from appointments ORDER BY id DESC")
+    @Query("select * from appointments where isDelete='0' ORDER BY id DESC")
     fun getAllAppointments(): Flow<List<Appointment>?>
 
     @Update

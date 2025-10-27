@@ -51,4 +51,7 @@
     <string name="eva_subject">Subject</string>
     <string name="eva_subject_hint">Enter subject</string>
     <string name="eva_book_appointment">Book Appointment</string>
+    <string name="eva_view_detail">View Details</string>
+    <string name="eva_add_calendar">Add To Calendar</string>
+    <string name="eva_reschedule">Reschedule</string>
 </resources>

@@ -1,10 +1,13 @@
 package com.eva.lead.capture.domain.model.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     tableName = "appointments",
 //    indices = [Index(value = ["lead_code", "user_id"], unique = true)]
@@ -36,4 +39,4 @@ data class Appointment(
     var location: String? = null,
     @ColumnInfo("isDelete")
     var isDelete: Boolean = false,
-)
+): Parcelable
