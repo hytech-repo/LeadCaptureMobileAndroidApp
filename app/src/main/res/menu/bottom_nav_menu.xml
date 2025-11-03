@@ -18,6 +18,7 @@
         android:id="@+id/nav_total_lead"
         android:icon="@drawable/nav_group_lead"
         android:title="Total Leads"
+        android:visible="false"
         app:showAsAction="withText"/>
 
 

@@ -67,7 +67,7 @@ class EvaAppointmentAdapter(val mContext: Context) :
             binding.locationOrMeeting.visibility =
                 if (model.location.isNullOrEmpty()) View.GONE else View.VISIBLE
             binding.locationOrMeeting.text = model.location
-            val date = model.timestamp?.convertIntoDate("dd MM yyyy")
+            val date = model.timestamp?.convertIntoDate("dd MMM yyyy")
             val time = model.timestamp?.convertIntoDate("hh:mm a")
 
             binding.ivOptions.setOnClickListener {
@@ -124,6 +124,5 @@ class EvaAppointmentAdapter(val mContext: Context) :
             binding.appointmentTime.text = time
             binding.organizationName.text = model.companyName
         }
-
     }
 }

@@ -41,6 +41,7 @@ class EvaBookAppointmentFragment :
     private lateinit var lastGeneratedDate: LocalDate
     private var isLoading = false
     private var leadDetail: EvaLeadData? = null
+    private var reScheduleAppoinment: Appointment? = null
     private var recordService: EvaRecordAudioService? = null
 
     private var firstHour: Int = 10
@@ -158,6 +159,11 @@ class EvaBookAppointmentFragment :
             } else {
                 arguments!!.getParcelable("lead_detail")
             }
+            reScheduleAppoinment = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments!!.getParcelable("appointment_detail", Appointment::class.java)
+            } else {
+                arguments!!.getParcelable("appointment_detail")
+            }
             appoinmentMode = arguments!!.getString("appointment_mode", "")
         }
     }
@@ -177,6 +183,19 @@ class EvaBookAppointmentFragment :
         if (leadDetail != null) {
             binding.etEmail.setText(leadDetail?.email?:"")
             binding.etCompanyName.setText(leadDetail?.companyName?: "")
+        }
+
+        if (reScheduleAppoinment != null) {
+            binding.actvLeadDropDown.setText(reScheduleAppoinment?.userName)
+            binding.etEmail.setText(reScheduleAppoinment?.userEmail)
+            binding.etLocation.setText(reScheduleAppoinment?.location?: "")
+            binding.etCompanyName.setText(reScheduleAppoinment?.companyName?: "")
+            binding.etSubject.setText(reScheduleAppoinment?.subject?: "")
+            if (reScheduleAppoinment!!.appointmentMode == "virtual") {
+                binding.rbVirtual.isChecked = true
+            } else {
+                binding.rbInPerson.isChecked = true
+            }
         }
     }
 
