@@ -650,7 +650,7 @@ class EvaLeadFormFragment :
         leadData.audioFilePath = audioFileName
         if (leadDetail == null) {
             audioFile?.let {
-                recordService?.saveRecordingIntoDb(it)
+                recordService?.saveRecordingIntoDb(it, "lead")
             }
             viewModel.saveLeadData(leadData)
         } else {
@@ -747,10 +747,10 @@ class EvaLeadFormFragment :
             mContext.showToast("First Name is required", ToastType.ERROR)
             return false
         }
-        if (binding.etLastName.text.isNullOrEmpty()) {
-            mContext.showToast("Last Name is required", ToastType.ERROR)
-            return false
-        }
+//        if (binding.etLastName.text.isNullOrEmpty()) {
+//            mContext.showToast("Last Name is required", ToastType.ERROR)
+//            return false
+//        }
         val email = binding.etEmail.text
         if (email.isNullOrEmpty()) {
             mContext.showToast("Email is required", ToastType.ERROR)

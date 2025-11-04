@@ -13,11 +13,93 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <HorizontalScrollView
+        android:id="@+id/filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/incToolbar"
+        android:paddingVertical="15dp"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:id="@+id/rgAppointmentStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="16dp"
+            android:checkedButton="@id/cbAll"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cbAll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_checkbox_selector"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:fontFamily="@font/sf_pro_regular"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="3dp"
+                android:text="All"
+                android:textColor="@drawable/checked_text_color_selector"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/rbOnGoing"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_checkbox_selector"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:drawableTint="@drawable/ic_hot_check"
+                android:fontFamily="@font/sf_pro_regular"
+                android:gravity="center"
+                android:paddingHorizontal="25dp"
+                android:text="Ongoing"
+                android:textColor="@drawable/checked_text_color_selector"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/cbMediumLead"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_checkbox_selector"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:drawableTint="@drawable/ic_fire_color_selector"
+                android:fontFamily="@font/sf_pro_regular"
+                android:paddingHorizontal="25dp"
+                android:text="Upcoming"
+                android:textColor="@drawable/checked_text_color_selector"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/cbColdLead"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/bg_checkbox_selector"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:drawableTint="@drawable/ic_cold_color_selector"
+                android:fontFamily="@font/sf_pro_regular"
+                android:paddingHorizontal="25dp"
+                android:text="Archive"
+                android:textColor="@drawable/checked_text_color_selector"
+                android:textSize="14sp" />
+
+        </RadioGroup>
+
+    </HorizontalScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAppointmentList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/incToolbar"
+        android:layout_below="@id/filter"
         tools:listitem="@layout/item_appointment" />
 
     <TextView

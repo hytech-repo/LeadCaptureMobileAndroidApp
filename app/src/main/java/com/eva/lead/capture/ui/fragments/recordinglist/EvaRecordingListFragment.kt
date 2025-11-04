@@ -67,19 +67,21 @@ class EvaRecordingListFragment :
 
         }
 
-        binding.cbAll.setOnCheckedChangeListener { btn, isChecked ->
-            if (isChecked) {
-                enableOtherCheckBox(!isChecked)
-                tags = mutableListOf("all")
+        binding.rgRecordingType.setOnCheckedChangeListener { btn, checkBtnId ->
+            tags = mutableListOf(if (checkBtnId == R.id.cbLead) {
+                "lead"
+            } else if (checkBtnId == R.id.cbPersonal) {
+                "personal"
             } else {
-                tags.remove("all")
-            }
+                "all"
+            })
             filterListAccordingToTags()
         }
 
         recordingListAdapter.onItemClick = { option, position ->
             val bundle = Bundle()
             bundle.putString("recording_name", option.fileName.toString())
+            bundle.putString("recording_type", option.type)
             findNavController().navigate(R.id.action_evaRecordingListFragment_to_evaRecordingDetailFragment, bundle)
         }
     }

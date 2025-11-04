@@ -92,10 +92,10 @@ interface AppDao {
     @Insert
     suspend fun insertMediaFile(media: LeadAudioRecording): Long
 
-    @Query("SELECT * FROM audio_recording where type = 'recording' ORDER BY id DESC")
+    @Query("SELECT * FROM audio_recording ORDER BY id DESC")
     fun getAllRecording(): Flow<List<LeadAudioRecording>>
 
-    @Query("SELECT * FROM audio_recording where type = 'recording' AND id = :recordingId")
+    @Query("SELECT * FROM audio_recording where id = :recordingId")
     fun getRecordingById(recordingId: String): Flow<LeadAudioRecording?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -99,14 +99,14 @@ class EvaAppointmentAdapter(val mContext: Context) :
 
                     val countdownText = if (elapsedDays != 0L) {
                         String.format(
-                            "%02dd: %02dh: %02dm: %02ds",
-                            elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds
+                            "%02dd: %02dh: %02dm",
+                            elapsedDays, elapsedHours, elapsedMinutes
                         )
                     } else {
                         if (elapsedHours != 0L) {
                             String.format(
-                                "%02dh: %02dm: %02ds",
-                                elapsedHours, elapsedMinutes, elapsedSeconds
+                                "%02dh: %02dm",
+                                elapsedHours, elapsedMinutes
                             )
                         } else {
                             String.format(

@@ -336,7 +336,7 @@ class EvaBookAppointmentFragment :
             }
             leadDetail?.audioFilePath = audioFileName
             audioFile?.let {
-                recordService?.saveRecordingIntoDb(it)
+                recordService?.saveRecordingIntoDb(it, "lead")
             }
             leadDetail?.let {
                 viewModel.saveLeadData(it)

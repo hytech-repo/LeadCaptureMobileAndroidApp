@@ -155,7 +155,7 @@ class EvaRecordAudioService : Service() {
         Log.d("recording Pause Duration", duration.toString())
     }
 
-    fun saveRecordingIntoDb(audioFile: File) {
+    fun saveRecordingIntoDb(audioFile: File, type: String) {
         CoroutineScope(Dispatchers.Default).launch {
             val recordingDate = System.currentTimeMillis()  // This will give you the current date and time as a Long
 
@@ -166,7 +166,7 @@ class EvaRecordAudioService : Service() {
                 recordingName = audioFile.nameWithoutExtension,
                 fileName = audioFile.name,
                 filePath = audioFile.absolutePath,
-                type = "recording",
+                type = type,
                 recordingDate = recordingDate,
                 duration = duration
             )

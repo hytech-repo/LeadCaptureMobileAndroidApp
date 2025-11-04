@@ -77,13 +77,15 @@
             android:paddingVertical="15dp"
             android:scrollbars="none">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <RadioGroup
+                android:id="@+id/rgTags"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
+                android:checkedButton="@id/cbAll"
                 android:layout_marginHorizontal="16dp"
                 android:orientation="horizontal">
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cbAll"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -97,7 +99,7 @@
                     android:textColor="@drawable/checked_text_color_selector"
                     android:textSize="14sp" />
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cbHotLead"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -115,7 +117,7 @@
                     android:textColor="@drawable/checked_text_color_selector"
                     android:textSize="14sp" />
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cbMediumLead"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -132,7 +134,7 @@
                     android:textColor="@drawable/checked_text_color_selector"
                     android:textSize="14sp" />
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cbColdLead"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -150,7 +152,7 @@
                     android:textColor="@drawable/checked_text_color_selector"
                     android:textSize="14sp" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </RadioGroup>
 
         </HorizontalScrollView>
 

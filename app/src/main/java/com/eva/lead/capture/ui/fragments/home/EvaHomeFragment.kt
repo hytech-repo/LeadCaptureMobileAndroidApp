@@ -207,9 +207,9 @@ class EvaHomeFragment :
 
     private fun initListener() {
         binding.cvTotalLead.setOnClickListener {
-            if (!leadList.isNullOrEmpty()) {
+//            if (!leadList.isNullOrEmpty()) {
                 findNavController().navigate(R.id.action_homeFragment_to_evaLeadListFragment)
-            }
+//            }
         }
         binding.incToolbar.ivUserImage.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_evaUserProfileFragment)

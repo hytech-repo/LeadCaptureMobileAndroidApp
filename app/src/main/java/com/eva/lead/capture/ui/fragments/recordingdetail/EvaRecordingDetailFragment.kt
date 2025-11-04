@@ -33,6 +33,7 @@ class EvaRecordingDetailFragment :
     ) {
     private lateinit var mContext: Context
     private lateinit var recordingName: String
+    private lateinit var recordingType: String
     private var mediaPlayer: MediaPlayer? = null
     private var isPlayingAudio = false
     private var audioFile: File? = null
@@ -65,6 +66,7 @@ class EvaRecordingDetailFragment :
     private fun initBundle() {
         if (arguments != null) {
             recordingName = arguments!!.getString("recording_name", "")
+            recordingType = arguments!!.getString("recording_type", "")
         }
     }
 
@@ -167,6 +169,10 @@ class EvaRecordingDetailFragment :
 
         val audioDir = mContext.getExternalFolderPath("recording")
         audioFile = File(audioDir, recordingName)
+        if (recordingType == "lead") {
+            binding.tvLeadRecord.visibility = View.GONE
+            binding.tilLeadDropDown.visibility = View.GONE
+        }
     }
 
     private fun playAudio() {

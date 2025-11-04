@@ -215,7 +215,7 @@ class EvaAddLeadFragment :
             onItemClickListener = { action, leadName ->
                 when (action) {
                     "dismiss" -> deleteRecordingFile(audioFile)
-                    "save_only" -> { recordService?.saveRecordingIntoDb(audioFile) }
+                    "save_only" -> { recordService?.saveRecordingIntoDb(audioFile, "personal") }
                     "save" -> { saveRecordingWithLeadDetail(leadName, audioFile) }
                 }
                 dismiss()
@@ -224,7 +224,7 @@ class EvaAddLeadFragment :
     }
 
     fun saveRecordingWithLeadDetail(leadName: EvaLeadData?, audioFile: File) {
-        recordService?.saveRecordingIntoDb(audioFile)
+        recordService?.saveRecordingIntoDb(audioFile, "lead")
         if (leadName != null) {
             leadName.audioFilePath = audioFile.name
             viewModel.updateLeadData(leadName)

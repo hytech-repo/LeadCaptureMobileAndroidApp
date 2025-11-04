@@ -99,42 +99,54 @@ class EvaLeadListFragment :
             }
 
         }
-        binding.cbAll.setOnCheckedChangeListener { btn, isChecked ->
-            if (isChecked) {
-                enableOtherCheckBox(!isChecked)
-                tags = mutableListOf("all")
+        binding.rgTags.setOnCheckedChangeListener { rg, checkBtnId ->
+            tags = mutableListOf(if (checkBtnId == R.id.cbAll) {
+                "all"
+            } else if (checkBtnId == R.id.cbHotLead) {
+                "hot"
+            } else if (checkBtnId == R.id.cbMediumLead) {
+                "warm"
             } else {
-                tags.remove("all")
-            }
+                "cold"
+            })
             filterListAccordingToTags()
         }
-        binding.cbHotLead.setOnClickListener {
-            if (binding.cbHotLead.isChecked) {
-                binding.cbAll.isChecked = false
-                tags.add("hot")
-            } else {
-                tags.remove("hot")
-            }
-            filterListAccordingToTags()
-        }
-        binding.cbMediumLead.setOnClickListener {
-            if (binding.cbMediumLead.isChecked) {
-                binding.cbAll.isChecked = false
-                tags.add("warm")
-            } else {
-                tags.remove("warm")
-            }
-            filterListAccordingToTags()
-        }
-        binding.cbColdLead.setOnClickListener {
-            if (binding.cbColdLead.isChecked) {
-                binding.cbAll.isChecked = false
-                tags.add("cold")
-            } else {
-                tags.remove("cold")
-            }
-            filterListAccordingToTags()
-        }
+//        binding.cbAll.setOnCheckedChangeListener { btn, isChecked ->
+//            if (isChecked) {
+//                enableOtherCheckBox(!isChecked)
+//                tags = mutableListOf("all")
+//            } else {
+//                tags.remove("all")
+//            }
+//            filterListAccordingToTags()
+//        }
+//        binding.cbHotLead.setOnClickListener {
+//            if (binding.cbHotLead.isChecked) {
+//                binding.cbAll.isChecked = false
+//                tags.add("hot")
+//            } else {
+//                tags.remove("hot")
+//            }
+//            filterListAccordingToTags()
+//        }
+//        binding.cbMediumLead.setOnClickListener {
+//            if (binding.cbMediumLead.isChecked) {
+//                binding.cbAll.isChecked = false
+//                tags.add("warm")
+//            } else {
+//                tags.remove("warm")
+//            }
+//            filterListAccordingToTags()
+//        }
+//        binding.cbColdLead.setOnClickListener {
+//            if (binding.cbColdLead.isChecked) {
+//                binding.cbAll.isChecked = false
+//                tags.add("cold")
+//            } else {
+//                tags.remove("cold")
+//            }
+//            filterListAccordingToTags()
+//        }
 
         binding.incToolbar.ivUserImage.setOnClickListener {
             findNavController().navigate(R.id.action_evaLeadListFragment_to_evaUserProfileFragment)
