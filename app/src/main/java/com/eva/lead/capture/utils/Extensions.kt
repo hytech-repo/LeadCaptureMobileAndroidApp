@@ -50,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -58,7 +59,14 @@ import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Properties
 import java.util.TimeZone
+import javax.mail.Message
+import javax.mail.PasswordAuthentication
+import javax.mail.Session
+import javax.mail.Transport
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeMessage
 import kotlin.coroutines.CoroutineContext
 
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T) -> Unit) =
@@ -445,3 +453,46 @@ private fun Calendar.isYesterday(other: Calendar): Boolean {
 //        null
 //    }
 //}
+
+
+fun Context.sendEmailSMTP(recipient: String, subject: String, body: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val username = "laxmikant@maplelms.com"
+            val password = "Laxmi@Maple" // For Gmail, generate App Password
+
+            val props = Properties().apply {
+                put("mail.smtp.auth", "true")
+                put("mail.smtp.starttls.enable", "true")
+                put("mail.smtp.host", "smtp.gmail.com")
+                put("mail.smtp.port", "587")
+            }
+
+            val session = Session.getInstance(props,
+                object : javax.mail.Authenticator() {
+                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                        return PasswordAuthentication(username, password)
+                    }
+                })
+
+            val message = MimeMessage(session).apply {
+                setFrom(InternetAddress(username))
+                setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient))
+                setSubject(subject)
+                setText(body)
+            }
+
+            Transport.send(message)
+            withContext(Dispatchers.Main) {
+                showToast("Email sent", ToastType.SUCCESS)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                showToast("Failed to send email", ToastType.ERROR)
+            }
+        }
+    }
+}
+
+

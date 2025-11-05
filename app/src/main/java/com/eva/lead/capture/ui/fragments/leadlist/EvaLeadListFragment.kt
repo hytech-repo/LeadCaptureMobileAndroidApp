@@ -68,7 +68,7 @@ class EvaLeadListFragment :
     override fun onResume() {
         super.onResume()
         (requireActivity() as EventHostActivity).activeNavMenu(R.id.nav_total_lead)
-        (requireActivity() as EventHostActivity).showHideBottomNavBar(true)
+        (requireActivity() as EventHostActivity).showHideBottomNavBar(false)
     }
 
     private fun initListener() {

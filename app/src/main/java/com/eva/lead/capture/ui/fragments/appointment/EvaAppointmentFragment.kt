@@ -214,7 +214,10 @@ class EvaAppointmentFragment :
         lifecycleScope.launch {
             val appointmentList = viewModel.getAllApointments().firstOrNull()
             if (!appointmentList.isNullOrEmpty()) {
+                binding.noAppointment.visibility = View.GONE
                 appointmentAdapter.setAppointmentList(appointmentList)
+            } else {
+                binding.noAppointment.visibility = View.VISIBLE
             }
         }
     }

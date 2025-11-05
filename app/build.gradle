@@ -14,8 +14,8 @@ android {
         applicationId "com.eva.lead.capture"
         minSdk 24
         targetSdk 36
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,6 +65,16 @@ android {
         buildConfig = true
         viewBinding = true
         compose = true
+    }
+    packagingOptions {
+        resources {
+            pickFirsts += [
+                    'META-INF/LICENSE.md',
+                    'META-INF/LICENSE',
+                    'META-INF/NOTICE.md',
+                    'META-INF/NOTICE'
+            ]
+        }
     }
 }
 
@@ -116,6 +126,9 @@ dependencies {
     implementation libs.android.retrofit
     implementation libs.android.retrofit.gson
     implementation libs.logging.intercepter
+
+    implementation libs.android.sun.mail
+//    implementation libs.android.sun.mail.activation
 
     implementation libs.circleimageview
 //    implementation libs.google.cloud.speech

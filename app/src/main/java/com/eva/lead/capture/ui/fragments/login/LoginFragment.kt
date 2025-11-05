@@ -24,6 +24,7 @@ import com.eva.lead.capture.utils.ResultWrapper
 import com.eva.lead.capture.utils.ToastType
 import com.eva.lead.capture.utils.handleFailure
 import com.eva.lead.capture.utils.observe
+import com.eva.lead.capture.utils.sendEmailSMTP
 import com.eva.lead.capture.utils.showToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -186,11 +187,12 @@ class LoginFragment :
         log.d(TAG, "forget password clicked")
         val dialog = ForgotPasswordDialog()
         dialog.onDialogConfirmationListener = { status, email ->
-//            if (status) {
-//                this.emailAddress = email
+            if (status) {
+                this.emailAddress = email
+//                mContext.sendEmailSMTP(email, "Hello", "Here are the email")
 //                viewModel.forgetPassword(email)
 //                dialog.dismiss()
-//            }
+            }
             dialog.dismiss()
             showLicenseCodeSentDialog()
         }

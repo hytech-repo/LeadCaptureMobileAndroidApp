@@ -35,7 +35,7 @@ class ForgotPasswordDialog : AdaptiveDialogFragment<ForgotDialogBinding>() {
 
     private fun initListener() {
         binding.btnSent.setOnClickListener {
-            onDialogConfirmationListener.invoke(true, "")
+            onDialogConfirmationListener.invoke(true, binding.etEmailAddress.text.toString())
 //            if (validateForgotField()) {
 //                val email = binding.etEmailAddress.text.toString()
 //                onDialogConfirmationListener.invoke(true, email)
