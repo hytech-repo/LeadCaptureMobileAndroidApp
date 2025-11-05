@@ -459,7 +459,7 @@ fun Context.sendEmailSMTP(recipient: String, subject: String, body: String) {
     CoroutineScope(Dispatchers.IO).launch {
         try {
             val username = "laxmikant@maplelms.com"
-            val password = "Laxmi@Maple" // For Gmail, generate App Password
+            val password = "Melimu@1234" // For Gmail, generate App Password
 
             val props = Properties().apply {
                 put("mail.smtp.auth", "true")
